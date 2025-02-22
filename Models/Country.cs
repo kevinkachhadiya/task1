@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Web;
+
+namespace task1.Models
+{
+    public class Country
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int country_id { get; set; }
+
+        [Required]
+        [Display(Name = "Country : ")]
+        public string CountryName { get; set; }
+
+        // A country can have many states
+        public virtual ICollection<State> States { get; set; }
+    }
+
+    public class State
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int state_id { get; set; }
+
+        [Required]
+        [Display(Name = "State : ")]
+        public string StateName { get; set; }
+
+        // Foreign key for Country
+        public int country_id { get; set; }
+
+        [ForeignKey("country_id")]
+        public virtual Country Country { get; set; }
+
+    }
+
+    public class City
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int city_id { get; set; }
+
+        [Required]
+        [Display(Name = "City : ")]
+        public string CityName { get; set; }
+
+        // Foreign key for State
+        public int state_id { get; set; }
+
+        [ForeignKey("state_id")]
+        public virtual State State { get; set; }
+
+    }
+}
