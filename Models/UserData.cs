@@ -66,13 +66,13 @@ namespace task1.Models
         public string ImagePath { get; set; }
 
         [Display(Name = "Select a Country")]
-        public int SelectedCountryId { get; set; }
+        public int? SelectedCountryId { get; set; }
 
         [Display(Name = "Select a State")]
-        public int SelectedStateId { get; set; }
+        public int? SelectedStateId { get; set; }
 
         [Display(Name = "Select a city")]
-        public int SelectedCityId { get; set; }
+        public int? SelectedCityId { get; set; }
 
         public IEnumerable<SelectListItem> CountryList { get; set; }
         public IEnumerable<SelectListItem> StateList { get; set; }

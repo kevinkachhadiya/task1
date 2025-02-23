@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -31,7 +32,6 @@ namespace task1.Controllers
                         Value = c.country_id.ToString(),
                         Text = c.CountryName
                     }).ToList(),
-
                 StateList = new List<SelectListItem>(),
                 CityList = new List<SelectListItem>(),
             };
@@ -67,12 +67,67 @@ namespace task1.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateUser(UserData user, HttpPostedFileBase file)
+        public ActionResult Index(UserData user, HttpPostedFileBase file)
         {
+            if (ModelState.IsValid)
+            {
+                if (file != null && file.ContentLength > 0)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                    string extension = Path.GetExtension(file.FileName);
+                    string newFileName = "";
+                    if (extension.ToLower() == ".jpg" || extension.ToLower() == ".jpeg" || extension.ToLower() == ".png")
+                    {
+                        newFileName = fileName + "_" + Guid.NewGuid() + extension;
+                        string directoryPath = Server.MapPath("~/App_Data/");
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
 
-           return RedirectToRoute("Home","Index");
-        
+                        string filePath = Path.Combine(directoryPath, newFileName);
+                        file.SaveAs(filePath);
+                        user.ImagePath = "/App_Data/" + newFileName;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid file format! Please upload only JPG, JPEG, or PNG images.");
+                        // Repopulate select lists before returning view
+                        PopulateSelectLists(user);
+                        return View(user);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid Data format");
+                    PopulateSelectLists(user);
+                    return View(user);
+                }
+
+                _applicationDbContext.Users.Add(user);
+                _applicationDbContext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                PopulateSelectLists(user);
+                return View(user);
+            }
         }
+
+        private void PopulateSelectLists(UserData user)
+        {
+            user.CountryList = _applicationDbContext.Countries
+                .Select(c => new SelectListItem
+                {
+                    Value = c.country_id.ToString(),
+                    Text = c.CountryName
+                }).ToList();
+
+            user.StateList = new List<SelectListItem>(); 
+            user.CityList = new List<SelectListItem>(); 
+        }
+
 
 
 
