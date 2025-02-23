@@ -16,9 +16,6 @@ namespace task1.Models
         [Required]
         [Display(Name = "Country : ")]
         public string CountryName { get; set; }
-
-        // A country can have many states
-        public virtual ICollection<State> States { get; set; }
     }
 
     public class State
@@ -45,7 +42,7 @@ namespace task1.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int city_id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="A city is required")]
         [Display(Name = "City : ")]
         public string CityName { get; set; }
 

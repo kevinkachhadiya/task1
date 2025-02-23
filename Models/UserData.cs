@@ -63,7 +63,6 @@ namespace task1.Models
 
      
         [Display(Name = "Image : ")]
-        [Required(ErrorMessage = "An Image is required.")]
         public string ImagePath { get; set; }
 
         [Display(Name = "Select a Country")]

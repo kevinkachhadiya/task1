@@ -63,10 +63,15 @@ namespace task1.Controllers
                     Value = s.city_id.ToString(),
                     Text = s.CityName
                 }).ToList();
-
-            System.Console.WriteLine(City);
-
             return Json(City, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult CreateUser(UserData user, HttpPostedFileBase file)
+        {
+
+           return RedirectToRoute("Home","Index");
+        
         }
 
 
