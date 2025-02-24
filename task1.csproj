@@ -294,6 +294,18 @@
     <Compile Include="Migrations\202502231911339_m14.Designer.cs">
       <DependentUpon>202502231911339_m14.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202502241015283_m15.cs" />
+    <Compile Include="Migrations\202502241015283_m15.Designer.cs">
+      <DependentUpon>202502241015283_m15.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502241612443_m16.cs" />
+    <Compile Include="Migrations\202502241612443_m16.Designer.cs">
+      <DependentUpon>202502241612443_m16.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502241702199_m17.cs" />
+    <Compile Include="Migrations\202502241702199_m17.Designer.cs">
+      <DependentUpon>202502241702199_m17.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -351,6 +363,9 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\ViewUser.cshtml" />
+    <Content Include="Views\Home\Edit.cshtml" />
+    <Content Include="Views\Home\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -418,6 +433,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202502231911339_m14.resx">
       <DependentUpon>202502231911339_m14.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502241015283_m15.resx">
+      <DependentUpon>202502241015283_m15.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502241612443_m16.resx">
+      <DependentUpon>202502241612443_m16.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502241702199_m17.resx">
+      <DependentUpon>202502241702199_m17.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

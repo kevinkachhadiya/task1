@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI.WebControls;
 using System.Web.Mvc;
+using System.Web.Services.Protocols;
 
 namespace task1.Models
 {
@@ -47,15 +48,17 @@ namespace task1.Models
 
         [Display(Name = "Password : ")]
         [Required(ErrorMessage = "A Password is required.")]
-        [MinLength(6, ErrorMessage = "A Password must be more than 6 letter")]
+        [MinLength(6, ErrorMessage = "A Password must be more than 6 letters.")]
         [DataType(DataType.Password)]
-        public String Password { get; set; }
+        public string Password { get; set; }
 
         [Display(Name = "Confirm Password : ")]
         [Required(ErrorMessage = "A Confirm Password is required.")]
-        [MinLength(6, ErrorMessage = "A Confirm Password must be more than 6 letter")]
+        [MinLength(6, ErrorMessage = "A Confirm Password must be more than 6 letters.")]
         [DataType(DataType.Password)]
-        public String ConfirmPassword { get; set; }
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
 
         [Display(Name = "Address : ")]
         [Required(ErrorMessage = "An Address is required.")]
@@ -66,13 +69,28 @@ namespace task1.Models
         public string ImagePath { get; set; }
 
         [Display(Name = "Select a Country")]
-        public int? SelectedCountryId { get; set; }
+        [Required(ErrorMessage ="Country is required")]
+        public int SelectedCountryId { get; set; }
 
         [Display(Name = "Select a State")]
-        public int? SelectedStateId { get; set; }
+        [Required(ErrorMessage = "A state is required")]
+        public int SelectedStateId { get; set; }
 
         [Display(Name = "Select a city")]
-        public int? SelectedCityId { get; set; }
+        [Required(ErrorMessage = "A City is required")]
+
+        public int SelectedCityId { get; set; }
+
+        [NotMapped]
+        public string SelectedCountry { get; set; }
+
+
+        [NotMapped]
+        public string selectedState { get; set; }
+
+
+        [NotMapped]
+        public string selectedCity { get; set; }
 
         public IEnumerable<SelectListItem> CountryList { get; set; }
         public IEnumerable<SelectListItem> StateList { get; set; }

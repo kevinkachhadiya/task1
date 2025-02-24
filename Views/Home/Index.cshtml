@@ -86,9 +86,9 @@
                 {
                     @class = "form-control",
                     type = "date",
-     Max = DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")
+                    Max = DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")
                 }
-})
+            })
             @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -166,6 +166,10 @@
             <label for="file" class="control-label">Image</label>
         </div>
         <div class="col-md-6">
+            <img id="previewImage" src="" alt="Uploaded Image"
+                 class="img-thumbnail mb-2"
+                 style="width: 150px; height: 150px; display: @(string.IsNullOrEmpty(Model.ImagePath) ? "none" : "block");" />
+
             <input type="file" name="file" id="file" class="form-control" required="required" />
         </div>
     </div>
@@ -233,8 +237,27 @@
         $("#stateDropdown").empty();
         $("#stateDropdown").append('<option value="">Select a State</option>');
     }
-});
+            });
+
+            $("#file").change(function (event) {
+                var file = event.target.files[0];
+
+                if (file) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $("#previewImage").attr("src", e.target.result);
+                        $("#previewImage").show();
+                    };
+
+                    reader.readAsDataURL(file);
+                } else {
+                    $("#previewImage").hide();
+                }
+            });
+            
         });
+    
 </script>
 }
 
