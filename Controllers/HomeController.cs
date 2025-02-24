@@ -174,7 +174,7 @@ namespace task1.Controllers
                     PopulateSelectLists(user);
                     return View(user);
                 }
-                _applicationDbContext.Users.Update(Edituser);
+                // error _applicationDbContext.Users.Update(Edituser);
                 _applicationDbContext.SaveChanges();
                 return RedirectToAction("ViewUser");
             }
