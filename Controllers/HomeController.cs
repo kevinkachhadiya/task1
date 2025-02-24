@@ -139,8 +139,7 @@ namespace task1.Controllers
         public ActionResult Edit(int Id)
         {
             var Edituser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
-            Edituser.ConfirmPassword = Edituser.Password;
-
+  
             PopulateSelectLists(Edituser);
             return View(Edituser);
         }
@@ -148,7 +147,7 @@ namespace task1.Controllers
         [HttpPost]
         public ActionResult Edit(UserData user, HttpPostedFileBase file)
         {
-            var Edituser = _applicationDbContext.Users.FirstOrDefault(u=>u.user_id == user.user_id);
+            var Edituser = _applicationDbContext.Users.Find(user.user_id);
 
             if (ModelState.IsValid)
             {
@@ -175,7 +174,7 @@ namespace task1.Controllers
                     PopulateSelectLists(user);
                     return View(user);
                 }
-                _applicationDbContext.Users.AddOrUpdate(user);
+                _applicationDbContext.Users.Update(Edituser);
                 _applicationDbContext.SaveChanges();
                 return RedirectToAction("ViewUser");
             }
