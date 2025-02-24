@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -136,7 +137,10 @@ namespace task1.Controllers
         public ActionResult Edit(int Id)
         {
             var Edituser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
-  
+
+
+            Edituser.Password = Edituser.Password;
+            Edituser.ConfirmPassword = Edituser.ConfirmPassword;
             PopulateSelectLists(Edituser);
             return View(Edituser);
         }
@@ -144,17 +148,29 @@ namespace task1.Controllers
         [HttpPost]
         public ActionResult Edit(UserData user, HttpPostedFileBase file)
         {
+            if (user == null || user.user_id == 0)
+            {
+                ModelState.AddModelError("", "Invalid user data.");
+                PopulateSelectLists(user);
+                return View(user);
+            }
+
             var Edituser = _applicationDbContext.Users.Find(user.user_id);
+
+            if (Edituser == null)
+            {
+                return HttpNotFound();
+            }
 
             if (ModelState.IsValid)
             {
+             
                 if (file != null && file.ContentLength > 0)
                 {
                     string fileName = Path.GetFileNameWithoutExtension(file.FileName);
                     string extension = Path.GetExtension(file.FileName);
                     string newFileName = fileName + "_" + Guid.NewGuid() + extension;
 
-                    
                     string directoryPath = Server.MapPath("~/Uploads/");
                     if (!Directory.Exists(directoryPath))
                     {
@@ -163,14 +179,12 @@ namespace task1.Controllers
 
                     string filePath = Path.Combine(directoryPath, newFileName);
                     file.SaveAs(filePath);
-                    user.ImagePath = newFileName;
+
+                   
+                    Edituser.ImagePath = newFileName;
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid Data format");
-                    PopulateSelectLists(user);
-                    return View(user);
-                }
+
+                Edituser.user_id = user.user_id;
                 Edituser.FirstName = user.FirstName;
                 Edituser.LastName = user.LastName;
                 Edituser.Email = user.Email;
@@ -178,12 +192,27 @@ namespace task1.Controllers
                 Edituser.Gender = user.Gender;
                 Edituser.Dob = user.Dob;
                 Edituser.Address = user.Address;
-                Edituser.ImagePath = user.ImagePath;
                 Edituser.SelectedCountryId = user.SelectedCountryId;
                 Edituser.SelectedStateId = user.SelectedStateId;
                 Edituser.SelectedCityId = user.SelectedCityId;
-                _applicationDbContext.SaveChanges();
-                return RedirectToAction("ViewUser");
+
+                try
+                {
+                    _applicationDbContext.SaveChanges();
+                    return RedirectToAction("ViewUser");
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var validationErrors in ex.EntityValidationErrors)
+                    {
+                        foreach (var validationError in validationErrors.ValidationErrors)
+                        {
+                            ModelState.AddModelError("", $"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
+                        }
+                    }
+                    PopulateSelectLists(user);
+                    return View(user);
+                }
             }
             else
             {
@@ -191,6 +220,7 @@ namespace task1.Controllers
                 return View(user);
             }
         }
+
         [HttpGet]
         public ActionResult Delete(int Id)
         {
