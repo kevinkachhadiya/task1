@@ -60,15 +60,12 @@ namespace task1.Controllers
 
             foreach (var user in users)
             {
-                // Fetch Country Name
                 var Country = _applicationDbContext.Countries.Find(user.SelectedCountryId);
                 user.SelectedCountry = Country != null ? Country.CountryName : "N/A";
 
-                // Fetch State Name
                 var State = _applicationDbContext.states.Find(user.SelectedStateId);
                 user.selectedState = State != null ? State.StateName : "N/A";
 
-                // Fetch City Name
                 var City = _applicationDbContext.Cities.Find(user.SelectedCityId);
                 user.selectedCity = City != null ? City.CityName : "N/A";
             }
@@ -174,7 +171,17 @@ namespace task1.Controllers
                     PopulateSelectLists(user);
                     return View(user);
                 }
-                // error _applicationDbContext.Users.Update(Edituser);
+                Edituser.FirstName = user.FirstName;
+                Edituser.LastName = user.LastName;
+                Edituser.Email = user.Email;
+                Edituser.MobileNo = user.MobileNo;
+                Edituser.Gender = user.Gender;
+                Edituser.Dob = user.Dob;
+                Edituser.Address = user.Address;
+                Edituser.ImagePath = user.ImagePath;
+                Edituser.SelectedCountryId = user.SelectedCountryId;
+                Edituser.SelectedStateId = user.SelectedStateId;
+                Edituser.SelectedCityId = user.SelectedCityId;
                 _applicationDbContext.SaveChanges();
                 return RedirectToAction("ViewUser");
             }
