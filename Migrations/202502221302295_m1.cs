@@ -49,7 +49,7 @@
                         LastName = c.String(nullable: false),
                         Email = c.String(nullable: false),
                         MobileNo = c.String(nullable: false),
-                        Gender = c.Int(nullable: false),
+                        Gender = c.String(nullable: false),
                         Dob = c.DateTime(nullable: false),
                         Password = c.String(nullable: false),
                         ConfirmPassword = c.String(nullable: false),

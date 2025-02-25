@@ -2,193 +2,202 @@
 
 @{
     ViewBag.Title = "Edit";
-  
+
 }
 
 <h2>Edit</h2>
 
-@using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+           
+            @using (Html.BeginForm("Edit", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
 
-    <div class="container">
+            <div class="container" style="max-width:auto">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+                </div>
 
-        <h4>Edit UserData</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="row mb-3">
-        @Html.HiddenFor(model => model.user_id)
+                <div class="row mb-3 mt-3">
+                    @Html.HiddenFor(model => model.user_id)
 
-        <div class="col-md-3">
-            @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
-        </div>
-        <div class="col-md-6">
-            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.Email, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.MobileNo, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.MobileNo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MobileNo, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6 d-flex">
-                @foreach (var gender in Enum.GetValues(typeof(task1.Models.Gender)))
-                {
-                    <div class="form-check me-3">
-                        @Html.RadioButtonFor(model => model.Gender, gender, new { @class = "form-check-input" })
-                        <label class="form-check-label">@gender</label>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
                     </div>
-                }
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.MobileNo, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.MobileNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MobileNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Gender1, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6 d-flex">
+                        @foreach (var gender in Enum.GetValues(typeof(task1.Models.Gender)))
+                        {
+                            <div class="form-check me-3">
+                                @Html.RadioButtonFor(model => model.Gender1, gender, new { @class = "form-check-input" })
+                                <label class="form-check-label">@gender</label>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-6 offset-md-3">
+                        @Html.ValidationMessageFor(model => model.Gender1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Dob, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.Dob, new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "form-control",
+                                type = "date",
+                                Max = DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")
+                            }
+                        })
+                        @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type = "password" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                       C_Password
+                    </div>
+                    <div class="col-md-6">
+                        @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.TextAreaFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                       State Name : 
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.SelectedCountryId,
+                            Model.CountryList,
+                            "Select a Country",
+                            new { @class = "form-control", id = "countryDropdown" })
+                        @Html.ValidationMessageFor(model => model.SelectedCountryId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        State Name :
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.SelectedStateId,
+                            Model.StateList,
+                            "Select a State",
+                            new { @class = "form-control", id = "stateDropdown" })
+                        @Html.ValidationMessageFor(model => model.SelectedStateId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.SelectedCityId, new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(model => model.SelectedCityId,
+                           Model.CityList,
+                            "Select a City",
+                            new { @class = "form-control", id = "CityDropdown" })
+                        @Html.ValidationMessageFor(model => model.SelectedCityId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="file" class="control-label">Image</label>
+                    </div>
+                    <div class="col-md-6">
+
+                        <img id="previewImage" src="@Url.Content("~/Uploads/" + Model.ImagePath)" alt="Uploaded Image"
+                             class="img-thumbnail mb-2"
+                             style="width: 150px; height: 150px; display: @(string.IsNullOrEmpty(Model.ImagePath) ? "none" : "block");" />
+
+                        <input type="file" name="file" id="file" class="form-control" required="required"
+                               accept=".jpg,.jpeg" />
+                        <span id="fileError" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <input type="submit" value="Create" class="btn btn-primary mb-3" />
+                    </div>
+                </div>
+
             </div>
-            <div class="col-md-6 offset-md-3">
-                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
-            </div>
+            }
         </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.Dob, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.Dob, new
-                {
-                    htmlAttributes = new
-                    {
-                        @class = "form-control",
-                        type = "date",
-                        Max = DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")
-                    }
-                })
-                @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.Password, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", type = "password" } })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control", type = "password" } })
-                @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.Address, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.TextAreaFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.SelectedCountryId, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.DropDownListFor(model => model.SelectedCountryId,
-                    Model.CountryList,
-                    "Select a Country",
-                    new { @class = "form-control", id = "countryDropdown" })
-                @Html.ValidationMessageFor(model => model.SelectedCountryId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.SelectedStateId, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.DropDownListFor(model => model.SelectedStateId,
-                    Model.StateList,
-                    "Select a State",
-                    new { @class = "form-control", id = "stateDropdown" })
-                @Html.ValidationMessageFor(model => model.SelectedStateId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-3">
-                @Html.LabelFor(model => model.SelectedCityId, new { @class = "control-label" })
-            </div>
-            <div class="col-md-6">
-                @Html.DropDownListFor(model => model.SelectedCityId,
-                   Model.CityList,
-                    "Select a City",
-                    new { @class = "form-control", id = "CityDropdown" })
-                @Html.ValidationMessageFor(model => model.SelectedCityId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="row mb-3">
-            <div class="col-md-3">
-                <label for="file" class="control-label">Image</label>
-            </div>
-            <div class="col-md-6">
-
-                <img id="previewImage" src="@Url.Content("~/Uploads/" + Model.ImagePath)" alt="Uploaded Image"
-                     class="img-thumbnail mb-2"
-                     style="width: 150px; height: 150px; display: @(string.IsNullOrEmpty(Model.ImagePath) ? "none" : "block");" />
-
-                <input type="file" name="file" id="file" class="form-control" required="required" />
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </div>
-
     </div>
-}
+</div>
+
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "ViewUser")
 </div>
 
 @section Scripts {
@@ -198,7 +207,7 @@
         $(document).ready(function () {
             $("#stateDropdown").change(function () {
                 var StateId = $(this).val();
-                if (StateId) {
+                if (StateId && StateId != null) {
                     $.ajax({
                         url: '@Url.Action("GetCityByState", "Home")',
                         type: "GET",
@@ -215,13 +224,14 @@
                     });
                 } else {
                     $("#CityDropdown").empty();
-                    $("#CityDropdown").append('<option value="">Select a State</option>');
+                   
+                    $("#CityDropdown").append('<option value="">Select a city </option>');
                 }
             });
 
             $("#countryDropdown").change(function () {
-               var countryId = $(this).val();
-                if (countryId) {
+                var countryId = $(this).val();
+                if (countryId && countryId != null) {
           $.ajax({
             url: '@Url.Action("GetStatesByCountry", "Home")',
             type: "GET",
@@ -237,27 +247,33 @@
             }
         });
     } else {
-        $("#stateDropdown").empty();
-        $("#stateDropdown").append('<option value="">Select a State</option>');
+                    $("#stateDropdown").empty();
+                    $("#stateDropdown").append('<option value="">Select a State</option>');
+                    $("#CityDropdown").empty();
+
+                    $("#CityDropdown").append('<option value="">Select a city</option>');
     }
             });
             $("#file").change(function (event) {
-                var file = event.target.files[0]; 
+                var file = event.target.files[0];
 
                 if (file) {
-                    var reader = new FileReader(); 
+                    var reader = new FileReader();
 
                     reader.onload = function (e) {
-                        $("#previewImage").attr("src", e.target.result); 
-                        $("#previewImage").show(); 
+                        $("#previewImage").attr("src", e.target.result);
+                        $("#previewImage").show();
                     };
 
-                    reader.readAsDataURL(file); 
+                    reader.readAsDataURL(file);
                 } else {
                     $("#previewImage").hide();
                 }
             });
+
+            $('#exampleModal').modal('show')
         });
-        
+
+
     </script>
 }

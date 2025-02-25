@@ -37,9 +37,19 @@ namespace task1.Models
         [RegularExpression(@"^\d+$", ErrorMessage = "Mobile number must contain only digits.")]
         public string MobileNo { get; set; }
 
+
         [Display(Name = "Gender : ")]
         [Required(ErrorMessage = "A Gender is required.")]
-        public Gender Gender { get; set; }
+        [EnumDataType(typeof(Gender))]
+        [NotMapped]
+        public Gender Gender1
+        {
+            get => Enum.TryParse(Gender_, out Gender gender) ? gender : Gender.Other;
+            set => Gender_ = value.ToString();
+        }
+
+
+        public string Gender_ { get; set; }
 
         [Display(Name = "Date of Birth : ")]
         [DataType(DataType.Date)]
@@ -48,46 +58,45 @@ namespace task1.Models
 
         [Display(Name = "Password : ")]
         [Required(ErrorMessage = "A Password is required.")]
-        [MinLength(6, ErrorMessage = "A Password must be more than 6 letters.")]
+        [MinLength(6, ErrorMessage = "A Password must be at least 6 characters.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [NotMapped]
         [Display(Name = "Confirm Password : ")]
         [Required(ErrorMessage = "A Confirm Password is required.")]
-        [MinLength(6, ErrorMessage = "A Confirm Password must be more than 6 letters.")]
+        [MinLength(6, ErrorMessage = "A Confirm Password must be at least 6 characters.")]
         [DataType(DataType.Password)]
         [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
 
         [Display(Name = "Address : ")]
         [Required(ErrorMessage = "An Address is required.")]
         public String Address { get; set; }
 
-     
         [Display(Name = "Image : ")]
         public string ImagePath { get; set; }
 
+        [NotMapped]
         [Display(Name = "Select a Country")]
         [Required(ErrorMessage ="Country is required")]
         public int SelectedCountryId { get; set; }
 
+
+        [NotMapped]
         [Display(Name = "Select a State")]
         [Required(ErrorMessage = "A state is required")]
         public int SelectedStateId { get; set; }
 
         [Display(Name = "Select a city")]
         [Required(ErrorMessage = "A City is required")]
-
         public int SelectedCityId { get; set; }
 
         [NotMapped]
         public string SelectedCountry { get; set; }
 
-
         [NotMapped]
         public string selectedState { get; set; }
-
 
         [NotMapped]
         public string selectedCity { get; set; }
@@ -95,8 +104,6 @@ namespace task1.Models
         public IEnumerable<SelectListItem> CountryList { get; set; }
         public IEnumerable<SelectListItem> StateList { get; set; }
         public IEnumerable<SelectListItem> CityList { get; set; }
-
-
     }
     public enum Gender
     { 

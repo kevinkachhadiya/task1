@@ -306,6 +306,46 @@
     <Compile Include="Migrations\202502241702199_m17.Designer.cs">
       <DependentUpon>202502241702199_m17.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202502251116239_19.cs" />
+    <Compile Include="Migrations\202502251116239_19.Designer.cs">
+      <DependentUpon>202502251116239_19.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251118488_20.cs" />
+    <Compile Include="Migrations\202502251118488_20.Designer.cs">
+      <DependentUpon>202502251118488_20.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251126309_21.cs" />
+    <Compile Include="Migrations\202502251126309_21.Designer.cs">
+      <DependentUpon>202502251126309_21.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251205117_22.cs" />
+    <Compile Include="Migrations\202502251205117_22.Designer.cs">
+      <DependentUpon>202502251205117_22.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251308237_23.cs" />
+    <Compile Include="Migrations\202502251308237_23.Designer.cs">
+      <DependentUpon>202502251308237_23.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251309149_24.cs" />
+    <Compile Include="Migrations\202502251309149_24.Designer.cs">
+      <DependentUpon>202502251309149_24.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251323526_25.cs" />
+    <Compile Include="Migrations\202502251323526_25.Designer.cs">
+      <DependentUpon>202502251323526_25.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251331295_26.cs" />
+    <Compile Include="Migrations\202502251331295_26.Designer.cs">
+      <DependentUpon>202502251331295_26.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251717497_27.cs" />
+    <Compile Include="Migrations\202502251717497_27.Designer.cs">
+      <DependentUpon>202502251717497_27.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202502251730032_28.cs" />
+    <Compile Include="Migrations\202502251730032_28.Designer.cs">
+      <DependentUpon>202502251730032_28.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -442,6 +482,36 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202502241702199_m17.resx">
       <DependentUpon>202502241702199_m17.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251116239_19.resx">
+      <DependentUpon>202502251116239_19.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251118488_20.resx">
+      <DependentUpon>202502251118488_20.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251126309_21.resx">
+      <DependentUpon>202502251126309_21.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251205117_22.resx">
+      <DependentUpon>202502251205117_22.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251308237_23.resx">
+      <DependentUpon>202502251308237_23.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251309149_24.resx">
+      <DependentUpon>202502251309149_24.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251323526_25.resx">
+      <DependentUpon>202502251323526_25.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251331295_26.resx">
+      <DependentUpon>202502251331295_26.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251717497_27.resx">
+      <DependentUpon>202502251717497_27.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502251730032_28.resx">
+      <DependentUpon>202502251730032_28.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
