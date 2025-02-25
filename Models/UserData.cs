@@ -34,7 +34,7 @@ namespace task1.Models
 
         [Display(Name = "Mobile No : ")]
         [Required(ErrorMessage = "A Mobile Number is required.")]
-        [RegularExpression(@"^\d+$", ErrorMessage = "Mobile number must contain only digits.")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Mobile number must contain 10 digits.")]
         public string MobileNo { get; set; }
 
 
