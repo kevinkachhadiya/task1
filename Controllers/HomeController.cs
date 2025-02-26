@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -58,13 +59,13 @@ namespace task1.Controllers
 
             foreach (var user in users)
             {
-                var City = _applicationDbContext.Cities.Find(user.SelectedCityId);
+                var City = _applicationDbContext.Cities.FirstOrDefault(c=>c.city_id == user.SelectedCityId);
                 user.selectedCity = City != null ? City.CityName : "N/A";
 
-                var State = _applicationDbContext.states.Find(City.state_id);
+                var State = _applicationDbContext.states.FirstOrDefault(s=>s.state_id == City.state_id);
                 user.selectedState = State != null ? State.StateName : "N/A";
 
-                var Country = _applicationDbContext.Countries.Find(State.country_id);
+                var Country = _applicationDbContext.Countries.FirstOrDefault(c=>c.country_id == State.country_id);
                 user.SelectedCountry = Country != null ? Country.CountryName : "N/A";
             }
 
@@ -168,10 +169,16 @@ namespace task1.Controllers
         public ActionResult Edit(int Id)
         {
             var Edituser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
-            PopulateSelectLists(Edituser);
-            Edituser.ConfirmPassword = Edituser.Password;
-            return View(Edituser);
+            if (Edituser != null)
+            {
+
+                PopulateSelectLists(Edituser);
+                Edituser.ConfirmPassword = Edituser.Password;
+                return View(Edituser);
+            }
+            return RedirectToAction("ViewUser");
         }
+
         [HttpPost]
         public ActionResult Edit(UserData user, HttpPostedFileBase file)
         {
@@ -182,7 +189,7 @@ namespace task1.Controllers
                 return View(user);
             }
 
-            var Edituser = _applicationDbContext.Users.Find(user.user_id);
+            var Edituser = _applicationDbContext.Users.FirstOrDefault(u=>u.user_id==user.user_id);
 
             if (Edituser == null)
             {
@@ -191,50 +198,39 @@ namespace task1.Controllers
 
             if (ModelState.IsValid)
             {
-             
+
                 if (file != null && file.ContentLength > 0)
                 {
                     string fileName = Path.GetFileNameWithoutExtension(file.FileName);
                     string extension = Path.GetExtension(file.FileName);
                     string newFileName = fileName + "_" + Guid.NewGuid() + extension;
-
                     string directoryPath = Server.MapPath("~/Uploads/");
                     if (!Directory.Exists(directoryPath))
                     {
                         Directory.CreateDirectory(directoryPath);
                     }
-
-               
                     string filePath = Path.Combine(directoryPath, newFileName);
-
                     try
                     {
-                     
-                        var allowedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".JPG", ".JPEG", ".PNG" };
-                  
+                        var allowedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".JPG", ".JPEG" };
                         if (allowedExtensions.Contains(extension))
                         {
-                           
                             file.SaveAs(filePath);
-
-                            user.ImagePath = newFileName;
+                            Edituser.ImagePath = newFileName;
                         }
                         else
                         {
-                            ModelState.AddModelError("FileError", "Invalid file format. Only JPG, JPEG, and PNG are allowed.");
+                            ModelState.AddModelError("FileError", "Invalid file format. Only JPG, JPEG are allowed.");
                             PopulateSelectLists(user);
                             return View(user);
                         }
                     }
-
                     catch (Exception ex)
                     {
                         ModelState.AddModelError("FileError", "Error uploading file: " + ex.Message);
                         return View(user);
                     }
-
                 }
-
                 Edituser.user_id = user.user_id;
                 Edituser.FirstName = user.FirstName;
                 Edituser.LastName = user.LastName;
@@ -258,14 +254,14 @@ namespace task1.Controllers
                 {
                     foreach (var validationErrors in ex.EntityValidationErrors)
                     {
-                        foreach (var validationError in validationErrors.ValidationErrors)
-                        {
-                            ModelState.AddModelError("", $"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
-                        }
+
+                        ModelState.AddModelError("", validationErrors.ToString());
                     }
-                    PopulateSelectLists(user);
-                    return View(user);
+                        PopulateSelectLists(user);
+                        return View(user);   
                 }
+
+
             }
             else
             {
@@ -282,11 +278,13 @@ namespace task1.Controllers
             _applicationDbContext.SaveChanges();
             return RedirectToAction("ViewUser");        
         }
+
         [HttpGet]
         public ActionResult Details(int Id)
         {
-            var user = _applicationDbContext.Users.Find(Id);
-
+            var user = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
+            if (user != null)
+            {
                 var City = _applicationDbContext.Cities.Find(user.SelectedCityId);
                 user.selectedCity = City != null ? City.CityName : "N/A";
 
@@ -296,10 +294,10 @@ namespace task1.Controllers
                 var Country = _applicationDbContext.Countries.Find(State.country_id);
                 user.SelectedCountry = Country != null ? Country.CountryName : "N/A";
 
-            return View(user);     
-        }
+                return View(user);
+            }
+            return RedirectToAction("ViewUser");        }
 
-      
          private void PopulateSelectLists(UserData user)
         {
             var CityName = _applicationDbContext.Cities.Find(user.SelectedCityId);
@@ -324,14 +322,11 @@ namespace task1.Controllers
 
             user.SelectedStateId = CityName.state_id;
 
-
-
             foreach (var i in user.StateList)
             {
                 if (i.Selected)
                 {
-                    int stateid = int.Parse(i.Value);
-                    var countryid = _applicationDbContext.Countries.FirstOrDefault(c=>c.country_id == stateid);
+                    var countryid = _applicationDbContext.Countries.FirstOrDefault(c=>c.country_id == StateName.country_id);
                     user.SelectedCountryId = countryid.country_id;
                 }
             }
@@ -345,9 +340,6 @@ namespace task1.Controllers
                    Text = c.CountryName,
                    Selected = c.country_id == user.SelectedCountryId
                }).ToList();
-
-           
-
         }
 
         public ActionResult About()
