@@ -16,7 +16,6 @@
                 <div class="container" style="max-width:auto">
                     <h5 class="modal-title" id="exampleModalLabel">Create User</h5>
                     <hr />
-
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                     <div class="row mb-3 mt-3">
@@ -94,7 +93,6 @@
                             @Html.ValidationMessageFor(model => model.Dob, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="row mb-3">
                         <div class="col-md-3">
                             @Html.LabelFor(model => model.Password, new { @class = "control-label" })
@@ -150,7 +148,6 @@
                             @Html.ValidationMessageFor(model => model.SelectedStateId, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                     <div class="row mb-3">
                         <div class="col-md-3">
                             @Html.LabelFor(model => model.SelectedCityId, new { @class = "control-label" })
@@ -193,9 +190,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -257,7 +251,8 @@
                 if (file) {
                     var reader = new FileReader();
 
-                    reader.onload = function (e) {
+                    reader.onload = function (e)
+                    {
                         $("#previewImage").attr("src", e.target.result);
                         $("#previewImage").show();
                     };
@@ -267,6 +262,8 @@
                     $("#previewImage").hide();
                 }
             });
+
+
             $('#CreateModal').modal({
                 backdrop: 'static',
                 keyboard: false
@@ -277,14 +274,10 @@
                     e.preventDefault();
                 }
             });
-
             $("#CreateModal").modal('show')       
         });
-    
 </script>
 }
-
-
 <style>
     .container {
         max-width: 700px;

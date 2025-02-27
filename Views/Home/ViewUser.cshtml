@@ -1,16 +1,25 @@
 ﻿@model IEnumerable<task1.Models.UserData>
 
 @{
+
     ViewBag.Title = "ViewUser";
+    int i = 1;
 }
 
 <h2>ViewUser</h2>
+<div class="row mb-3">
+    <div class="col-md-8">
+        <input type="text" alt="search user" id="search" placeholder="Searching by name,city,gender etc..  " class="col-6 form-control" />
+    </div>
+</div>
+<div class="mb-3 col">
 
+</div>
 <p>
-    <button type="button" class="btn btn-outline-success" onclick="location.href='@Url.Action("Index","Home")'" >Create User</button>
+    <button type="button" class="btn btn-outline-success" onclick="location.href='@Url.Action("Index", "Home")'">Create User</button>
 </p>
 <div class="table-responsive">
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped table-bordered" id="viewtable">
         <thead class="table-light">
             <tr style="font-size:14px;">
                 <th>#</th>
@@ -28,75 +37,141 @@
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-            @{ int i = 1; }
-            @foreach (var item in Model)
+        <tbody class="align-content-center">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@i</td>
+                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MobileNo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Gender1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Dob)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                        <td>
+                            <img src="@Url.Content("~/Uploads/" + item.ImagePath)" alt="Image"
+                                 class="img-fluid rounded"
+                                 style="max-width: 80px; height: auto; display: @(string.IsNullOrEmpty(item.ImagePath) ? "none" : "block");" />
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.SelectedCountry)</td>
+                        <td>@Html.DisplayFor(modelItem => item.selectedState)</td>
+                        <td>@Html.DisplayFor(modelItem => item.selectedCity)</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm"
+                                        onclick="location.href='@Url.Action("Edit", "Home", new { Id = item.user_id })'">
+                                    Edit
+                                </button>
+                                <button type="button" class="btn btn-outline-warning btn-sm"
+                                        onclick="location.href='@Url.Action("Details", "Home", new { Id = item.user_id })'">
+                                    Detail
+
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm"
+                                        onclick="location.href='@Url.Action("Delete", "Home", new { Id = item.user_id })'">
+                                    Delete
+                                </button>
+
+                            </div>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@i</td>
-                    <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                    <td>@Html.DisplayFor(modelItem => item.MobileNo)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Gender1)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Dob)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Address)</td>
-                    <td>
-                        <img src="@Url.Content("~/Uploads/" + item.ImagePath)" alt="Image"
-                             class="img-fluid rounded"
-                             style="max-width: 80px; height: auto; display: @(string.IsNullOrEmpty(item.ImagePath) ? "none" : "block");" />
-                    </td>
-                    <td>@Html.DisplayFor(modelItem => item.SelectedCountry)</td>
-                    <td>@Html.DisplayFor(modelItem => item.selectedState)</td>
-                    <td>@Html.DisplayFor(modelItem => item.selectedCity)</td>
-                    <td>
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-outline-primary btn-sm"
-                                    onclick="location.href='@Url.Action("Edit", "Home", new { Id = item.user_id })'">
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-outline-warning btn-sm"
-                                    onclick="location.href='@Url.Action("Details", "Home", new { Id = item.user_id })'">
-                                Detail
-
-                            </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm"
-                                    onclick="location.href='@Url.Action("Delete", "Home", new { Id = item.user_id })'">
-                                Delete
-                            </button>
-
-                        </div>
-                    </td>
+                    <td colspan="13" class="text-center text-danger"><strong>Zero Record found Please Add Record By Clicking Create User Button</strong></td>
                 </tr>
-                i++;
+
             }
         </tbody>
     </table>
+    <div class="pagination  mb-2">
+
+        <span id="pageInfo" class="d-flex align-items-center justify-content-center"></span>
+        <button id="prevBtn" class="btn btn-outline-primary">Previous</button>
+        <span class="m-2 d-flex align-items-center justify-content-center"></span>
+        <button id="nextBtn" class="btn btn-outline-primary">Next</button>
+    </div>
 </div>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            var rowsPerPage = 10;
+            var currentPage = 1;
+            var $rows = $("#viewtable tbody tr");
+            var totalPages = Math.ceil($rows.length / rowsPerPage);
+
+           
+            function showPage(page) {
+                $rows.hide();
+                var start = (page - 1) * rowsPerPage;
+                var end = start + rowsPerPage;
+                $rows.slice(start, end).show();
+                $("#pageInfo").text("Page " + page + " of " + totalPages);
+                $()
+            }
+
+            
+            showPage(currentPage);
+
+      
+            $("#prevBtn").click(function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                }
+            });
+
+            $("#nextBtn").click(function () {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                }
+            });
+
+     
+            $("#search").on("input", function () {
+                var searchvalue = $(this).val().toLowerCase();
+
+              var filteredrow =   $("#viewtable tbody tr").filter(function () {
+
+                  return $(this).text().toLowerCase().indexOf(searchvalue) > -1;
+                
+              });
+
+                $("#viewtable tbody tr").hide();
+
+                filteredrow.slice(0, 10).show();
+
+            });
+        });
+    </script>
+}
 <style>
-    th, td {
-        text-align: center; 
-        vertical-align: middle; 
+    .pagination {
+        display: flex; 
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
     }
 
-        td img {
-            display: block;
-            margin: 0 auto; 
-            max-width: 80px;
-            height: auto;
-        }
-
-    .d-flex {
-        display: flex;
-        justify-content: center; 
-        align-items: center; 
-        gap: 10px; 
-    }
-
-    .table-responsive {
-        display: flex;
+ 
+    #pageInfo {
+        display: flex; 
+        align-items: center;
         justify-content: center;
     }
-
+    #viewtable th,
+    #viewtable td {
+        text-align: center;
+        vertical-align: middle;
+    }
 </style>

@@ -28,7 +28,6 @@ namespace task1.Models
         [Display(Name = "State : ")]
         public string StateName { get; set; }
 
-        // Foreign key for Country
         public int country_id { get; set; }
 
         [ForeignKey("country_id")]
@@ -46,7 +45,6 @@ namespace task1.Models
         [Display(Name = "City : ")]
         public string CityName { get; set; }
 
-        // Foreign key for State
         public int state_id { get; set; }
 
         [ForeignKey("state_id")]

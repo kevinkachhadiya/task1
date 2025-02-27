@@ -48,7 +48,6 @@ namespace task1.Models
             set => Gender_ = value.ToString();
         }
 
-
         public string Gender_ { get; set; }
 
         [Display(Name = "Date of Birth : ")]
