@@ -103,6 +103,8 @@ namespace task1.Models
         public IEnumerable<SelectListItem> CountryList { get; set; }
         public IEnumerable<SelectListItem> StateList { get; set; }
         public IEnumerable<SelectListItem> CityList { get; set; }
+
+        public Boolean IsActive { get; set; }
     }
     public enum Gender
     { 

@@ -350,6 +350,10 @@
     <Compile Include="Migrations\202502251856154_29.Designer.cs">
       <DependentUpon>202502251856154_29.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202502281749418_30.cs" />
+    <Compile Include="Migrations\202502281749418_30.Designer.cs">
+      <DependentUpon>202502281749418_30.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -406,7 +410,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\ViewUser.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
     <Content Include="Views\Home\Details.cshtml" />
@@ -519,6 +522,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202502251856154_29.resx">
       <DependentUpon>202502251856154_29.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202502281749418_30.resx">
+      <DependentUpon>202502281749418_30.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

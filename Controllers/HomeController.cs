@@ -23,6 +23,16 @@ namespace task1.Controllers
         {
             _applicationDbContext = context;
         }
+        [HttpGet]
+        public JsonResult GetAllCountry()
+        {
+            var AllCountry = _applicationDbContext.Countries.Select(s => new SelectListItem
+            {
+                Value = s.country_id.ToString(),
+                Text = s.CountryName
+            }).ToList();
+            return Json(AllCountry,JsonRequestBehavior.AllowGet);
+        }
 
         [HttpGet]
         public JsonResult GetStatesByCountry(int countryId)
@@ -51,11 +61,12 @@ namespace task1.Controllers
             return Json(City, JsonRequestBehavior.AllowGet);
         }
 
+
         [HttpGet]
         public ActionResult ViewUser()
         {
 
-            List<UserData> users = _applicationDbContext.Users.ToList();
+            List<UserData> users = _applicationDbContext.Users.Where(c=>c.IsActive == true).ToList();
 
             foreach (var user in users)
             {
@@ -67,50 +78,32 @@ namespace task1.Controllers
 
                 var Country = _applicationDbContext.Countries.FirstOrDefault(c=>c.country_id == State.country_id);
                 user.SelectedCountry = Country != null ? Country.CountryName : "N/A";
+               PopulateSelectLists(user);
             }
-
             return View(users);
-        }
-
-        [HttpGet]
-        public ActionResult Index()
-        {
-            var model = new UserData
-            {
-                CountryList = _applicationDbContext.Countries
-                    .Select(c => new SelectListItem
-                    {
-                        Value = c.country_id.ToString(),
-                        Text = c.CountryName
-                    }).ToList(),
-                StateList = new List<SelectListItem>(),
-                CityList = new List<SelectListItem>(),
-            };
-
-            return View(model);
         }
 
         [HttpPost]
         public ActionResult Index(UserData user, HttpPostedFileBase file)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (file != null && file.ContentLength > 0)
+                if (ModelState.IsValid)
                 {
-                    string fileName = Path.GetFileNameWithoutExtension(file.FileName);
-                    string extension = Path.GetExtension(file.FileName);
-                    string newFileName = fileName + "_" + Guid.NewGuid() + extension;
-
-                  
-                    string directoryPath = Server.MapPath("~/Uploads/");
-                    if (!Directory.Exists(directoryPath))
+                    if (file != null && file.ContentLength > 0)
                     {
-                        Directory.CreateDirectory(directoryPath);
-                    }
+                        string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                        string extension = Path.GetExtension(file.FileName);
+                        string newFileName = fileName + "_" + Guid.NewGuid() + extension;
 
-                    string filePath = Path.Combine(directoryPath, newFileName);
-                    try
-                    {
+                        string directoryPath = Server.MapPath("~/Uploads/");
+                        if (!Directory.Exists(directoryPath))
+                        {
+                            Directory.CreateDirectory(directoryPath);
+                        }
+
+                        string filePath = Path.Combine(directoryPath, newFileName);
+
                         if (extension.ToUpper() == ".JPG" || extension.ToUpper() == ".JPEG" || extension.ToUpper() == ".PNG")
                         {
                             file.SaveAs(filePath);
@@ -121,49 +114,56 @@ namespace task1.Controllers
                         {
                             ModelState.AddModelError("", "Invalid file format");
                             PopulateSelectLists(user);
-                            return View(user);
-                       
+                            return Json(new { success = false, message = "Invalid file format" });
+
                         }
-
                     }
-                    catch(Exception ex)
-                        {
-                        ModelState.AddModelError("Invalid file format",ex);
+                    else
+                    {
+                        ModelState.AddModelError("", "Invalid Data format");
                         PopulateSelectLists(user);
-                        return View(user);
+                        return Json(new { success = false, message = "Invalid Data format" });
                     }
-                }
+                    var unique_email = !_applicationDbContext.Users
+                         .Any(c => c.Email == user.Email && c.user_id != user.user_id);
 
+                    if (unique_email)
+                    {
+                        user.IsActive = true;
+                        _applicationDbContext.Users.Add(user);
+                        _applicationDbContext.SaveChanges();
+                        return Json(new { success = true, message = "User created successfully!" });
+
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Email is already registered");
+                        PopulateSelectLists(user);
+                        return Json(new { success = false, message = "Email is already registered" });
+                    }
+
+                }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid Data format");
-                    PopulateSelectLists(user);
-                    return View(user);
+                    var errors = ModelState.Values
+                             .SelectMany(v => v.Errors)
+                             .Select(e => e.ErrorMessage)
+                             .ToList();
+                    Debug.WriteLine("Validation errors: " + string.Join(", ", errors));
+                    return Json(new { success = false, message = "Validation failed." +string.Join(", ", errors)});
                 }
-                var unique_email = !_applicationDbContext.Users
-                     .Any(c => c.Email == user.Email && c.user_id != user.user_id);
-
-                if (unique_email)
-                {
-                    _applicationDbContext.Users.Add(user);
-                    _applicationDbContext.SaveChanges();
-                    return RedirectToAction("ViewUser");
-
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Email is already registered");
-                    PopulateSelectLists(user);
-                    return View(user);
-                }
-
             }
-            else
+            catch (Exception ex)
             {
-                PopulateSelectLists(user);
-                return View(user);
+                ModelState.AddModelError("Invalid file format", ex);
+                var errors = ModelState.Values
+                             .SelectMany(v => v.Errors)
+                             .Select(e => e.ErrorMessage)
+                             .ToList();
+                return Json(new { success = false, message = "Validation failed.", errors = errors });
             }
         }
+
 
         [HttpGet]
         public ActionResult Edit(int Id)
@@ -270,15 +270,26 @@ namespace task1.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult Delete(int Id)
         {
-            var user = _applicationDbContext.Users.Find(Id);
-            _applicationDbContext.Users.Remove(user);
-            _applicationDbContext.SaveChanges();
-            return RedirectToAction("ViewUser");        
-        }
+            try
+            {
+                var deleteuser = _applicationDbContext.Users.FirstOrDefault(u=>u.user_id==Id);
+                Debug.WriteLine(deleteuser);
+                deleteuser.IsActive = false;
+                _applicationDbContext.Configuration.ValidateOnSaveEnabled = false;
 
+                _applicationDbContext.SaveChanges();
+                return Json(new { success = true, response = "Deleted Successfully", Name = deleteuser.FirstName });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "No record Found"+ ex });
+             }
+
+            }
         [HttpGet]
         public ActionResult Details(int Id)
         {
