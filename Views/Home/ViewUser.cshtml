@@ -20,6 +20,7 @@
 <p>
     <button type="button" class="btn btn-outline-success" id="create_user">Create User</button>
 </p>
+
 <table class="display table table-hover" id="viewtable" style="width:100%;">
     <thead class="bg-light text-dark">
         <tr style="font-size:14px;">
@@ -105,7 +106,6 @@
         }
     </tbody>
 </table>
-
 
 <div class="modal fade" id="CreateModal" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="false">
     <div class="modal-dialog" role="document">
@@ -453,45 +453,66 @@
                 </ul>
             </div>
         </div>
-     </div>
     </div>
+</div>
 
-            @section scripts {
-                <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-                <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
-                <script>
-    $(document).ready(function () {
-        $('#viewtable').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "columnDefs": [
-                { "orderable": false, "targets": [12] },
-                { "width": "15%", "targets": 12 } // Enough space for buttons
-            ],
-            "pageLength": 10,
-            "language": {
-                "search": '<i class="fas fa-search me-2"></i> Search:',
-                "lengthMenu": "Show _MENU_ entries",
-                "info": "Showing _START_ to _END_ of _TOTAL_ entries",
-                "emptyTable": "No data available in table",
-                "paginate": {
-                    "previous": '<i class="fas fa-chevron-left"></i>',
-                    "next": '<i class="fas fa-chevron-right"></i>'
+<div id="customAlert" class="custom-alert" style="display: none;">
+    <div class="alert-content">
+        <span id="alertMessage"></span>
+        <button class="close-btn">&times;</button>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#viewtable').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "scrollX": true,
+                "fixedHeader": true,
+                "stateSave": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": [12] },
+                    { "width": "15%", "targets": 12 },
+                    { "className": "dt-center text-nowrap", "targets": "_all" }
+                ],
+                "pageLength": 5,
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                "language": {
+                    "search": '<i class="fas fa-search me-2 text-primary"></i>',
+                    "searchPlaceholder": "Search users...",
+                    "lengthMenu": '<span class="me-2 text-muted">Show</span> _MENU_ <span class="ms-1 text-muted">entries</span>',
+                    "info": "<span class='text-info'>Showing</span> _START_ to _END_ of _TOTAL_ entries",
+                    "emptyTable": '<div class="text-center py-4"><i class="fas fa-user-slash text-danger me-2"></i>No users found</div>',
+                    "paginate": {
+                        "previous": '<i class="fas fa-angle-left"></i>',
+                        "next": '<i class="fas fa-angle-right"></i>'
+                    }
+                },
+                "order": [[0, 'asc']],
+                "dom": '<"row align-items-center mb-4"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row align-items-center mt-4"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                "drawCallback": function () {
+                    $('.btn-sm').addClass('shadow-sm animate__animated animate__fadeIn');
+                    $('.dataTables_filter input').addClass('form-control rounded-pill border-primary shadow-sm');
+                    $('.dataTables_length select').addClass('form-select rounded-pill border-primary shadow-sm');
+                    $('.paginate_button').addClass('btn btn-outline-primary btn-sm rounded-pill');
+                },
+                "initComplete": function () {
+                    $('#viewtable_wrapper').addClass('animate__animated animate__zoomIn');
                 }
-            },
-            "order": [[0, 'asc']],
-            "dom": '<"row mb-3"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
-                '<"row"<"col-sm-12"tr>>' +
-                '<"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-            "drawCallback": function () {
-                $('.btn-sm').addClass('shadow-sm');
-            }
-        });
+            });
+
         $("#countryDropdown").change(function () {
            var countryId = $(this).val();
             if (countryId) {
@@ -518,7 +539,7 @@
 }
         });
 
-            $("#stateDropdown").change(function () {
+        $("#stateDropdown").change(function () {
             var StateId = $(this).val();
             if (StateId) {
                 $.ajax({
@@ -541,7 +562,7 @@
             }
             });
 
-            $.ajax(
+        $.ajax(
                 {
                     url: '@Url.Action("GetAllCountry", "Home")',
                     type: "GET",
@@ -558,7 +579,6 @@
                     }
                  }
             );
-
 
         $("#file").change(function (event) {
             var file = event.target.files[0];
@@ -578,11 +598,11 @@
             }
         });
 
-            $("#create_user").click(function () {
+        $("#create_user").click(function () {
                 $("#CreateModal").modal('show')
-            });5
+            });
 
-            $("#CreateNewUser").on('submit', function (e) {
+        $("#CreateNewUser").on('submit', function (e) {
 
                 e.preventDefault();
                 var formData = new FormData(this);
@@ -596,11 +616,11 @@
                     contentType: false,
                     success: function (response) {
                         if (response.success) {
-                            alert("user created successfully");
+                            customAlert("user created successfully",0.25);
                             window.location.href = '@Url.Action("ViewUser", "Home")';
                         }
                         else {
-                            alert('Error: ' + response.message);
+                            customAlert('Error: ' + response.message,0.25);
                         }
                     }
 
@@ -618,14 +638,14 @@
               data: { Id: userId },
             success: function (response) {
                 if (response.success) {
-                    alert("User deleted successfully whose name is " + response.Name);
+                    customAlert("User deleted successfully whose name is " + response.Name,0.25);
                     window.location.reload();
                 } else {
-                    alert("Error: " + response.message);
+                    customAlert("Error: " + response.message,0.25);
                 }
             },
             error: function (xhr, status, error) {
-                alert("An error occurred: " + error);
+                customAlert("An error occurred: " + error,0.25);
             }
         });
     }
@@ -735,11 +755,11 @@
 
                 $("#editUserModal").modal("show");
             } else {
-                alert("Error: " + response.message);
+                customAlert('Error: ' + response.message,4);
             }
         },
         error: function (xhr, status, error) {
-            alert("An error occurred: " + error);
+            customAlert('Error: ' + response.message,4);
         }
       });
 
@@ -832,13 +852,13 @@
                           contentType: false,
                           success: function (response) {
                               if (response.success)
-                            {
-                                alert("user Edited successfully");
+                              {
+                                  customAlert("user Edited successfully",0.25);
                                 window.location.href = '@Url.Action("ViewUser", "Home")';
                             }
                             else
                             {
-                                 alert(response.message);
+                                  customAlert(response.message,0.25);
                             }
                          }
 
@@ -875,116 +895,27 @@
                 $("#City").text(user.selectedCity);
                 $("#user_id").text(user.user_id);
 
-                // Update Edit/Delete links with userId
-                $("#editLink").attr("href", '@Url.Action("Edit", "Home")' + '?id=' + userId);
-                $("#deleteLink").attr("href", '@Url.Action("Delete", "Home")' + '?id=' + userId);
-
                 // Show modal
                 $("#detail").modal("show");
             } else {
-                console.error("Invalid response:", response);
-                alert("Failed to load user details.");
+               
+                customAlert("Failed to load user details.",0.25);
             }
         },
         error: function (xhr, status, error) {
-            console.error("AJAX error:", status, error);
-            alert("An error occurred while fetching details.");
+            
+            customAlert("An error occurred while fetching details.",0.25);
         }
     });
                     }
 
-                    function deleteUserFromHidden() {
-                        var userId = $("#user_id").val(); 
+   function customAlert(message, delayInSeconds) {
+            setTimeout(() => {
+                alert(message);
+            }, delayInSeconds * 1000);
+        }
 
-                        console.log("User ID from hidden field:", userId); 
+    </script>
+}
 
-                        if (!userId) {
-                            alert("User ID is not set. Cannot delete.");
-                            return;
-                        }
-
-                       
-                        try {
-                            deleteUser(userId);
-                        } catch (error) {
-                            console.error("Error in deleteUser:", error);
-                            alert("An error occurred while trying to delete the user.");
-                        }
-                    }
-                </script>
-              }
-
-            <style>
-
-
-                #viewtable {
-                    border-radius: 8px;
-                    overflow: hidden;
-                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                }
-
-                    #viewtable thead th {
-                        background-color: #f8f9fa;
-                        font-weight: 600;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                        padding: 12px;
-                    }
-
-                    #viewtable tbody tr:hover {
-                        background-color: #f1f3f5;
-                        transition: background-color 0.2s ease;
-                    }
-
-
-                .btn-sm {
-                    padding: 0.3rem 0.6rem;
-                    min-width: 34px;
-                    min-height: 34px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 4px;
-                    transition: all 0.2s ease;
-                }
-
-                    .btn-sm i {
-                        font-size: 1.1rem;
-                        line-height: 1;
-                    }
-
-                .btn-outline-primary:hover,
-                .btn-outline-info:hover,
-                .btn-outline-danger:hover {
-                    color: #fff;
-                    transform: scale(1.05);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                }
-
-                .badge {
-                    padding: 0.4em 0.8em;
-                    font-size: 0.9em;
-                }
-
-
-                .rounded-circle {
-                    border: 2px solid #e9ecef;
-                }
-
-                .dataTables_wrapper .dataTables_length,
-                .dataTables_wrapper .dataTables_filter {
-                    margin-bottom: 1rem;
-                }
-
-                .dataTables_wrapper .dataTables_paginate .paginate_button {
-                    border-radius: 4px;
-                    margin: 0 2px;
-                    padding: 0.25rem 0.5rem;
-                }
-
-                    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-                        background: #007bff;
-                        color: #fff !important;
-                        border-color: #007bff;
-                    }
-            </style>
+<link rel="stylesheet" href="~/App_Data/view.css" />
