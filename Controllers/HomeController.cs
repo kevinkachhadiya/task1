@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
@@ -65,7 +66,6 @@ namespace task1.Controllers
         [HttpGet]
         public ActionResult ViewUser()
         {
-
             List<UserData> users = _applicationDbContext.Users.Where(c=>c.IsActive == true).ToList();
 
             foreach (var user in users)
@@ -127,7 +127,10 @@ namespace task1.Controllers
                     var unique_email = !_applicationDbContext.Users
                          .Any(c => c.Email == user.Email && c.user_id != user.user_id);
 
-                    if (unique_email)
+                    var unique_MobileNumber = !_applicationDbContext.Users
+                        .Any(c => c.MobileNo == user.MobileNo && c.user_id != user.user_id);
+
+                    if (unique_email && unique_MobileNumber)
                     {
                         user.IsActive = true;
                         _applicationDbContext.Users.Add(user);
@@ -137,9 +140,7 @@ namespace task1.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Email is already registered");
-                        PopulateSelectLists(user);
-                        return Json(new { success = false, message = "Email is already registered" });
+                        return Json(new { success = false, message = "Email or PhoneNumber is already registered" });
                     }
 
                 }
@@ -150,7 +151,8 @@ namespace task1.Controllers
                              .Select(e => e.ErrorMessage)
                              .ToList();
                     Debug.WriteLine("Validation errors: " + string.Join(", ", errors));
-                    return Json(new { success = false, message = "Validation failed." +string.Join(", ", errors)});
+                    var errorMessage = "Validation failed." + Environment.NewLine + string.Join(Environment.NewLine, errors);
+                    return Json(new { success = false, message = errorMessage });
                 }
             }
             catch (Exception ex)
@@ -160,10 +162,10 @@ namespace task1.Controllers
                              .SelectMany(v => v.Errors)
                              .Select(e => e.ErrorMessage)
                              .ToList();
-                return Json(new { success = false, message = "Validation failed.", errors = errors });
+                var errorMessage = "Validation failed." + Environment.NewLine + string.Join(Environment.NewLine, errors);
+                return Json(new { success = false, message = errorMessage });
             }
         }
-
 
         [HttpPost]
         public JsonResult Edit(int Id)
@@ -181,18 +183,22 @@ namespace task1.Controllers
 
         }
 
-        [HttpGet]
-
-        public ActionResult Edit(UserData user, HttpPostedFileBase file)
+        [HttpPost]
+        public ActionResult EditUser(UserData user, HttpPostedFileBase file)
         {
-            if (user == null || user.user_id == 0)
+            if (user == null)
             {
                 ModelState.AddModelError("", "Invalid user data.");
                 PopulateSelectLists(user);
-                return View(user);
+                return View();
             }
 
+            
             var Edituser = _applicationDbContext.Users.FirstOrDefault(u=>u.user_id==user.user_id);
+
+            var OldEmail = Edituser.Email;
+
+            var OldPhoneNumber = Edituser.MobileNo;
 
             if (Edituser == null)
             {
@@ -251,15 +257,28 @@ namespace task1.Controllers
                 try
                 {
                     var unique_email = !_applicationDbContext.Users
-                         .Any(c => c.Email == Edituser.Email );
+                         .Any(c => c.Email == Edituser.Email);
 
-                    if (unique_email || Edituser.Email == user.Email)
+                    var unique_MobileNumber = !_applicationDbContext.Users
+                       .Any(c => c.MobileNo == Edituser.MobileNo);
+                    if (!(unique_MobileNumber || OldPhoneNumber == Edituser.MobileNo))
+                    {
+
+                        return Json(new { success = false, message = "mobile number is Already registered with other User!" });
+                    }
+                    else if (unique_email || OldEmail.ToString() == Edituser.Email.ToString())
                     {
                         _applicationDbContext.SaveChanges();
                         return Json(new { success = true, message = "User Edited successfully!" });
                     }
+                    else
+                    {
+                        return Json(new { success = false, message = "Email is Already registered with other User!" });
 
-                    return Json(new { success = false, message = "Email is Already registered with other User!" });
+                    }
+                    
+
+                  
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -274,8 +293,16 @@ namespace task1.Controllers
             }
             else
             {
-                PopulateSelectLists(user);
-                return Json(new { success = false, message = "MOdel is not valid" });
+                var errors = ModelState.Values
+                                      .SelectMany(v => v.Errors)
+                                      .Select(e => e.ErrorMessage)
+                                      .ToList();
+
+       
+                var errorMessage = "Validation failed." + Environment.NewLine + string.Join(Environment.NewLine, errors);
+
+                return Json(new { success = false, message = errorMessage });
+
             }
         }
 
@@ -299,8 +326,9 @@ namespace task1.Controllers
              }
 
             }
-        [HttpGet]
-        public ActionResult Details(int Id)
+
+        [HttpPost]
+        public JsonResult Details(int Id)
         {
             var user = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
             if (user != null)
@@ -313,10 +341,13 @@ namespace task1.Controllers
 
                 var Country = _applicationDbContext.Countries.Find(State.country_id);
                 user.SelectedCountry = Country != null ? Country.CountryName : "N/A";
+                Debug.WriteLine(user);
 
-                return View(user);
+
+                return Json(new { success = true, message = user }, JsonRequestBehavior.DenyGet); ;
             }
-            return RedirectToAction("ViewUser");        }
+            return Json(new { success = false, message = "Error accure" }, JsonRequestBehavior.DenyGet);
+        }
 
          private void PopulateSelectLists(UserData user)
         {

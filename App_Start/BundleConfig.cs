@@ -25,6 +25,10 @@ namespace task1
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/datatables").Include(
+                    "~/Scripts/jquery-3.7.0.js",
+                   "~/Scripts/DataTables/datatables.min.js"));
         }
     }
 }
