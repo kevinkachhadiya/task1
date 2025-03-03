@@ -508,6 +508,7 @@
                     $('.dataTables_length select').addClass('form-select rounded-pill border-primary shadow-sm');
                     $('.paginate_button').addClass('btn btn-outline-primary btn-sm rounded-pill');
                 },
+
                 "initComplete": function () {
                     $('#viewtable_wrapper').addClass('animate__animated animate__zoomIn');
                 }
@@ -858,7 +859,7 @@
                             }
                             else
                             {
-                                  customAlert(response.message,0.25);
+                                  customAlert(response.message,0.1);
                             }
                          }
 
