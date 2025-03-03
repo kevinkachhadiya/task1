@@ -69,8 +69,8 @@
                         <td>@Html.DisplayFor(modelItem => Modelitem.selectedCity)</td>
                         <td>
                             <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-outline-primary btn-sm"
-                                        onclick="location.href='@Url.Action("Edit", "Home", new { Id = Modelitem.user_id })'">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="edit"
+                                        onclick="edituser(@Modelitem.user_id)">
                                     Edit
                                 </button>
                                 <button type="button" class="btn btn-outline-warning btn-sm"
@@ -289,6 +289,138 @@
     </div>
 </div>
 
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @{
+                    using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "EditUserForm" }))
+                    {
+                        <div class="container">
+                            <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                            <hr />
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <input type="hidden" id="userId" name="userId" />
+
+                            <div class="row mb-3 mt-3">
+                                <div class="col-md-3">
+                                    @Html.Label("First Name", new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="editFirstName" name="FirstName" class="form-control" placeholder="Enter Your Firstname" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.Label("Last Name", new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="editLastName" name="LastName" class="form-control" placeholder="Enter Your Lastname" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.Label("Email", new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="email" id="editEmail" name="Email" class="form-control" placeholder="Enter Your Email" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.Label("Mobile No", new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="editMobileNo" name="MobileNo" class="form-control" placeholder="Enter Your Mobile No" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">Gender:</div>
+                                <div class="col-md-8 d-flex">
+                                    @foreach (var gender in Enum.GetValues(typeof(task1.Models.Gender)))
+                                    {
+                                        <div class="form-check me-4">
+                                            <input type="radio" name="Gender1" value="@gender" class="form-check-input editGender" />
+                                            <label class="form-check-label ms-2">@gender</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">DOB:</div>
+                                <div class="col-md-8">
+                                    <input type="date" id="editDob" name="Dob" class="form-control" max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("Password", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <input type="password" id="editPassword" name="Password" class="form-control" placeholder="Enter Your Password" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("Confirm Password", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <input type="password" id="editConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Confirm Your Password" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("Address", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <textarea id="editAddress" name="Address" class="form-control" placeholder="Enter Your Address"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("Country", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <select id="editCountry" name="SelectedCountryId" class="form-control">
+                                        @foreach (var country in item.CountryList)
+                                        {
+                                            <option value="@country.Value">@country.Text</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("State", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <select id="editState" name="SelectedStateId" class="form-control"></select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("City", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <select id="editCity" name="SelectedCityId" class="form-control"></select>
+                                </div>
+                            </div>
+
+                            <hr />
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 <script>
@@ -411,12 +543,6 @@
                 filteredrow.slice(0, 10).show();
             });
 
-            $("#create_user").click(function () {
-                console.log("click");
-                $("#CreateModal").modal('show')
-            });
-
-
         $("#countryDropdown").change(function () {
            var countryId = $(this).val();
             if (countryId) {
@@ -504,6 +630,10 @@
             }
         });
 
+            $("#create_user").click(function () {
+                $("#CreateModal").modal('show')
+            });5
+
             $("#CreateNewUser").on('submit', function (e) {
 
                 e.preventDefault();
@@ -531,6 +661,7 @@
                 });
 
             });
+
         });
 
        function deleteUser(userId) {
@@ -552,7 +683,48 @@
             }
         });
     }
+    }
+
+   function edituser(userId) {
+    $.ajax({
+        url: '@Url.Action("Edit", "Home")',
+        type: "POST",
+        data: { Id: userId },
+        success: function (response) {
+            if (response.success) {
+                $("#userId").val(userId);
+                $("#editFirstName").val(response.message.FirstName);
+                $("#editLastName").val(response.message.LastName);
+                $("#editEmail").val(response.message.Email);
+                $("#editMobileNo").val(response.message.MobileNo);
+                $("#editDob").val(response.message.Dob);
+
+                
+                $(".editGender").each(function () {
+                    if ($(this).val() === response.message.Gender1) {
+                        $(this).prop("checked", true);
+                    }
+                });
+
+                $("#editPassword").val(response.message.Password);
+                $("#editConfirmPassword").val(response.message.ConfirmPassword);
+                $("#editAddress").val(response.message.Address);
+                $("#editCountry").val(response.message.SelectedCountryId);
+                $("#editState").val(response.message.SelectedStateId);
+                $("#editCity").val(response.message.SelectedCityId);
+
+        
+                $("#editUserModal").modal("show");
+            } else {
+                alert("Error: " + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            alert("An error occurred: " + error);
+        }
+    });
 }
+
 </script>
 }
 <style>

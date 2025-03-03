@@ -165,21 +165,24 @@ namespace task1.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult Edit(int Id)
+        [HttpPost]
+        public JsonResult Edit(int Id)
         {
             var Edituser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
+          
             if (Edituser != null)
             {
 
                 PopulateSelectLists(Edituser);
                 Edituser.ConfirmPassword = Edituser.Password;
-                return View(Edituser);
+                return Json(new { success = true, message = Edituser, JsonRequestBehavior.DenyGet });
             }
-            return RedirectToAction("ViewUser");
+            return Json(new { success = false, message = "Error accure" }, JsonRequestBehavior.DenyGet);
+
         }
 
-        [HttpPost]
+        [HttpGet]
+
         public ActionResult Edit(UserData user, HttpPostedFileBase file)
         {
             if (user == null || user.user_id == 0)
@@ -222,13 +225,13 @@ namespace task1.Controllers
                         {
                             ModelState.AddModelError("FileError", "Invalid file format. Only JPG, JPEG are allowed.");
                             PopulateSelectLists(user);
-                            return View(user);
+                            return Json(new { success = false, message = "FileError Invalid file format. Only JPG, JPEG are allowed." });
                         }
                     }
                     catch (Exception ex)
                     {
                         ModelState.AddModelError("FileError", "Error uploading file: " + ex.Message);
-                        return View(user);
+                        return Json(new { success = false, message = ex.Message });
                     }
                 }
                 Edituser.user_id = user.user_id;
@@ -244,11 +247,19 @@ namespace task1.Controllers
                 Edituser.SelectedCountryId = user.SelectedCountryId;
                 Edituser.SelectedStateId = user.SelectedStateId;
                 Edituser.SelectedCityId = user.SelectedCityId;
-
+                Edituser.IsActive = true;
                 try
                 {
-                    _applicationDbContext.SaveChanges();
-                    return RedirectToAction("ViewUser");
+                    var unique_email = !_applicationDbContext.Users
+                         .Any(c => c.Email == Edituser.Email );
+
+                    if (unique_email || Edituser.Email == user.Email)
+                    {
+                        _applicationDbContext.SaveChanges();
+                        return Json(new { success = true, message = "User Edited successfully!" });
+                    }
+
+                    return Json(new { success = false, message = "Email is Already registered with other User!" });
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -258,15 +269,13 @@ namespace task1.Controllers
                         ModelState.AddModelError("", validationErrors.ToString());
                     }
                         PopulateSelectLists(user);
-                        return View(user);   
+                    return Json(new { success = false, message = "Some error is coming"});
                 }
-
-
             }
             else
             {
                 PopulateSelectLists(user);
-                return View(user);
+                return Json(new { success = false, message = "MOdel is not valid" });
             }
         }
 
