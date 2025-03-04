@@ -1,4 +1,6 @@
-﻿using Microsoft.Ajax.Utilities;
+﻿using BrenoQueiroz.MVC.DataTable;
+using Microsoft.Ajax.Utilities;
+using MyComService;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
@@ -62,12 +64,10 @@ namespace task1.Controllers
             return Json(City, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpGet]
         public ActionResult ViewUser()
         {
             List<UserData> users = _applicationDbContext.Users.Where(c=>c.IsActive == true).ToList();
-
             foreach (var user in users)
             {
                 var City = _applicationDbContext.Cities.FirstOrDefault(c=>c.city_id == user.SelectedCityId);
@@ -81,6 +81,130 @@ namespace task1.Controllers
                PopulateSelectLists(user);
             }
             return View(users);
+        }
+
+        [HttpPost]
+        public ActionResult serverdata(DataTableRequest dataTableRequest)
+        {
+            int draw = dataTableRequest.Draw;
+            int start = dataTableRequest.Start;
+            int length = dataTableRequest.Length;
+            string searchValue = dataTableRequest.Search?.Value?.ToLower();
+
+            // Start with the Users query
+            var query = _applicationDbContext.Users
+                .Where(c => c.IsActive == true)
+                .Join(_applicationDbContext.Cities,
+                      user => user.SelectedCityId,
+                      city => city.city_id,
+                      (user, city) => new { User = user, City = city })
+                .Join(_applicationDbContext.states,
+                      uc => uc.City.state_id,
+                      state => state.state_id,
+                      (uc, state) => new { uc.User, uc.City, State = state })
+                .Join(_applicationDbContext.Countries,
+                      ucs => ucs.State.country_id,
+                      country => country.country_id,
+                      (ucs, country) => new { ucs.User, ucs.City, ucs.State, Country = country });
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                query = query.Where(ucs =>ucs.User.FirstName.ToLower().Contains(searchValue) ||
+                                          ucs.City.CityName.ToLower().Contains(searchValue)||
+                                          ucs.State.StateName.ToLower().Contains(searchValue)||
+                                          ucs.Country.CountryName.ToLower().Contains(searchValue)||
+                                          ucs.User.FirstName.ToLower().Contains(searchValue) ||
+                                          ucs.User.LastName.ToLower().Contains(searchValue)||
+                                          ucs.User.Email.ToLower().Contains(searchValue)||
+                                          ucs.User.MobileNo.ToLower().Contains(searchValue) ||
+                                          ucs.User.Gender_.ToLower().Contains(searchValue) ||
+                                          ucs.User.Dob.ToLower().Contains(searchValue)|| 
+                                          ucs.User.Address.ToLower().Contains(searchValue));
+
+            }
+            // Apply sorting
+            if (dataTableRequest.Order != null && dataTableRequest.Order.Any())
+            {
+                var order = dataTableRequest.Order[0];
+
+                switch (order.Column)
+                {
+                    case 0: // number
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.user_id) : query.OrderByDescending(ucs => ucs.User.user_id);
+                        break;
+                    case 1: // FirstName
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.FirstName) : query.OrderByDescending(ucs => ucs.User.FirstName);
+                        break;
+                    case 2: // LastName
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.LastName) : query.OrderByDescending(ucs => ucs.User.LastName);
+                        break;
+                    case 3: // Email
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.Email) : query.OrderByDescending(ucs => ucs.User.Email);
+                        break;
+                    case 4: // MobileNo
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.MobileNo) : query.OrderByDescending(ucs => ucs.User.MobileNo);
+                        break;
+                    case 5: // Gender
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.Gender_) : query.OrderByDescending(ucs => ucs.User.Gender_);
+                        break;
+                    case 6: // Address
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.Address) : query.OrderByDescending(ucs => ucs.User.Address);
+                        break;
+                    case 7: // ImagePath
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.ImagePath) : query.OrderByDescending(ucs => ucs.User.ImagePath);
+                        break;
+                    case 8: // City
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.City.CityName) : query.OrderByDescending(ucs => ucs.City.CityName);
+                        break;
+                    case 9: // State
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.State.StateName) : query.OrderByDescending(ucs => ucs.State.StateName);
+                        break;
+                    case 10: // Country
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.Country.CountryName) : query.OrderByDescending(ucs => ucs.Country.CountryName);
+                        break;
+                    default:
+                        query = query.OrderBy(ucs => ucs.User.FirstName); // Default sorting
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderBy(ucs => ucs.User.FirstName); // Default sorting
+            }
+
+            // Apply paging
+            var totalRecords = _applicationDbContext.Users.Count(c => c.IsActive == true);
+            var filteredRecords = query.Count(); // Count after filtering
+
+
+            var data = query.Skip(start).Take(length).ToList();
+
+            int index = start + 1;
+            // Map to the result
+            var result = new
+            {
+                draw = draw,
+                recordsTotal = totalRecords,
+                recordsFiltered = filteredRecords,
+                data = data.Select(ucs => new
+                {
+                    iid = index++,
+                    id = ucs.User.user_id,
+                    ucs.User.FirstName,
+                    ucs.User.LastName,
+                    ucs.User.Email,
+                    ucs.User.MobileNo,
+                    ucs.User.Gender_,
+                    ucs.User.Dob,
+                    ucs.User.Address,
+                    ucs.User.ImagePath,
+                    selectedCity = ucs.City.CityName,
+                    selectedState = ucs.State.StateName,
+                    SelectedCountry = ucs.Country.CountryName
+                   
+                })
+            };
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

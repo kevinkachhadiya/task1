@@ -16,21 +16,6 @@
     overflow: hidden;
 }
 
-    #viewtable thead th {
-        background: linear-gradient(90deg, #ff6f61, #ff8c7f);
-        color: #fff;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        padding: 20px 15px;
-        border-bottom: 4px solid #ff5e50;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        text-align: center;
-        transition: background 0.3s ease;
-    }
-
         #viewtable thead th:hover {
             background: linear-gradient(90deg, #ff5e50, #ff6f61);
         }

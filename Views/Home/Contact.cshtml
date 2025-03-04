@@ -1,19 +1,1099 @@
-﻿@{
-    ViewBag.Title = "Contact";
+﻿@model IEnumerable<task1.Models.UserData>
+@{
+
+    ViewBag.Title = "ViewUser";
+    var item = new task1.Models.UserData()
+    {
+        CountryList = new List<SelectListItem>(),
+        StateList = new List<SelectListItem>(),
+        CityList = new List<SelectListItem>()
+
+    };
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
 
-    <address>
-        One Microsoft Way<br />
-        Redmond, WA 98052-6399<br />
-        <abbr title="Phone">P:</abbr>
-        425.555.0100
-    </address>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="text-primary">ViewUser</h4>
+            <h5 class="text-muted">User List</h5>
+        </div>
+        <button id="btnCreate" class="btn btn-success btn-lg rounded-pill shadow-sm" data-bs-toggle="tooltip" title="Add a new user">
+            <i class="fas fa-plus"></i> Create New User
+        </button>
+    </div>
+    <div id="loadingSpinner" class="text-center" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <table class="display table table-hover table-striped" id="servertable" style="width:100%;">
+        <thead class="text-white">
+            <tr>
+                <th>#</th>
+                <th>F_Name</th>
+                <th>L_Name</th>
+                <th>Email</th>
+                <th>Mob_No</th>
+                <th>Gender</th>
+                <th>DOB</th>
+                <th>Address</th>
+                <th>Image</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Country</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
-    <address>
-        <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-    </address>
-</main>
+<div class="modal fade" id="CreateModal" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @{
+
+                    using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "CreateNewUser" }))
+                    {
+
+                        <div class="container" style="max-width:auto">
+                            <h5 class="modal-title" id="exampleModalLabel">Create User</h5>
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="row mb-3 mt-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.FirstName, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBox("FirstName", null, new { @class = "form-control", placeholder = "Enter Your Firstname" })
+                                    @Html.ValidationMessageFor(model => item.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.LastName, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBox("LastName", null, new { @class = "form-control", placeholder = "Enter Your Lastname" })
+                                    @Html.ValidationMessageFor(model => item.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.Email, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "Enter Your Email" })
+                                    @Html.ValidationMessageFor(model => item.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.MobileNo, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBox("MobileNo", null, new { @class = "form-control", placeholder = "Enter Your Mobile_No" })
+                                    @Html.ValidationMessageFor(model => item.MobileNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.Gender1, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8 d-flex">
+                                    @foreach (var gender in Enum.GetValues(typeof(task1.Models.Gender)))
+                                    {
+                                        <div class="form-check me-4">
+                                            @Html.RadioButton("Gender1", gender, new { @class = "form-check-input" })
+                                            <label class="form-check-label ms-2">@gender</label>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="col-md-6 offset-md-3">
+                                    @Html.ValidationMessageFor(model => item.Gender1, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    Dob :
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextBox("Dob", null, new { @class = "form-control", type = "date", Max = DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd") })
+                                    @Html.ValidationMessageFor(model => item.Dob, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.Password, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.Password("Password", null, new { @class = "form-control", placeholder = "Enter Your Password", autocomplete = "new-password" })
+                                    @Html.ValidationMessageFor(model => item.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.ConfirmPassword, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.Password("ConfirmPassword", null, new { @class = "form-control", placeholder = "Enter Your Confirm Password", autocomplete = "new-password" })
+                                    @Html.ValidationMessageFor(model => item.ConfirmPassword, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.Address, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.TextArea("Address", null, new { @class = "form-control", placeholder = "Enter Your Address" })
+                                    @Html.ValidationMessageFor(model => item.Address, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.SelectedCountryId, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownList("SelectedCountryId", item.CountryList, "Select a Country", new { @class = "form-control", id = "countryDropdown" })
+                                    @Html.ValidationMessageFor(model => item.SelectedCountryId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.SelectedStateId, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownList("SelectedStateId", item.StateList, "Select a State", new { @class = "form-control", id = "stateDropdown" })
+                                    @Html.ValidationMessageFor(model => item.SelectedStateId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.SelectedCityId, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownList("SelectedCityId", item.CityList, "Select a City", new { @class = "form-control", id = "CityDropdown" })
+                                    @Html.ValidationMessageFor(model => item.SelectedCityId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label for="file" class="control-label">Image</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <img id="previewImage" src="" alt="Uploaded Image"
+                                         class="img-thumbnail mb-2"
+                                         style="width: 150px; height: 150px; display: @(string.IsNullOrEmpty(item.ImagePath) ? "none" : "block");" />
+
+                                    <input type="file" name="file" id="file" class="form-control" required="required"
+                                           accept=".jpg,.jpeg" />
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.ActionLink("Back to List", "ViewUser")
+                                </div>
+                                <div class="col-md-8 text-end">
+                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                @{
+                    using (Html.BeginForm("ViewUser", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "EditUserForm" }))
+                    {
+                        @Html.Hidden("user_id")
+                        <div class="container">
+                            <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                            <hr />
+
+
+
+                            <input type="hidden" id="userId" name="userId" />
+
+                            <div class="row mb-3 mt-3">
+                                <div class="col-md-3">
+                                    @Html.Label("First Name", new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="editFirstName" name="FirstName" class="form-control" placeholder="Enter Your Firstname" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.Label("Last Name", new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="editLastName" name="LastName" class="form-control" placeholder="Enter Your Lastname" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.Label("Email", new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="email" id="editEmail" name="Email" class="form-control" placeholder="Enter Your Email" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.Label("Mobile No", new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="editMobileNo" name="MobileNo" class="form-control" placeholder="Enter Your Mobile No" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">Gender:</div>
+                                <div class="col-md-8 d-flex">
+                                    @foreach (var gender in Enum.GetValues(typeof(task1.Models.Gender)))
+                                    {
+                                        <div class="form-check me-4">
+                                            <input type="radio" name="Gender1" value="@((int)gender)" class="form-check-input editGender" />
+                                            <label class="form-check-label ms-2">@gender</label>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">DOB:</div>
+                                <div class="col-md-8">
+                                    <input type="date" id="editDob" name="Dob" class="form-control" max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("Password", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <input type="password" id="editPassword" name="Password" class="form-control" placeholder="Enter Your Password" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("Confirm Password", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <input type="password" id="editConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Confirm Your Password" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">@Html.Label("Address", new { @class = "control-label" })</div>
+                                <div class="col-md-8">
+                                    <textarea id="editAddress" name="Address" class="form-control" placeholder="Enter Your Address"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.SelectedCountryId, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownList("SelectedCountryId", item.CountryList, "Select a Country", new { @class = "form-control", id = "editcountry" })
+                                    @Html.ValidationMessageFor(model => item.SelectedCountryId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.SelectedStateId, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownList("SelectedStateId", item.StateList, "Select a State", new { @class = "form-control", id = "editstate" })
+                                    @Html.ValidationMessageFor(model => item.SelectedStateId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => item.SelectedCityId, new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-8">
+                                    @Html.DropDownList("SelectedCityId", item.CityList, "Select a City", new { @class = "form-control", id = "editcity" })
+                                    @Html.ValidationMessageFor(model => item.SelectedCityId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <label for="file" class="control-label">Image</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <img id="edit_image" src="" alt="Uploaded Image"
+                                         class="img-thumbnail mb-2"
+                                         style="width: 150px; height: 150px; display:block;" />
+
+                                    <input type="file" name="file" id="editfile" class="form-control"
+                                           accept=".jpg,.jpeg" />
+                                </div>
+                            </div>
+
+                            <hr />
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-body" style="width: 22rem;">
+            <div class="card shadow-lg rounded" style="width: 22rem;">
+                <img src="/images/default-avatar.png" class="card-img-top rounded-circle mx-auto d-block mt-3" id="dImage"
+                     alt="Profile Image" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #fff;">
+
+                <div class="card-body text-center">
+                    @Html.Hidden("user_id", null, new { @id = "user_id" })
+                    <h5 class="card-title fw-bold" id="fullname">Loading...</h5>
+                    <p class="card-text text-muted" id="dEmail"><i class="fas fa-envelope me-2"></i><span></span></p>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong><i class="fas fa-phone me-2"></i>Mobile:</strong> <span id="Mobile"></span></li>
+                    <li class="list-group-item"><strong><i class="fas fa-user me-2"></i>Gender:</strong> <span id="Gender"></span></li>
+                    <li class="list-group-item"><strong><i class="fas fa-birthday-cake me-2"></i>DOB:</strong> <span id="DDob"></span></li>
+                    <li class="list-group-item"><strong><i class="fas fa-home me-2"></i>Address:</strong> <span id="DAddress"></span></li>
+                    <li class="list-group-item"><strong><i class="fas fa-globe me-2"></i>Country:</strong> <span id="Country"></span></li>
+                    <li class="list-group-item"><strong><i class="fas fa-map-marker-alt me-2"></i>State:</strong> <span id="State"></span></li>
+                    <li class="list-group-item"><strong><i class="fas fa-city me-2"></i>City:</strong> <span id="City"></span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="customAlert" class="custom-alert" style="display: none;">
+    <div class="alert-content">
+        <span id="alertMessage"></span>
+        <button class="close-btn">&times;</button>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+         var datatablecolumnDefinations = [
+    {
+        "targets": [0],
+        "render": function (data, type, row, meta) {
+            return data.iid;
+        },
+        "className": "text-center"
+    },
+    {
+        "targets": [8],
+        "render": function (data, type, row, meta) {
+            if (data && data.trim() !== "") {
+                return '<img src="/Uploads/' + data + '" alt="User Image" class="img-thumbnail rounded-circle shadow-sm" style="max-width: 50px; max-height: 50px;" />';
+            } else {
+                return '<span class="text-muted">No image</span>';
+            }
+        },
+        "className": "text-center"
+    },
+    {
+        "targets": [12], 
+        "render": function (data, type, row, meta) {
+            return `
+                <div class="btn-group" role="group">
+                    <button class="btn btn-primary btn-sm me-1" onclick="edituser(${row.id})" data-bs-toggle="tooltip" title="Edit user">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-warning btn-sm me-1" onclick="detailsUser(${row.id})" data-bs-toggle="tooltip" title="View details">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteUser(${row.id})" data-bs-toggle="tooltip" title="Delete user">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+        },
+        "className": "text-center"
+    }
+];
+
+var datatableoptions = {
+    "serverSide": true,
+    "processing": true,
+    "paging": true,
+    "lengthChange": true,
+    "searching": true,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+    "scrollX": true,
+    "fixedHeader": true,
+    "stateSave": true,
+    "columnDefs": datatablecolumnDefinations,
+    "ajax": {
+        "url": '@Url.Action("serverdata", "Home")',
+        "type": "POST",
+        "dataType": "json",
+        "beforeSend": function () {
+            $('#loadingSpinner').show();
+        },
+        "complete": function () {
+            $('#loadingSpinner').hide();
+        }
+    },
+    "columns": [
+        { "data": null },
+        { "data": "FirstName" },
+        { "data": "LastName" },
+        { "data": "Email" },
+        { "data": "MobileNo" },
+        { "data": "Gender_" },
+        { "data": "Dob" },
+        { "data": "Address" },
+        { "data": "ImagePath" },
+        { "data": "selectedCity" },
+        { "data": "selectedState" },
+        { "data": "SelectedCountry" },
+        { "data": null }
+    ],
+    "pageLength": 5,
+    "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+    "language": {
+        "search": '<i class="fas fa-search me-2 text-primary"></i>',
+        "searchPlaceholder": "Search users...",
+        "lengthMenu": '<span class="me-2 text-muted">Show</span> _MENU_ <span class="ms-1 text-muted">entries</span>',
+        "info": "<span class='text-info'>Showing</span> _START_ to _END_ of _TOTAL_ entries",
+        "emptyTable": '<div class="text-center py-4"><i class="fas fa-user-slash text-danger me-2"></i>No users found</div>',
+        "paginate": {
+            "previous": '<i class="fas fa-angle-left"></i>',
+            "next": '<i class="fas fa-angle-right"></i>'
+        }
+    },
+    "order": [[1, 'asc']],
+    "dom": '<"row align-items-center mb-4"<"col-sm-12 col-md-4 d-flex justify-content-start align-items-center ps-3"l><"col-sm-12 col-md-4 d-flex justify-content-center align-items-center text-center"h><"col-sm-12 col-md-4 d-flex justify-content-end align-items-center pe-3"f>>' +
+        '<"row"<"col-sm-12"tr>>' +
+        '<"row align-items-center mt-4"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+
+    "drawCallback": function () {
+        $('.btn-sm').addClass('shadow-sm animate__animated animate__fadeIn').css({
+            'padding': '4px 10px',
+            'transition': 'all 0.3s ease'
+        });
+        $('.dataTables_filter input:visible').addClass('form-control rounded-pill border-primary shadow-sm').css({
+            'width': '250px',
+            'padding': '8px 12px',
+            'margin-right': '15px'
+        });
+        $('.dataTables_length select:visible').addClass('form-select rounded-pill border-primary shadow-sm').css({
+            'padding': '6px 12px',
+            'margin-left': '15px',
+            'max-width': '120px'
+        });
+        $('.paginate_button:visible').addClass('btn btn-outline-primary btn-sm rounded-pill').css({
+            'margin': '0 4px',
+            'padding': '6px 12px'
+        });
+        $('[data-bs-toggle="tooltip"]:not(.tooltip-initialized)').tooltip().addClass('tooltip-initialized');
+    },
+    "initComplete": function () {
+        $('#viewtable_wrapper').addClass('animate__animated animate__zoomIn');
+        $('[data-bs-toggle="tooltip"]:not(.tooltip-initialized)').tooltip().addClass('tooltip-initialized');
+    }
+};
+
+var testdatatable = $("#servertable").DataTable(datatableoptions);
+
+        $("#countryDropdown").change(function () {
+           var countryId = $(this).val();
+            if (countryId) {
+      $.ajax({
+        url: '@Url.Action("GetStatesByCountry", "Home")',
+        type: "GET",
+        data: { countryId: countryId },
+        success: function (data) {
+            var stateDropdown = $("#stateDropdown");
+            stateDropdown.empty();
+            stateDropdown.append('<option value="">Select a State</option>');
+
+            $.each(data, function (index, state) {
+                stateDropdown.append('<option value="' + state.Value + '">' + state.Text + '</option>');
+            });
+        }
+    });
+} else {
+    $("#stateDropdown").empty();
+                $("#stateDropdown").append('<option value="">Select a State</option>');
+                $("#CityDropdown").empty();
+                $("#CityDropdown").append('<option value="">Select a city</option>');
+
+}
+        });
+
+        $("#stateDropdown").change(function () {
+            var StateId = $(this).val();
+            if (StateId) {
+                $.ajax({
+                    url: '@Url.Action("GetCityByState", "Home")',
+                    type: "GET",
+                    data: { StateId: StateId },
+                    success: function (data) {
+                        var CityDropdown = $("#CityDropdown");
+                        CityDropdown.empty();
+                        CityDropdown.append('<option value="">Select a City</option>');
+
+                        $.each(data, function (index, City) {
+                            CityDropdown.append('<option value="' + City.Value + '">' + City.Text + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $("#CityDropdown").empty();
+                $("#CityDropdown").append('<option value="">Select a city</option>');
+            }
+            });
+
+        $.ajax(
+                {
+                    url: '@Url.Action("GetAllCountry", "Home")',
+                    type: "GET",
+                    success: function (data)
+                    {
+                        var countryfield = $("#countryDropdown");
+                        countryfield.empty();
+                        countryfield.append('<option value="">Select a country</option>');
+                        $.each(data, function (index, country) {
+
+                            countryfield.append('<option value="' + country.Value + '">' + country.Text + '</option>');
+                        })
+
+                    }
+                 }
+            );
+
+        $("#file").change(function (event) {
+            var file = event.target.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e)
+                {
+                    $("#previewImage").attr("src", e.target.result);
+                    $("#previewImage").show();
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                $("#previewImage").hide();
+            }
+        });
+
+        $("#create_user").click(function () {
+                $("#CreateModal").modal('show')
+            });
+
+        $("#CreateNewUser").on('submit', function (e) {
+
+                e.preventDefault();
+                var formData = new FormData(this);
+
+
+                $.ajax({
+                    url: '@Url.Action("Index","Home")',
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            customAlert("user created successfully",0.25);
+                            window.location.href = '@Url.Action("ViewUser", "Home")';
+                        }
+                        else {
+                            customAlert('Error: ' + response.message,0.25);
+                        }
+                    }
+
+                });
+
+            });
+
+        });
+
+   function deleteUser(userId) {
+       if (confirm("Are you sure you want to delete this user? Whose id is "+userId)) {
+          $.ajax({
+            url: '@Url.Action("Delete", "Home")',
+            type: "POST",
+              data: { Id: userId },
+            success: function (response) {
+                if (response.success) {
+                    customAlert("User deleted successfully whose name is " + response.Name,0.25);
+                    window.location.reload();
+                } else {
+                    customAlert("Error: " + response.message,0.25);
+                }
+            },
+            error: function (xhr, status, error) {
+                customAlert("An error occurred: " + error,0.25);
+            }
+        });
+    }
+    }
+
+   function edituser(userId) {
+        //edit Country dropdown
+      $.ajax(
+      {
+          url: '@Url.Action("GetAllCountry", "Home")',
+          type: "GET",
+          success: function (data)
+          {
+              var countryfield = $("#editcountry");
+              countryfield.empty();
+              countryfield.append('<option value="">Select a country</option>');
+              $.each(data, function (index, country) {
+
+                  countryfield.append('<option value="' + country.Value + '">' + country.Text + '</option>');
+
+              })
+
+          }
+       }
+        );
+
+      $.ajax({
+        url: '@Url.Action("Edit", "Home")',
+        type: "POST",
+        data: { Id: userId },
+        success: function (response) {
+
+          //edit state dropdown
+          $.ajax({
+                 url: '@Url.Action("GetStatesByCountry", "Home")',
+                 type: "GET",
+                 data: { countryId: response.message.SelectedCountryId },
+                 success: function (data) {
+                 var stateDropdown = $("#editstate");
+                 stateDropdown.empty();
+                 stateDropdown.append('<option value="">Select a State</option>');
+
+                 $.each(data, function (index, state) {
+                        stateDropdown.append('<option value="' + state.Value + '">' + state.Text + '</option>');
+                      if (state.Value.toString() == response.message.SelectedStateId.toString())
+                          {
+                             $("#editstate").val(response.message.SelectedStateId);
+
+
+                          }
+
+                      });
+                 }
+          });
+
+         //edit city dropdown
+         $.ajax({
+    url: '@Url.Action("GetCityByState", "Home")',
+    type: "GET",
+                data: { StateId: response.message.SelectedStateId },
+    success: function (data) {
+        var CityDropdown = $("#editcity");
+        CityDropdown.empty();
+        CityDropdown.append('<option value="">Select a City</option>');
+
+        $.each(data, function (index, City) {
+            CityDropdown.append('<option value="' + City.Value + '">' + City.Text + '</option>');
+
+            if (City.Value.toString() == response.message.SelectedCityId.toString()) {
+                $("#editcity").val(response.message.SelectedCityId);
+
+
+            }
+        });
+    }
+         });
+
+            if (response.success) {
+                $("#userId").val(userId);
+                $("#editFirstName").val(response.message.FirstName);
+                $("#editLastName").val(response.message.LastName);
+                $("#editEmail").val(response.message.Email);
+                $("#editMobileNo").val(response.message.MobileNo);
+                $("#editDob").val(response.message.Dob);
+
+                $(".editGender").each(function () {
+                    if ($(this).val().toString() === response.message.Gender1.toString()) {
+                        $(this).prop("checked", true);
+                    }
+                });
+
+
+                $("#editPassword").val(response.message.Password);
+                $("#editConfirmPassword").val(response.message.ConfirmPassword);
+                $("#editAddress").val(response.message.Address);
+                $("#editcountry").val(response.message.SelectedCountryId);
+
+                $("#editstate").val(response.message.SelectedStateId);
+                $("#editCity").val(response.message.SelectedCityId);
+
+                $("#edit_image").attr("src", "/Uploads/" + response.message.ImagePath.toString());
+
+
+
+                $("#user_id").val(response.message.user_id)
+
+
+                $("#editUserModal").modal("show");
+            } else {
+                customAlert('Error: ' + response.message,4);
+            }
+        },
+        error: function (xhr, status, error) {
+            customAlert('Error: ' + response.message,4);
+        }
+      });
+
+       //edit country changing event
+
+      $("#editcountry").change(function () {
+           var countryId = $(this).val();
+            if (countryId) {
+      $.ajax({
+        url: '@Url.Action("GetStatesByCountry", "Home")',
+        type: "GET",
+        data: { countryId: countryId },
+        success: function (data) {
+            var stateDropdown = $("#editstate");
+            stateDropdown.empty();
+            stateDropdown.append('<option value="">Select a State</option>');
+
+            $.each(data, function (index, state) {
+                stateDropdown.append('<option value="' + state.Value + '">' + state.Text + '</option>');
+            });
+        }
+    });
+} else {
+    $("#editstate").empty();
+                $("#editstate").append('<option value="">Select a State</option>');
+                $("#editcity").empty();
+                $("#editcity").append('<option value="">Select a city</option>');
+
+}
+      });
+
+        //edit state changing event
+
+      $("#editstate").change(function () {
+            var StateId = $(this).val();
+            if (StateId) {
+                $.ajax({
+                    url: '@Url.Action("GetCityByState", "Home")',
+                    type: "GET",
+                    data: { StateId: StateId },
+                    success: function (data) {
+                        var CityDropdown = $("#editcity");
+                        CityDropdown.empty();
+                        CityDropdown.append('<option value="">Select a City</option>');
+
+                        $.each(data, function (index, City) {
+                            CityDropdown.append('<option value="' + City.Value + '">' + City.Text + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $("#editcity").empty();
+                $("#editcity").append('<option value="">Select a city</option>');
+            }
+      });
+
+        //edit file
+        $("#editfile").change(function (event) {
+
+            var file = event.target.files[0];
+
+            if (file) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#edit_image").attr("src", e.target.result);
+                    $("#edit_image").show();
+                    $('#edit_image').prop('required', true);
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                $("#edit_image").hide();
+                $('#edit_image').prop('required', false);
+            }
+        });
+
+        $(document).ready(function () {
+
+            $("#EditUserForm").on('submit', function (e) {
+
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                  $.ajax({
+                          url: '@Url.Action("EditUser", "Home")',
+                          type: "POST",
+                          data: formData,
+                          processData: false,
+                          contentType: false,
+                          success: function (response) {
+                              if (response.success)
+                              {
+                                  customAlert("user Edited successfully",0.25);
+                                window.location.href = '@Url.Action("ViewUser", "Home")';
+                            }
+                            else
+                            {
+                                  customAlert(response.message,0.1);
+                            }
+                         }
+
+                  });
+
+            });
+
+        });
+                    }
+
+   function detailsUser(userId) {
+    $.ajax({
+        url: '@Url.Action("Details", "Home")',
+        type: "POST",
+        data: { Id: userId },
+        dataType: "json", // Ensure JSON response
+        success: function (response) {
+            // Check if response has the expected structure
+            if (response && response.message) {
+                var user = response.message;
+
+                // Update image
+                $("#dImage").attr("src", user.ImagePath ? "/Uploads/" + user.ImagePath : "/images/default-avatar.png");
+
+                // Update text content
+                $("#fullname").text(user.FirstName + " " + user.LastName);
+                $("#dEmail").text(user.Email);
+                $("#Mobile").text(user.MobileNo);
+                $("#Gender").text(user.Gender1);
+                $("#DDob").text(user.Dob);
+                $("#DAddress").text(user.Address);
+                $("#Country").text(user.SelectedCountry);
+                $("#State").text(user.selectedState);
+                $("#City").text(user.selectedCity);
+                $("#user_id").text(user.user_id);
+
+                // Show modal
+                $("#detail").modal("show");
+            } else {
+
+                customAlert("Failed to load user details.",0.25);
+            }
+        },
+        error: function (xhr, status, error) {
+
+            customAlert("An error occurred while fetching details.",0.25);
+        }
+    });
+                    }
+
+   function customAlert(message, delayInSeconds) {
+            setTimeout(() => {
+                alert(message);
+            }, delayInSeconds * 1000);
+        }
+
+    </script>
+}
+
+<link href="~/App_Data/view.css" rel="stylesheet">
+<style>
+
+   /* Table wrapper and general spacing */
+.dataTables_wrapper {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+
+#servertable th:after {
+    content: "" !important; /* Remove diamond separators */
+}
+
+/* Table cell alignment */
+#servertable td {
+    vertical-align: middle;
+    padding: 10px;
+    text-align: center;
+    white-space: nowrap;
+    border-bottom: 1px solid #eee;
+}
+
+#servertable tr:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+
+/* Image column styling */
+#servertable .img-thumbnail {
+    border: 2px solid #dee2e6;
+    padding: 2px;
+    background-color: #f8f9fa;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+#servertable .img-thumbnail:hover {
+    transform: scale(1.1);
+}
+
+/* Actions column button styling */
+#servertable .btn-group .btn {
+    padding: 6px 10px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+#servertable .btn-group .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Search and length menu alignment */
+.dataTables_wrapper .dataTables_filter {
+    padding-right: 0;
+}
+
+.dataTables_wrapper .dataTables_length {
+    padding-left: 0;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    width: 250px !important;
+    max-width: 100%;
+    padding: 8px 12px;
+    border-color: #007bff;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    width: auto !important;
+    max-width: 120px;
+    padding: 6px 12px;
+    border-color: #007bff;
+}
+
+/* Responsive adjustments */
+@@media (max-width: 768px) {
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_length {
+        text-align: center !important;
+        margin-bottom: 10px;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+        width: 100% !important;
+        max-width: 100%;
+    }
+    .dataTables_wrapper .dataTables_length select {
+        width: 100% !important;
+    }
+    .dataTables_wrapper .row:first-child {
+        flex-direction: column;
+        align-items: center;
+    }
+    #servertable th,
+    #servertable td {
+        font-size: 14px;
+        padding: 6px;
+    }
+}
+
+/* Pagination and info styling */
+.dataTables_wrapper .dataTables_info {
+    padding-top: 8px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 6px 12px;
+    margin: 0 4px;
+    border: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #e9ecef;
+    border-radius: 50%;
+}
+
+    .dataTables_length select,
+    .dataTables_filter input {
+        border-radius: 55px;
+        padding: 0.6rem 1.5rem;
+        border: 2px solid #dee2e6;
+        background: #fff;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+        .dataTables_filter input:focus,
+        .dataTables_length select:focus {
+            border-color: #ff6f61;
+            box-shadow: 0 0 10px rgba(255, 111, 97, 0.3);
+            outline: none;
+        }
+
+
+
+    #viewtable thead th {
+        background: linear-gradient(90deg, #ff6f61, #ff8c7f);
+        color: #fff;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        padding: 20px 15px;
+        border-bottom: 4px solid #ff5e50;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        text-align: center;
+        transition: background 0.3s ease;
+    }
+</style>
