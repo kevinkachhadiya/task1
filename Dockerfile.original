@@ -1,19 +1,14 @@
-
-# Ignore everything by default
-*
-
-# Include the published app files
-!bin/Release/net472/*
-
-
 # Use the official Windows Server Core image with .NET Framework 4.7.2
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.7.2-windowsservercore-ltsc2019
 
 # Set the working directory inside the container
 WORKDIR /inetpub/wwwroot
 
-# Copy the published app files
+# Copy the published app to the container
 COPY bin/Release/net472/ .
 
-# Expose port 80 (default for IIS)
+# Expose the port your app runs on (default IIS port is 80)
 EXPOSE 80
+
+# Start IIS (handled by the base image automatically)
+# No additional ENTRYPOINT needed for ASP.NET Framework with IIS
