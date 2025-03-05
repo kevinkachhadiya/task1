@@ -1,4 +1,4 @@
-# Ignore build artifacts (we'll generate these in the container)
+# Ignore build artifacts
 bin/
 obj/
 *.user
@@ -8,7 +8,7 @@ obj/
 .git
 .gitignore
 
-# Include source code and project files
+# Include source and config files
 !*.csproj
 !*.cs
 !web.config
