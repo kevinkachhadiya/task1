@@ -16,7 +16,7 @@ namespace task1
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "ViewUser", id = UrlParameter.Optional }
+                defaults: new { controller = "Home", action = "Contact", id = UrlParameter.Optional }
             );
         }
     }

@@ -49,6 +49,7 @@
     </table>
 
 </div>
+
 <div class="modal fade" id="CreateModal" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -408,9 +409,10 @@
 @section scripts {
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
+
         $(document).ready(function () {
 
-            var datatablecolumnDefinations = [
+        var datatablecolumnDefinations = [
                 { "targets": [0], "render": function (data, type, row, meta) { return data.iid; }, "className": "text-center dt-center", "responsivePriority": 1 },
                 { "targets": [1], "data": "FirstName", "className": "text-center dt-center", "responsivePriority": 2 },
                 { "targets": [2], "data": "LastName", "className": "text-center dt-center", "responsivePriority": 3 },
@@ -424,10 +426,19 @@
                 { "targets": [10], "data": "selectedState", "className": "text-center dt-center", "responsivePriority": 9 },
                 { "targets": [11], "data": "SelectedCountry", "className": "text-center dt-center", "responsivePriority": 10 },
                 { "targets": [12], "data": null, "render": function (data, type, row, meta) { return `<div class="btn-group" role="group"><button class="btn btn-primary btn-sm me-1" onclick="edituser(${row.id})" data-bs-toggle="tooltip" title="Edit user"><i class="fas fa-edit"></i></button><button class="btn btn-warning btn-sm me-1" onclick="detailsUser(${row.id})" data-bs-toggle="tooltip" title="View details"><i class="fas fa-info-circle"></i></button><button class="btn btn-danger btn-sm" onclick="deleteUser(${row.id})" data-bs-toggle="tooltip" title="Delete user"><i class="fas fa-trash"></i></button></div>`; }, "className": "text-center dt-center", "responsivePriority": 1 },
-                { "targets": "_all", "className": "dt-center" }
+                {
+                    "targets": "_all", "className": "dt-center ", "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).on('click', function (e) {
+
+                            if (col !== 12 && !$(e.target).is('button') && !$(e.target).parents('button').length) {
+                                detailsUser(rowData.id);
+                            }
+                        });
+                    } },
+               
             ];
 
-var datatableoptions = {
+        var datatableoptions = {
     "serverSide": true,
     "processing": true,
     "paging": true,
@@ -531,7 +542,7 @@ var datatableoptions = {
     }
 };
 
-var testdatatable = $("#servertable").DataTable(datatableoptions);
+        var testdatatable = $("#servertable").DataTable(datatableoptions);
 
         $("#countryDropdown").change(function () {
            var countryId = $(this).val();
@@ -652,7 +663,7 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
 
         });
 
-   function deleteUser(userId) {
+        function deleteUser(userId) {
        if (confirm("Are you sure you want to delete this user? Whose id is "+userId)) {
           $.ajax({
             url: '@Url.Action("Delete", "Home")',
@@ -673,9 +684,9 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
     }
     }
 
-   function edituser(userId) {
+        function edituser(userId) {
         //edit Country dropdown
-      $.ajax(
+        $.ajax(
       {
           url: '@Url.Action("GetAllCountry", "Home")',
           type: "GET",
@@ -694,7 +705,7 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
        }
         );
 
-      $.ajax({
+        $.ajax({
         url: '@Url.Action("Edit", "Home")',
         type: "POST",
         data: { Id: userId },
@@ -736,10 +747,9 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
         $.each(data, function (index, City) {
             CityDropdown.append('<option value="' + City.Value + '">' + City.Text + '</option>');
 
-            if (City.Value.toString() == response.message.SelectedCityId.toString()) {
+            if (City.Value.toString() == response.message.SelectedCityId.toString())
+            {
                 $("#editcity").val(response.message.SelectedCityId);
-
-
             }
         });
     }
@@ -787,7 +797,7 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
 
        //edit country changing event
 
-      $("#editcountry").change(function () {
+        $("#editcountry").change(function () {
            var countryId = $(this).val();
             if (countryId) {
       $.ajax({
@@ -815,7 +825,7 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
 
         //edit state changing event
 
-      $("#editstate").change(function () {
+        $("#editstate").change(function () {
             var StateId = $(this).val();
             if (StateId) {
                 $.ajax({
@@ -909,7 +919,7 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
                 $("#fullname").text(user.FirstName + " " + user.LastName);
                 $("#dEmail").text(user.Email);
                 $("#Mobile").text(user.MobileNo);
-                $("#Gender").text(user.Gender1);
+                $("#Gender").text(user.Gender_);
                 $("#DDob").text(user.Dob);
                 $("#DAddress").text(user.Address);
                 $("#Country").text(user.SelectedCountry);
@@ -941,7 +951,6 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
 }
 
     <style>
-    /* Table wrapper and general spacing */
     .dataTables_wrapper {
         padding: 20px;
         border-radius: 8px;
@@ -961,32 +970,50 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
         border-bottom: 1px solid #eee;
     }
     /* Image column styling */
-    #servertable .img-thumbnail {
-        border: 2px solid #dee2e6;
-        padding: 2px;
-        background-color: #f8f9fa;
-        border-radius: 50%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-    }
+        #servertable .img-thumbnail {
+            border: 3px solid #e9ecef; /* Thicker, softer border */
+            padding: 3px;
+            background-color: #fff; /* White background for consistency */
+            border-radius: 50%;
+            width: 50px; /* Fixed width */
+            height: 50px; /* Fixed height */
+            object-fit: cover; /* Ensure images fit nicely */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-    #servertable .img-thumbnail:hover {
-        transform: scale(1.1);
-    }
+            #servertable .img-thumbnail:hover {
+                transform: scale(1.2); /* Larger zoom on hover */
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Add shadow on hover */
+            }
 
     /* Actions column button styling */
-    #servertable .btn-group .btn {
-        padding: 6px 10px;
-        transition: all 0.3s ease;
-        border: none;
-    }
+        #servertable .btn-group .btn {
+            padding: 8px 12px; /* Slightly larger buttons */
+            border-radius: 20px; /* Rounded pill shape */
+            font-size: 14px;
+            margin: 0 4px; /* Consistent spacing */
+            transition: all 0.3s ease;
+        }
 
-    #servertable .btn-group .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+            #servertable .btn-group .btn:hover {
+                transform: translateY(-3px); /* More pronounced lift */
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+            }
 
-    /* Search and length menu alignment */
+        #servertable .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        #servertable .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+        #servertable .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
     .dataTables_wrapper .dataTables_filter {
         padding-right: 0;
     }
@@ -1009,7 +1036,6 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
         border-color: #007bff;
     }
 
-    /* Responsive adjustments */
     @@media (max-width: 768px) {
         .dataTables_wrapper .dataTables_filter,
         .dataTables_wrapper .dataTables_length {
@@ -1029,8 +1055,11 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
         }
         #servertable th,
         #servertable td {
-            font-size: 14px;
-            padding: 6px;
+            padding: 12px 15px; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-size: 15px;
+            color: #333; 
+            border-bottom: 1px solid #e9ecef;
         }
 
     }
@@ -1044,8 +1073,6 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
             opacity: 0.95;
         }
 
-
-        /* Pagination and info styling */
         .dataTables_wrapper .dataTables_info {
             padding-top: 8px;
             font-size: 14px;
@@ -1095,10 +1122,26 @@ var testdatatable = $("#servertable").DataTable(datatableoptions);
             vertical-align: middle;
         }
 
-        #viewtable tbody tr {
-            transition: all 0.3s ease;
-        }
         #servertable tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
+            background-color: #f5f7fa;
         }
+
+        #servertable tbody tr:nth-child(odd) {
+            background-color: #ffffff; 
+        }
+
+        #servertable tr:hover {
+            background-color: #e6f3ff; 
+            transform: scale(1.02); 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 1; 
+        }
+        #servertable tbody tr.selected {
+            background-color: #d1e7ff; /* Light blue for selected row */
+            font-weight: 500; /* Slightly bolder text */
+            transition: background-color 0.2s ease;
+        }
+
 </style>
