@@ -1,0 +1,13 @@
+﻿services:
+  - type: web
+    name: task2
+    runtime: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+databases:
+  - name: moksha_database
+    region: oregon
