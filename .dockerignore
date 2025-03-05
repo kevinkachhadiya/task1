@@ -1,3 +1,5 @@
+# Ignore everything by default
 *
-!obj\Docker\publish\*
-!obj\Docker\empty\
+
+# Include the published app files
+!bin/Release/net472/*

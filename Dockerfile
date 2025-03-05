@@ -1,11 +1,4 @@
 
-# Ignore everything by default
-*
-
-# Include the published app files
-!bin/Release/net472/*
-
-
 # Use the official Windows Server Core image with .NET Framework 4.7.2
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.7.2-windowsservercore-ltsc2019
 
