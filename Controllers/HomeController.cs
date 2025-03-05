@@ -1,6 +1,4 @@
-﻿using BrenoQueiroz.MVC.DataTable;
-using Microsoft.Ajax.Utilities;
-using MyComService;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
@@ -122,7 +120,7 @@ namespace task1.Controllers
                                           ucs.User.Address.ToLower().Contains(searchValue));
 
             }
-            // Apply sorting
+          
             if (dataTableRequest.Order != null && dataTableRequest.Order.Any())
             {
                 var order = dataTableRequest.Order[0];
@@ -131,6 +129,7 @@ namespace task1.Controllers
                 {
                     case 0: // number
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.user_id) : query.OrderByDescending(ucs => ucs.User.user_id);
+                        
                         break;
                     case 1: // FirstName
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.FirstName) : query.OrderByDescending(ucs => ucs.User.FirstName);
@@ -155,6 +154,7 @@ namespace task1.Controllers
                         break;
                     case 8: // City
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.City.CityName) : query.OrderByDescending(ucs => ucs.City.CityName);
+
                         break;
                     case 9: // State
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.State.StateName) : query.OrderByDescending(ucs => ucs.State.StateName);
@@ -169,26 +169,28 @@ namespace task1.Controllers
             }
             else
             {
-                query = query.OrderBy(ucs => ucs.User.FirstName); // Default sorting
+                query = query.OrderBy(ucs => ucs.User.user_id);
+
             }
 
-            // Apply paging
             var totalRecords = _applicationDbContext.Users.Count(c => c.IsActive == true);
-            var filteredRecords = query.Count(); // Count after filtering
-
+            var filteredRecords = query.Count();
 
             var data = query.Skip(start).Take(length).ToList();
 
-            int index = start + 1;
-            // Map to the result
+            bool isDesending = (dataTableRequest.Order[0].Column == 0 && dataTableRequest.Order[0].Dir == "desc");
+            int baseIndex = isDesending ? (filteredRecords - start + 1) : start;
+            int indexIncrement = isDesending ? -1 : +1;
+            
+
             var result = new
             {
                 draw = draw,
                 recordsTotal = totalRecords,
                 recordsFiltered = filteredRecords,
-                data = data.Select(ucs => new
+                data = data.Select((ucs, idx) => new
                 {
-                    iid = index++,
+                    iid = baseIndex + (idx + 1) * indexIncrement,
                     id = ucs.User.user_id,
                     ucs.User.FirstName,
                     ucs.User.LastName,
