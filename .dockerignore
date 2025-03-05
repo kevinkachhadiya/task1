@@ -1,5 +1,14 @@
-# Ignore everything by default
-*
+# Ignore build artifacts (we'll generate these in the container)
+bin/
+obj/
+*.user
+*.suo
 
-# Include the published app files
-!bin/Release/net472/*
+# Ignore Git files
+.git
+.gitignore
+
+# Include source code and project files
+!*.csproj
+!*.cs
+!web.config
