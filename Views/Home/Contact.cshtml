@@ -11,7 +11,7 @@
     };
 }
 
-<div class="container mt-4">
+<div class="mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h4 class="text-primary">ViewUser</h4>
@@ -21,14 +21,15 @@
             <i class="fas fa-plus"></i> Create New User
         </button>
     </div>
-    <div id="loadingSpinner" class="text-center" style="display: none;">
+    <div id="loadingSpinner" class="text-center " style="display: none">
         <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
         <p>Loading users...</p>
     </div>
-    <table class="display table table-hover table-striped" id="servertable" style="width:100%;">
-        <thead class="text-white">
+
+    <table class="w-full text-sm text-gray-600 border-collapse" id="servertable">
+        <thead class="bg-gradient-to-r from-blue-500 to-blue-700 text-white">
             <tr>
                 <th>#</th>
                 <th>F_Name</th>
@@ -45,8 +46,7 @@
                 <th id="actions">Actions</th>
             </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody class="bg-white divide-y divide-gray-200"></tbody>
     </table>
 </div>
 
@@ -536,19 +536,19 @@
             document.body.appendChild(globalAlertContainer);
 
             var datatablecolumnDefinations = [
-                { "targets": [0], "render": function (data, type, row, meta) { return row.iid; }, "className": "text-center dt-center", "width": "3%"},
-    { "targets": [1], "data": "FirstName", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "8%" },
-    { "targets": [2], "data": "LastName", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "8%" },
-    { "targets": [3], "data": "Email", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "13%" },
-    { "targets": [4], "data": "MobileNo", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "10%" },
-    { "targets": [5], "data": "Gender_", "className": "text-center dt-center", "width": "9%" },
-    { "targets": [6], "data": "Dob", "className": "text-center dt-center", "width": "10%" },
-    { "targets": [7], "data": "Address", "render": function (data, type, row) { return type === 'display' && data.length > 10 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "12%" },
-    { "targets": [8], "data": "ImagePath", "render": function (data, type, row, meta) { return data && data.trim() !== "" ? '<img src="/Uploads/' + data + '" alt="User Image" class="img-thumbnail rounded-circle shadow-sm" style="max-width: 50px; max-height: 50px;" />' : '<span class="text-muted">No image</span>'; }, "className": "text-center dt-center ps-1", "width": "6%", "orderable": false },
-    { "targets": [9], "data": "selectedCity", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "10%" },
-    { "targets": [10], "data": "selectedState", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "10%" },
-    { "targets": [11], "data": "SelectedCountry", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "10%" },
-    { "targets": [12], "data": null, "render": function (data, type, row, meta) { return `<div class="btn-group" role="group"><button class="btn btn-primary btn-sm me-1" onclick="edituser(${row.id})" data-bs-toggle="tooltip" title="Edit user"><i class="fas fa-edit"></i></button><button class="btn btn-warning btn-sm me-1" onclick="detailsUser(${row.id})" data-bs-toggle="tooltip" title="View details"><i class="fas fa-info-circle"></i></button><button class="btn btn-danger btn-sm" onclick="deleteUser(${row.id})" data-bs-toggle="tooltip" title="Delete user"><i class="fas fa-trash"></i></button></div>`; }, "className": "text-center dt-center", "width": "13%", "orderable": false },
+                { "targets": [0], "render": function (data, type, row, meta) { return row.iid; }, "className": "text-center dt-center"},
+    { "targets": [1], "data": "FirstName", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center" },
+    { "targets": [2], "data": "LastName", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center" },
+    { "targets": [3], "data": "Email", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", },
+    { "targets": [4], "data": "MobileNo", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
+    { "targets": [5], "data": "Gender_", "className": "text-center dt-center", },
+    { "targets": [6], "data": "Dob", "className": "text-center dt-center"},
+    { "targets": [7], "data": "Address", "render": function (data, type, row) { return type === 'display' && data.length > 10 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
+    { "targets": [8], "data": "ImagePath", "render": function (data, type, row, meta) { return data && data.trim() !== "" ? '<img src="/Uploads/' + data + '" alt="User Image" class="img-thumbnail rounded-circle shadow-sm" style="max-width: 50px; max-height: 50px;" />' : '<span class="text-muted">No image</span>'; }, "className": "text-center dt-center ps-1", "orderable": false },
+    { "targets": [9], "data": "selectedCity", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", },
+    { "targets": [10], "data": "selectedState", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
+    { "targets": [11], "data": "SelectedCountry", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
+    { "targets": [12], "data": null, "render": function (data, type, row, meta) { return `<div class="btn-group" role="group"><button class="btn btn-primary btn-sm me-1" onclick="edituser(${row.id})" data-bs-toggle="tooltip" title="Edit user"><i class="fas fa-edit"></i></button><button class="btn btn-warning btn-sm me-1" onclick="detailsUser(${row.id})" data-bs-toggle="tooltip" title="View details"><i class="fas fa-info-circle"></i></button><button class="btn btn-danger btn-sm" onclick="deleteUser(${row.id})" data-bs-toggle="tooltip" title="Delete user"><i class="fas fa-trash"></i></button></div>`; }, "className": "text-center dt-center", "orderable": false },
     { "targets": "_all", "className": "dt-center", "createdCell": function (td, cellData, rowData, row, col) {
         $(td).on('click', function (e) {
             if (col !== 12 && !$(e.target).is('button') && !$(e.target).parents('button').length) {
@@ -558,8 +558,7 @@
     }}
 ];
 
-
-            var datatableoptions = {
+             var datatableoptions = {
 
     // Core DataTable settings
     "serverSide": true,
@@ -569,12 +568,13 @@
     "searching": true,
     "ordering": true,
     "info": true,
-    "autoWidth": false,
+    "autoWidth": true,
     "scrollX": true,
-    "scrollY": "400px",
-    "scrollCollapse": true,
-    "fixedHeader": { header: true, headerOffset: 0 },
-    "fixedColumns": false, // Disable fixedColumns temporarily
+    "scrollY": "80vh", 
+      
+     responsive: true,
+                "scrollCollapse": true,
+                "fixedColumns": true, // Disable fixedColumns temporarily
     "stateSave": true,
 
     // Data and columns
@@ -588,7 +588,7 @@
         },
         "complete": function () {
             $('#servertable_processing').hide(); // Hide loading
-            testdatatable.columns.adjust(); // Adjust columns after data load
+           
         }
     },
     "columns": [
@@ -606,7 +606,7 @@
         { "data": "SelectedCountry", "width": "10%" },
         { "data": null, "width": "13%" }
     ],
-
+       
     // Pagination and ordering
     "pageLength": 5,
     "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
@@ -628,21 +628,8 @@
             'padding': '10px'
         });
     },
-    "drawCallback": function (settings) {
-        const api = this.api();
-        setTimeout(function () {
-            api.columns.adjust(); // Adjust column widths after a delay
-            if (api.fixedHeader) {
-                api.fixedHeader.adjust(); // Adjust fixed header if used
-            }
-        }, 100); // Adjust after 100ms
-    },
     "initComplete": function () {
-        const api = this.api();
-        api.columns.adjust(); // Adjust column widths on initialization
-        if (api.fixedHeader) {
-            api.fixedHeader.adjust(); // Adjust fixed header if used
-        }
+      
         $('#servertable_wrapper').addClass('shadow-sm rounded');
     }
 };
@@ -1486,6 +1473,7 @@
             }
 
         }
+
         // Create the global alert container
         var globalAlertContainer = document.createElement("div");
         globalAlertContainer.id = "globalAlertContainer";
@@ -1632,32 +1620,6 @@ table.dataTable thead th {
     transition: background 0.2s ease-in-out;
 }
 
-.edit-btn {
-    background-color: #007bff;
-    color: white;
-}
-
-.edit-btn:hover {
-    background-color: #0056b3;
-}
-
-.details-btn {
-    background-color: #ffc107;
-    color: white;
-}
-
-.details-btn:hover {
-    background-color: #e0a800;
-}
-
-.delete-btn {
-    background-color: #dc3545;
-    color: white;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
-}
 
 /* Loading Indicator */
 .dataTables_processing {
