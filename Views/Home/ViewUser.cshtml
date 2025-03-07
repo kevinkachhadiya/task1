@@ -472,8 +472,9 @@
         $('#viewtable').DataTable({
                 "paging": true,
                 "lengthChange": true,
-                "searching": true,
+                 "searching": true,
                 "ordering": true,
+                "paging": true,
                 "info": true,
                 "autoWidth": false,
                 "responsive": true,
@@ -511,7 +512,21 @@
 
                 "initComplete": function () {
                     $('#viewtable_wrapper').addClass('animate__animated animate__zoomIn');
-                }
+            },
+
+            "headerCallback": function (thead, data, start, end, display) {
+                $(thead).find('th').css({
+                    'text-align': 'center',
+                    'background': 'linear-gradient(90deg, #ff6200, #cc4e00)',
+                    'color': '#fff',
+                    'text-transform': 'uppercase',
+                    'letter-spacing': '1px',
+
+                    'position': 'sticky',
+                    'top': '0',
+                    'z-index': '10'
+                });
+            },
             });
 
         $("#countryDropdown").change(function () {

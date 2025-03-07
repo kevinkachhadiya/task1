@@ -146,20 +146,23 @@ namespace task1.Controllers
                     case 5: // Gender
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.Gender_) : query.OrderByDescending(ucs => ucs.User.Gender_);
                         break;
-                    case 6: // Address
+
+                    case 6: // DOB
+                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.Dob) : query.OrderByDescending(ucs => ucs.User.Dob);
+                        break;
+
+                    case 7: // Address
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.Address) : query.OrderByDescending(ucs => ucs.User.Address);
                         break;
-                    case 7: // ImagePath
-                        query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.ImagePath) : query.OrderByDescending(ucs => ucs.User.ImagePath);
-                        break;
-                    case 8: // City
+                  
+                    case 9: // City
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.City.CityName) : query.OrderByDescending(ucs => ucs.City.CityName);
 
                         break;
-                    case 9: // State
+                    case 10: // State
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.State.StateName) : query.OrderByDescending(ucs => ucs.State.StateName);
                         break;
-                    case 10: // Country
+                    case 11: // Country
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.Country.CountryName) : query.OrderByDescending(ucs => ucs.Country.CountryName);
                         break;
                     default:
@@ -167,6 +170,7 @@ namespace task1.Controllers
                         break;
                 }
             }
+
             else
             {
                 query = query.OrderBy(ucs => ucs.User.user_id);
@@ -175,14 +179,10 @@ namespace task1.Controllers
 
             var totalRecords = _applicationDbContext.Users.Count(c => c.IsActive == true);
             var filteredRecords = query.Count();
-
             var data = query.Skip(start).Take(length).ToList();
-
             bool isDesending = (dataTableRequest.Order[0].Column == 0 && dataTableRequest.Order[0].Dir == "desc");
             int baseIndex = isDesending ? (filteredRecords - start + 1) : start;
             int indexIncrement = isDesending ? -1 : +1;
-            
-
             var result = new
             {
                 draw = draw,

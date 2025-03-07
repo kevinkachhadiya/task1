@@ -376,6 +376,10 @@
     <Compile Include="Migrations\202502281749418_30.Designer.cs">
       <DependentUpon>202502281749418_30.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202503061111172_m18.cs" />
+    <Compile Include="Migrations\202503061111172_m18.Designer.cs">
+      <DependentUpon>202503061111172_m18.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -552,6 +556,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202502281749418_30.resx">
       <DependentUpon>202502281749418_30.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202503061111172_m18.resx">
+      <DependentUpon>202503061111172_m18.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

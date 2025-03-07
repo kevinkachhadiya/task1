@@ -38,21 +38,26 @@
                 <th>Gender</th>
                 <th>DOB</th>
                 <th>Address</th>
-                <th>Image</th>
+                <th>Img</th>
                 <th>City</th>
                 <th>State</th>
                 <th>Country</th>
-                <th>Actions</th>
+                <th id="actions">Actions</th>
             </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+        </tbody>
     </table>
-
 </div>
 
 <div class="modal fade" id="CreateModal" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Create User</h5>
+                <button type="button" class="btn-close" aria-label="Close" onclick="$('#CreateModal').modal('hide')"></button>
+
+            </div>
             <div class="modal-body">
                 @{
 
@@ -60,8 +65,7 @@
                     {
 
                         <div class="container" style="max-width:auto">
-                            <h5 class="modal-title" id="exampleModalLabel">Create User</h5>
-                            <hr />
+
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                             <div class="row mb-3 mt-3">
@@ -69,8 +73,17 @@
                                     @Html.LabelFor(model => item.FirstName, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.TextBox("FirstName", null, new { @class = "form-control", placeholder = "Enter Your Firstname" })
-                                    @Html.ValidationMessageFor(model => item.FirstName, "", new { @class = "text-danger" })
+                                    @Html.TextBox("FirstName", null, new
+                                    {
+                                        @class = "form-control pl-3",
+                                        placeholder = "Enter Your Firstname",
+                                   onkeyup = "validateFirstName(this)",
+                                   required = "required",
+                                   type = "text",
+                                   maxlength = "50",
+
+                               })
+                                    <span class="text-danger" id="firstNameError"></span>
                                 </div>
                             </div>
 
@@ -79,8 +92,15 @@
                                     @Html.LabelFor(model => item.LastName, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.TextBox("LastName", null, new { @class = "form-control", placeholder = "Enter Your Lastname" })
-                                    @Html.ValidationMessageFor(model => item.LastName, "", new { @class = "text-danger" })
+                                    @Html.TextBox("LastName", null, new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter Your Lastname",
+                                   onkeyup = "validateLastName(this)",
+                                   required = "required",
+                                   maxlength = "50"
+                               })
+                                    <span class="text-danger" id="LastNameError"></span>
                                 </div>
                             </div>
 
@@ -89,8 +109,15 @@
                                     @Html.LabelFor(model => item.Email, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.TextBox("Email", null, new { @class = "form-control", placeholder = "Enter Your Email" })
-                                    @Html.ValidationMessageFor(model => item.Email, "", new { @class = "text-danger" })
+                                    @Html.TextBox("Email", null, new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter Your Email",
+                                        onkeyup = "validateEmail(this)",
+                                        required = "required",
+                                        maxlength = "50",
+                                   })
+                                    <span class="text-danger" id="Email_"></span>
                                 </div>
                             </div>
 
@@ -98,9 +125,20 @@
                                 <div class="col-md-3">
                                     @Html.LabelFor(model => item.MobileNo, new { @class = "control-label" })
                                 </div>
-                                <div class="col-md-8">
-                                    @Html.TextBox("MobileNo", null, new { @class = "form-control", placeholder = "Enter Your Mobile_No" })
-                                    @Html.ValidationMessageFor(model => item.MobileNo, "", new { @class = "text-danger" })
+                                <div class="col-md-1 align-content-center">
+                                    <span class="text-success">+91</span>
+                                </div>
+                                <div class="col-md-7" style="margin-left:-6px;">
+                                    @Html.TextBox("MobileNo", null, new
+                               {
+                                   @class = "form-control",
+                                   placeholder = "Enter Your Mobile_No",
+                                   type = "number",
+                                   onkeyup = "validateMobile(this)",
+                                   required = "required",
+                                   maxlength = "15",
+                               })
+                                    <span class="text-danger" id="Mo_number"></span>
                                 </div>
                             </div>
 
@@ -112,13 +150,14 @@
                                     @foreach (var gender in Enum.GetValues(typeof(task1.Models.Gender)))
                                     {
                                         <div class="form-check me-4">
-                                            @Html.RadioButton("Gender1", gender, new { @class = "form-check-input" })
+                                            @Html.RadioButton("Gender1", gender, new
+                                            {
+                                                @class = "form-check-input",
+                                            required = "required"
+                                       })
                                             <label class="form-check-label ms-2">@gender</label>
                                         </div>
                                     }
-                                </div>
-                                <div class="col-md-6 offset-md-3">
-                                    @Html.ValidationMessageFor(model => item.Gender1, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 
@@ -127,8 +166,18 @@
                                     Dob :
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.TextBox("Dob", null, new { @class = "form-control", type = "date", Max = DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd") })
-                                    @Html.ValidationMessageFor(model => item.Dob, "", new { @class = "text-danger" })
+                                    @Html.TextBox("Dob", null, new
+                                    {
+                                        @class = "form-control",
+                                        type = "date",
+                                        Max = DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd"),
+                                        Min = DateTime.Now.AddYears(-125).ToString("yyyy-MM-dd"),
+                                        onchange = "handleDateChange(this)",
+
+                                        required = "required"
+                               })
+
+                                    <span class="text-danger" id="Date"></span>
                                 </div>
                             </div>
 
@@ -137,8 +186,17 @@
                                     @Html.LabelFor(model => item.Password, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.Password("Password", null, new { @class = "form-control", placeholder = "Enter Your Password", autocomplete = "new-password" })
-                                    @Html.ValidationMessageFor(model => item.Password, "", new { @class = "text-danger" })
+                                    @Html.Password("Password", null, new
+                               {
+                                   @class = "form-control",
+                                   placeholder = "Enter Your Password",
+                                   required = "required",
+                                   onkeyup = "validatePassword(this)",
+
+
+                               })
+
+                                    <span class="text-danger" id="PassWord_"></span>
                                 </div>
                             </div>
 
@@ -147,8 +205,15 @@
                                     @Html.LabelFor(model => item.ConfirmPassword, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.Password("ConfirmPassword", null, new { @class = "form-control", placeholder = "Enter Your Confirm Password", autocomplete = "new-password" })
-                                    @Html.ValidationMessageFor(model => item.ConfirmPassword, "", new { @class = "text-danger" })
+                                    @Html.Password("ConfirmPassword", null,
+                                   new
+                                        {
+                                            @class = "form-control",
+                                   placeholder = "Enter Your Confirm Password",
+                                   required = "required",
+                                   onkeyup = "validateCPassword(this)"
+                               })
+                                    <span class="text-danger" id="C_PassWord_"></span>
                                 </div>
                             </div>
 
@@ -157,8 +222,15 @@
                                     @Html.LabelFor(model => item.Address, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.TextArea("Address", null, new { @class = "form-control", placeholder = "Enter Your Address" })
-                                    @Html.ValidationMessageFor(model => item.Address, "", new { @class = "text-danger" })
+                                    @Html.TextArea("Address", null, new
+                                    {
+
+                                   @class = "form-control",
+                                   placeholder = "Enter Your Address",
+                                   required = "required",
+                                   onkeyup = "validateAddress(this)"
+                               })
+                                    <span class="text-danger" id="Address_"></span>
                                 </div>
                             </div>
 
@@ -167,7 +239,7 @@
                                     @Html.LabelFor(model => item.SelectedCountryId, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.DropDownList("SelectedCountryId", item.CountryList, "Select a Country", new { @class = "form-control", id = "countryDropdown" })
+                                    @Html.DropDownList("SelectedCountryId", item.CountryList, "Select a Country", new { @class = "form-control", id = "countryDropdown", required = "required" })
                                     @Html.ValidationMessageFor(model => item.SelectedCountryId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -177,7 +249,7 @@
                                     @Html.LabelFor(model => item.SelectedStateId, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.DropDownList("SelectedStateId", item.StateList, "Select a State", new { @class = "form-control", id = "stateDropdown" })
+                                    @Html.DropDownList("SelectedStateId", item.StateList, "Select a State", new { @class = "form-control", id = "stateDropdown", required = "required" })
                                     @Html.ValidationMessageFor(model => item.SelectedStateId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -187,7 +259,7 @@
                                     @Html.LabelFor(model => item.SelectedCityId, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.DropDownList("SelectedCityId", item.CityList, "Select a City", new { @class = "form-control", id = "CityDropdown" })
+                                    @Html.DropDownList("SelectedCityId", item.CityList, "Select a City", new { @class = "form-control", id = "CityDropdown", required = "required" })
                                     @Html.ValidationMessageFor(model => item.SelectedCityId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -225,16 +297,17 @@
 <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="btn-close" aria-label="Close" onclick="$('#editUserModal').modal('hide')"></button>
+            </div>
+
             <div class="modal-body">
                 @{
                     using (Html.BeginForm("ViewUser", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "EditUserForm" }))
                     {
                         @Html.Hidden("user_id")
                         <div class="container">
-                            <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
-                            <hr />
-
-
 
                             <input type="hidden" id="userId" name="userId" />
 
@@ -243,7 +316,8 @@
                                     @Html.Label("First Name", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" id="editFirstName" name="FirstName" class="form-control" placeholder="Enter Your Firstname" />
+                                    <input type="text" id="editFirstName" name="FirstName" class="form-control" , onkeyup="editvalidateFirstName(this)" ,placeholder="Enter Your Firstname" required="required" />
+                                    <span class="text-danger" id="editfirstNameError"></span>
                                 </div>
                             </div>
 
@@ -252,7 +326,9 @@
                                     @Html.Label("Last Name", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" id="editLastName" name="LastName" class="form-control" placeholder="Enter Your Lastname" />
+                                    <input type="text" id="editLastName" name="LastName" onkeyup="editvalidateLastName(this)" required="required" maxlength="50" class="form-control" placeholder="Enter Your Lastname" />
+
+                                    <span class="text-danger" id="editLastNameError"></span>
                                 </div>
                             </div>
 
@@ -261,7 +337,8 @@
                                     @Html.Label("Email", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="email" id="editEmail" name="Email" class="form-control" placeholder="Enter Your Email" />
+                                    <input type="email" id="editEmail" onkeyup="editvalidateEmail(this)" required="required" maxlength="35" name="Email" class="form-control" placeholder="Enter Your Email" />
+                                    <span class="text-danger" id="editEmail12"></span>
                                 </div>
                             </div>
 
@@ -270,7 +347,11 @@
                                     @Html.Label("Mobile No", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" id="editMobileNo" name="MobileNo" class="form-control" placeholder="Enter Your Mobile No" />
+                                    <input type="number" id="editMobileNo" name="MobileNo" onkeyup="editvalidateMobile(this)" required="required" maxlength="15" class="form-control" placeholder="Enter Your Mobile No" />
+
+
+
+                                    <span class="text-danger" id="editMo_number"></span>
                                 </div>
                             </div>
 
@@ -280,7 +361,7 @@
                                     @foreach (var gender in Enum.GetValues(typeof(task1.Models.Gender)))
                                     {
                                         <div class="form-check me-4">
-                                            <input type="radio" name="Gender1" value="@((int)gender)" class="form-check-input editGender" />
+                                            <input type="radio" name="Gender1" value="@((int)gender)" class="form-check-input editGender" required="required" />
                                             <label class="form-check-label ms-2">@gender</label>
                                         </div>
                                     }
@@ -290,28 +371,37 @@
                             <div class="row mb-3">
                                 <div class="col-md-3">DOB:</div>
                                 <div class="col-md-8">
-                                    <input type="date" id="editDob" name="Dob" class="form-control" max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")" />
+                                    <input type="date" id="editDob" name="Dob" onchange="edithandleDateChange(this)" required="required" class="form-control" Min=DateTime.Now.AddYears(-125).ToString("yyyy-MM-dd") max="@DateTime.Now.AddYears(-18).ToString("yyyy-MM-dd")" />
+
+                                    <span class="text-danger" id="editDate"></span>
+
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-3">@Html.Label("Password", new { @class = "control-label" })</div>
                                 <div class="col-md-8">
-                                    <input type="password" id="editPassword" name="Password" class="form-control" placeholder="Enter Your Password" />
+                                    <input type="password" id="editPassword" name="Password" required="required" onkeyup="editvalidatePassword(this)" class="form-control" placeholder="Enter Your Password" />
+                                    <span class="text-danger" id="editPassWord_"></span>
+
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-3">@Html.Label("Confirm Password", new { @class = "control-label" })</div>
                                 <div class="col-md-8">
-                                    <input type="password" id="editConfirmPassword" name="ConfirmPassword" class="form-control" placeholder="Confirm Your Password" />
+                                    <input type="password" id="editConfirmPassword" onkeyup="editvalidateCPassword(this)" name="ConfirmPassword" required="required" class="form-control" placeholder="Confirm Your Password" />
+                                    <span class="text-danger" id="editC_PassWord_"></span>
+
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-3">@Html.Label("Address", new { @class = "control-label" })</div>
                                 <div class="col-md-8">
-                                    <textarea id="editAddress" name="Address" class="form-control" placeholder="Enter Your Address"></textarea>
+                                    <textarea id="editAddress" name="Address" class="form-control" required="required" onkeyup="editvalidateAddress(this)" placeholder="Enter Your Address"></textarea>
+
+                                    <span class="text-danger" id="editAddress_"></span>
                                 </div>
                             </div>
 
@@ -320,7 +410,7 @@
                                     @Html.LabelFor(model => item.SelectedCountryId, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.DropDownList("SelectedCountryId", item.CountryList, "Select a Country", new { @class = "form-control", id = "editcountry" })
+                                    @Html.DropDownList("SelectedCountryId", item.CountryList, "Select a Country", new { @class = "form-control", id = "editcountry", required = "required" })
                                     @Html.ValidationMessageFor(model => item.SelectedCountryId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -330,7 +420,7 @@
                                     @Html.LabelFor(model => item.SelectedStateId, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.DropDownList("SelectedStateId", item.StateList, "Select a State", new { @class = "form-control", id = "editstate" })
+                                    @Html.DropDownList("SelectedStateId", item.StateList, "Select a State", new { @class = "form-control", id = "editstate", required = "required" })
                                     @Html.ValidationMessageFor(model => item.SelectedStateId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -340,7 +430,7 @@
                                     @Html.LabelFor(model => item.SelectedCityId, new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
-                                    @Html.DropDownList("SelectedCityId", item.CityList, "Select a City", new { @class = "form-control", id = "editcity" })
+                                    @Html.DropDownList("SelectedCityId", item.CityList, "Select a City", new { @class = "form-control", id = "editcity", required = "required" })
                                     @Html.ValidationMessageFor(model => item.SelectedCityId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -374,8 +464,15 @@
 
 <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
+
         <div class="modal-body" style="width: 22rem;">
             <div class="card shadow-lg rounded" style="width: 22rem;">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">User Detail</h5>
+                    <button type="button" class="btn-close" aria-label="Close" onclick="$('#detail').modal('hide')"></button>
+                </div>
+
                 <img src="/images/default-avatar.png" class="card-img-top rounded-circle mx-auto d-block mt-3" id="dImage"
                      alt="Profile Image" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #fff;">
 
@@ -406,40 +503,65 @@
     </div>
 </div>
 
-@section scripts {
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script>
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this user? Whose id is <span id="userIdPlaceholder"></span>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+@section scripts {
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+
+
+    <script>
         $(document).ready(function () {
 
-        var datatablecolumnDefinations = [
-                { "targets": [0], "render": function (data, type, row, meta) { return data.iid; }, "className": "text-center dt-center", "responsivePriority": 1 },
-                { "targets": [1], "data": "FirstName", "className": "text-center dt-center", "responsivePriority": 2 },
-                { "targets": [2], "data": "LastName", "className": "text-center dt-center", "responsivePriority": 3 },
-                { "targets": [3], "data": "Email", "className": "text-center dt-center", "responsivePriority": 4 },
-                { "targets": [4], "data": "MobileNo", "className": "text-center dt-center", "responsivePriority": 5 },
-                { "targets": [5], "data": "Gender_", "className": "text-center dt-center", "responsivePriority": 6 },
-                { "targets": [6], "data": "Dob", "className": "text-center dt-center", "responsivePriority": 7 },
-                { "targets": [7], "data": "Address", "render": function (data, type, row) { return type === 'display' && data.length > 20 ? '<span title="' + data + '">' + data.substring(0, 20) + '...</span>' : data; }, "className": "text-center dt-center", "responsivePriority": 10 },
-                { "targets": [8], "data": "ImagePath", "render": function (data, type, row, meta) { return data && data.trim() !== "" ? '<img src="/Uploads/' + data + '" alt="User Image" class="img-thumbnail rounded-circle shadow-sm" style="max-width: 50px; max-height: 50px;" />' : '<span class="text-muted">No image</span>'; }, "className": "text-center dt-center", "responsivePriority": 11 },
-                { "targets": [9], "data": "selectedCity", "className": "text-center dt-center", "responsivePriority": 8 },
-                { "targets": [10], "data": "selectedState", "className": "text-center dt-center", "responsivePriority": 9 },
-                { "targets": [11], "data": "SelectedCountry", "className": "text-center dt-center", "responsivePriority": 10 },
-                { "targets": [12], "data": null, "render": function (data, type, row, meta) { return `<div class="btn-group" role="group"><button class="btn btn-primary btn-sm me-1" onclick="edituser(${row.id})" data-bs-toggle="tooltip" title="Edit user"><i class="fas fa-edit"></i></button><button class="btn btn-warning btn-sm me-1" onclick="detailsUser(${row.id})" data-bs-toggle="tooltip" title="View details"><i class="fas fa-info-circle"></i></button><button class="btn btn-danger btn-sm" onclick="deleteUser(${row.id})" data-bs-toggle="tooltip" title="Delete user"><i class="fas fa-trash"></i></button></div>`; }, "className": "text-center dt-center", "responsivePriority": 1 },
-                {
-                    "targets": "_all", "className": "dt-center ", "createdCell": function (td, cellData, rowData, row, col) {
-                        $(td).on('click', function (e) {
+            document.body.appendChild(globalAlertContainer);
 
-                            if (col !== 12 && !$(e.target).is('button') && !$(e.target).parents('button').length) {
-                                detailsUser(rowData.id);
-                            }
-                        });
-                    } },
+            var datatablecolumnDefinations = [
+                { "targets": [0], "render": function (data, type, row, meta) { return row.iid; }, "className": "text-center dt-center", "width": "3%"},
+    { "targets": [1], "data": "FirstName", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "8%" },
+    { "targets": [2], "data": "LastName", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "8%" },
+    { "targets": [3], "data": "Email", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "13%" },
+    { "targets": [4], "data": "MobileNo", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "10%" },
+    { "targets": [5], "data": "Gender_", "className": "text-center dt-center", "width": "9%" },
+    { "targets": [6], "data": "Dob", "className": "text-center dt-center", "width": "10%" },
+    { "targets": [7], "data": "Address", "render": function (data, type, row) { return type === 'display' && data.length > 10 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "12%" },
+    { "targets": [8], "data": "ImagePath", "render": function (data, type, row, meta) { return data && data.trim() !== "" ? '<img src="/Uploads/' + data + '" alt="User Image" class="img-thumbnail rounded-circle shadow-sm" style="max-width: 50px; max-height: 50px;" />' : '<span class="text-muted">No image</span>'; }, "className": "text-center dt-center ps-1", "width": "6%", "orderable": false },
+    { "targets": [9], "data": "selectedCity", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "10%" },
+    { "targets": [10], "data": "selectedState", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "10%" },
+    { "targets": [11], "data": "SelectedCountry", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", "width": "10%" },
+    { "targets": [12], "data": null, "render": function (data, type, row, meta) { return `<div class="btn-group" role="group"><button class="btn btn-primary btn-sm me-1" onclick="edituser(${row.id})" data-bs-toggle="tooltip" title="Edit user"><i class="fas fa-edit"></i></button><button class="btn btn-warning btn-sm me-1" onclick="detailsUser(${row.id})" data-bs-toggle="tooltip" title="View details"><i class="fas fa-info-circle"></i></button><button class="btn btn-danger btn-sm" onclick="deleteUser(${row.id})" data-bs-toggle="tooltip" title="Delete user"><i class="fas fa-trash"></i></button></div>`; }, "className": "text-center dt-center", "width": "13%", "orderable": false },
+    { "targets": "_all", "className": "dt-center", "createdCell": function (td, cellData, rowData, row, col) {
+        $(td).on('click', function (e) {
+            if (col !== 12 && !$(e.target).is('button') && !$(e.target).parents('button').length) {
+                detailsUser(rowData.id);
+            }
+        });
+    }}
+];
 
-            ];
 
-        var datatableoptions = {
+            var datatableoptions = {
+
+    // Core DataTable settings
     "serverSide": true,
     "processing": true,
     "paging": true,
@@ -448,102 +570,86 @@
     "ordering": true,
     "info": true,
     "autoWidth": false,
-    "responsive": true,
     "scrollX": true,
-    "fixedHeader": true,
+    "scrollY": "400px",
+    "scrollCollapse": true,
+    "fixedHeader": { header: true, headerOffset: 0 },
+    "fixedColumns": false, // Disable fixedColumns temporarily
     "stateSave": true,
+
+    // Data and columns
     "columnDefs": datatablecolumnDefinations,
     "ajax": {
         "url": '@Url.Action("serverdata", "Home")',
         "type": "POST",
         "dataType": "json",
         "beforeSend": function () {
-            $('#loadingSpinner').show();
+            $('#servertable_processing').show(); // Show loading
         },
         "complete": function () {
-            $('#loadingSpinner').hide();
+            $('#servertable_processing').hide(); // Hide loading
+            testdatatable.columns.adjust(); // Adjust columns after data load
         }
     },
     "columns": [
-        { "data": null },
-        { "data": "FirstName" },
-        { "data": "LastName" },
-        { "data": "Email" },
-        { "data": "MobileNo" },
-        { "data": "Gender_" },
-        { "data": "Dob" },
-        { "data": "Address" },
-        { "data": "ImagePath" },
-        { "data": "selectedCity" },
-        { "data": "selectedState" },
-        { "data": "SelectedCountry" },
-        { "data": null }
+        { "data": null, "width": "3%" },
+        { "data": "FirstName", "width": "8%" },
+        { "data": "LastName", "width": "8%" },
+        { "data": "Email", "width": "13%" },
+        { "data": "MobileNo", "width": "10%" },
+        { "data": "Gender_", "width": "9%" },
+        { "data": "Dob", "width": "10%" },
+        { "data": "Address", "width": "12%" },
+        { "data": "ImagePath", "width": "6%" },
+        { "data": "selectedCity", "width": "10%" },
+        { "data": "selectedState", "width": "10%" },
+        { "data": "SelectedCountry", "width": "10%" },
+        { "data": null, "width": "13%" }
     ],
-    "responsive": {
-        "details": {
-            "type": 'column',
-            "target": 0
-        }
-    },
+
+    // Pagination and ordering
     "pageLength": 5,
     "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
-    "language": {
-        "search": '<i class="fas fa-search me-2 text-primary"></i>',
-        "searchPlaceholder": "Search users...",
-        "lengthMenu": '<span class="me-2 text-muted">Show</span> _MENU_ <span class="ms-1 text-muted">entries</span>',
-        "info": "<span class='text-info'>Showing</span> _START_ to _END_ of _TOTAL_ entries",
-        "emptyTable": '<div class="text-center py-4"><i class="fas fa-user-slash text-danger me-2"></i>No users found</div>',
-        "paginate": {
-            "previous": '<i class="fas fa-angle-left"></i>',
-            "next": '<i class="fas fa-angle-right"></i>'
-        }
-    },
     "order": [[1, 'asc']],
-    "dom": '<"row align-items-center mb-4"<"col-sm-12 col-md-4 d-flex justify-content-start align-items-center ps-3"l><"col-sm-12 col-md-4 d-flex justify-content-center align-items-center text-center"h><"col-sm-12 col-md-4 d-flex justify-content-end align-items-center pe-3"f>>' +
-        '<"row"<"col-sm-12"tr>>' +
-        '<"row align-items-center mt-4"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
-    "headerCallback": function (thead, data, start, end, display) {
+
+    // Custom DOM layout
+    "dom": '<"row align-items-center mb-3"<"col-md-4"l><"col-md-4 text-center"h><"col-md-4"f>>' +
+           '<"row"<"col-12"tr>>' +
+           '<"row align-items-center mt-3"<"col-md-6"i><"col-md-6"p>>',
+
+    // Styling and callbacks
+    "headerCallback": function (thead) {
         $(thead).find('th').css({
             'text-align': 'center',
             'background': 'linear-gradient(90deg, #007bff, #0056b3)',
             'color': '#fff',
             'text-transform': 'uppercase',
             'letter-spacing': '1px',
-
-            'position': 'sticky',
-            'top': '0',
-            'z-index': '10'
+            'padding': '10px'
         });
     },
-    "drawCallback": function () {
-
-        $('.btn-sm').addClass('shadow-sm animate__animated animate__fadeIn').css({
-            'padding': '4px 10px',
-            'transition': 'all 0.3s ease'
-        });
-        $('.dataTables_filter input:visible').addClass('form-control rounded-pill border-primary shadow-sm').css({
-            'width': '250px',
-            'padding': '8px 12px',
-            'margin-right': '15px'
-        });
-        $('.dataTables_length select:visible').addClass('form-select rounded-pill border-primary shadow-sm').css({
-            'padding': '6px 12px',
-            'margin-left': '15px',
-            'max-width': '120px'
-        });
-        $('.paginate_button:visible').addClass('btn btn-outline-primary btn-sm rounded-pill').css({
-            'margin': '0 4px',
-            'padding': '6px 12px'
-        });
-        $('[data-bs-toggle="tooltip"]:not(.tooltip-initialized)').tooltip().addClass('tooltip-initialized');
+    "drawCallback": function (settings) {
+        const api = this.api();
+        setTimeout(function () {
+            api.columns.adjust(); // Adjust column widths after a delay
+            if (api.fixedHeader) {
+                api.fixedHeader.adjust(); // Adjust fixed header if used
+            }
+        }, 100); // Adjust after 100ms
     },
     "initComplete": function () {
-        $('#viewtable_wrapper').addClass('animate__animated animate__zoomIn');
-        $('[data-bs-toggle="tooltip"]:not(.tooltip-initialized)').tooltip().addClass('tooltip-initialized');
+        const api = this.api();
+        api.columns.adjust(); // Adjust column widths on initialization
+        if (api.fixedHeader) {
+            api.fixedHeader.adjust(); // Adjust fixed header if used
+        }
+        $('#servertable_wrapper').addClass('shadow-sm rounded');
     }
 };
 
-        var testdatatable = $("#servertable").DataTable(datatableoptions);
+             // Initialize DataTable
+            var testdatatable = $("#servertable").DataTable(datatableoptions);
+
 
         $("#countryDropdown").change(function () {
            var countryId = $(this).val();
@@ -609,7 +715,6 @@
 
                             countryfield.append('<option value="' + country.Value + '">' + country.Text + '</option>');
                         })
-
                     }
                  }
             );
@@ -633,8 +738,10 @@
         });
 
         $("#create_user").click(function () {
+
+                $("#CreateModal form")[0].reset();
                 $("#CreateModal").modal('show')
-            });
+        });
 
         $("#CreateNewUser").on('submit', function (e) {
 
@@ -650,259 +757,311 @@
                     contentType: false,
                     success: function (response) {
                         if (response.success) {
-                            customAlert("user created successfully",0.25);
-                            window.location.href = '@Url.Action("ViewUser", "Home")';
+
+
+                            $("#CreateModal").hide();
+
+                            $("#CreateModal form")[0].reset();
+
+                            showAlert("User Created Successfully", type = "success", 1900);
+
+                            setTimeout(() => { window.location.reload(); }, 2000)
+
+                        } else {
+
+                            showAlert('Error: ' + response.message, type = "danger", 1900);
                         }
-                        else {
-                            customAlert('Error: ' + response.message,0.25);
-                        }
+
                     }
+
+
 
                 });
 
-            });
+        });
 
         });
+
 
         function deleteUser(userId) {
-       if (confirm("Are you sure you want to delete this user? Whose id is "+userId)) {
-          $.ajax({
-            url: '@Url.Action("Delete", "Home")',
-            type: "POST",
-              data: { Id: userId },
-            success: function (response) {
-                if (response.success) {
-                    customAlert("User deleted successfully whose name is " + response.Name,0.25);
-                    window.location.reload();
-                } else {
-                    customAlert("Error: " + response.message,0.25);
-                }
-            },
-            error: function (xhr, status, error) {
-                customAlert("An error occurred: " + error,0.25);
-            }
-        });
-    }
-    }
-
-        function edituser(userId) {
-        //edit Country dropdown
-        $.ajax(
-      {
-          url: '@Url.Action("GetAllCountry", "Home")',
-          type: "GET",
-          success: function (data)
-          {
-              var countryfield = $("#editcountry");
-              countryfield.empty();
-              countryfield.append('<option value="">Select a country</option>');
-              $.each(data, function (index, country) {
-
-                  countryfield.append('<option value="' + country.Value + '">' + country.Text + '</option>');
-
-              })
-
-          }
-       }
-        );
-
-        $.ajax({
-        url: '@Url.Action("Edit", "Home")',
-        type: "POST",
-        data: { Id: userId },
-        success: function (response) {
-
-          //edit state dropdown
-          $.ajax({
-                 url: '@Url.Action("GetStatesByCountry", "Home")',
-                 type: "GET",
-                 data: { countryId: response.message.SelectedCountryId },
-                 success: function (data) {
-                 var stateDropdown = $("#editstate");
-                 stateDropdown.empty();
-                 stateDropdown.append('<option value="">Select a State</option>');
-
-                 $.each(data, function (index, state) {
-                        stateDropdown.append('<option value="' + state.Value + '">' + state.Text + '</option>');
-                      if (state.Value.toString() == response.message.SelectedStateId.toString())
-                          {
-                             $("#editstate").val(response.message.SelectedStateId);
+    showCustomConfirm(userId, function (confirmed) {
+        if (confirmed) {
+            $.ajax({
+                url: '@Url.Action("Delete", "Home")',
+                type: "POST",
+                data: { Id: userId },
+                success: function (response) {
+                    if (response.success) {
 
 
-                          }
+                        $("#confirmModal").hide();
 
-                      });
-                 }
-          });
 
-         //edit city dropdown
-         $.ajax({
-    url: '@Url.Action("GetCityByState", "Home")',
-    type: "GET",
-                data: { StateId: response.message.SelectedStateId },
-    success: function (data) {
-        var CityDropdown = $("#editcity");
-        CityDropdown.empty();
-        CityDropdown.append('<option value="">Select a City</option>');
+                        showAlert("User deleted successfully whose name is " + response.Name, "danger", 1900);
 
-        $.each(data, function (index, City) {
-            CityDropdown.append('<option value="' + City.Value + '">' + City.Text + '</option>');
+                        setTimeout(() => { window.location.reload()  },2000);
 
-            if (City.Value.toString() == response.message.SelectedCityId.toString())
-            {
-                $("#editcity").val(response.message.SelectedCityId);
-            }
-        });
-    }
-         });
 
-            if (response.success) {
-                $("#userId").val(userId);
-                $("#editFirstName").val(response.message.FirstName);
-                $("#editLastName").val(response.message.LastName);
-                $("#editEmail").val(response.message.Email);
-                $("#editMobileNo").val(response.message.MobileNo);
-                $("#editDob").val(response.message.Dob);
 
-                $(".editGender").each(function () {
-                    if ($(this).val().toString() === response.message.Gender1.toString()) {
-                        $(this).prop("checked", true);
                     }
-                });
-
-
-                $("#editPassword").val(response.message.Password);
-                $("#editConfirmPassword").val(response.message.ConfirmPassword);
-                $("#editAddress").val(response.message.Address);
-                $("#editcountry").val(response.message.SelectedCountryId);
-
-                $("#editstate").val(response.message.SelectedStateId);
-                $("#editCity").val(response.message.SelectedCityId);
-
-                $("#edit_image").attr("src", "/Uploads/" + response.message.ImagePath.toString());
-
-
-
-                $("#user_id").val(response.message.user_id)
-
-
-                $("#editUserModal").modal("show");
-            } else {
-                customAlert('Error: ' + response.message,4);
-            }
-        },
-        error: function (xhr, status, error) {
-            customAlert('Error: ' + response.message,4);
-        }
-      });
-
-       //edit country changing event
-
-        $("#editcountry").change(function () {
-           var countryId = $(this).val();
-            if (countryId) {
-      $.ajax({
-        url: '@Url.Action("GetStatesByCountry", "Home")',
-        type: "GET",
-        data: { countryId: countryId },
-        success: function (data) {
-            var stateDropdown = $("#editstate");
-            stateDropdown.empty();
-            stateDropdown.append('<option value="">Select a State</option>');
-
-            $.each(data, function (index, state) {
-                stateDropdown.append('<option value="' + state.Value + '">' + state.Text + '</option>');
+                },
+                error: function (xhr, status, error) {
+                    // Corrected: Pass the type parameter directly
+                    showAlert("An error occurred: " + error, "danger", 3000);
+                }
             });
         }
     });
-} else {
-    $("#editstate").empty();
-                $("#editstate").append('<option value="">Select a State</option>');
-                $("#editcity").empty();
-                $("#editcity").append('<option value="">Select a city</option>');
+        }
 
-}
-      });
 
-        //edit state changing event
 
-        $("#editstate").change(function () {
-            var StateId = $(this).val();
-            if (StateId) {
+
+
+       function edituser(userId) {
+           var form = $("#EditUserForm")[0];
+           form.reset();
+           $("#EditUserForm input, #EditUserForm select, #EditUserForm textarea").each(function () {
+               this.setCustomValidity(""); // Clear custom validity
+           });
+           $(".text-danger").text("");
+
+                //edit Country dropdown
+                $.ajax(
+                    {
+                        url: '@Url.Action("GetAllCountry", "Home")',
+                        type: "GET",
+                        success: function (data) {
+                            var countryfield = $("#editcountry");
+                            countryfield.empty();
+                            countryfield.append('<option value="">Select a country</option>');
+                            $.each(data, function (index, country) {
+
+                                countryfield.append('<option value="' + country.Value + '">' + country.Text + '</option>');
+
+                            })
+
+                        }
+                    }
+                );
+
                 $.ajax({
-                    url: '@Url.Action("GetCityByState", "Home")',
-                    type: "GET",
-                    data: { StateId: StateId },
-                    success: function (data) {
-                        var CityDropdown = $("#editcity");
-                        CityDropdown.empty();
-                        CityDropdown.append('<option value="">Select a City</option>');
+                    url: '@Url.Action("Edit", "Home")',
+                    type: "POST",
+                    data: { Id: userId },
+                    success: function (response) {
 
-                        $.each(data, function (index, City) {
-                            CityDropdown.append('<option value="' + City.Value + '">' + City.Text + '</option>');
+                        //edit state dropdown
+                        $.ajax({
+                            url: '@Url.Action("GetStatesByCountry", "Home")',
+                            type: "GET",
+                            data: { countryId: response.message.SelectedCountryId },
+                            success: function (data) {
+                                var stateDropdown = $("#editstate");
+                                stateDropdown.empty();
+                                stateDropdown.append('<option value="">Select a State</option>');
+
+                                $.each(data, function (index, state) {
+                                    stateDropdown.append('<option value="' + state.Value + '">' + state.Text + '</option>');
+                                    if (state.Value.toString() == response.message.SelectedStateId.toString()) {
+                                        $("#editstate").val(response.message.SelectedStateId);
+
+
+                                    }
+
+                                });
+                            }
                         });
+
+                        //edit city dropdown
+                        $.ajax({
+                            url: '@Url.Action("GetCityByState", "Home")',
+                            type: "GET",
+                            data: { StateId: response.message.SelectedStateId },
+                            success: function (data) {
+                                var CityDropdown = $("#editcity");
+                                CityDropdown.empty();
+                                CityDropdown.append('<option value="">Select a City</option>');
+
+                                $.each(data, function (index, City) {
+                                    CityDropdown.append('<option value="' + City.Value + '">' + City.Text + '</option>');
+
+                                    if (City.Value.toString() == response.message.SelectedCityId.toString()) {
+                                        $("#editcity").val(response.message.SelectedCityId);
+                                    }
+                                });
+                            }
+                        });
+                        if (response.success) {
+
+
+                            $("#userId").val(userId);
+                            $("#editFirstName").val(response.message.FirstName);
+                            $("#editLastName").val(response.message.LastName);
+                            $("#editEmail").val(response.message.Email);
+                            $("#editMobileNo").val(response.message.MobileNo);
+                            $("#editDob").val(response.message.Dob);
+
+                            $(".editGender").each(function () {
+                                if ($(this).val().toString() === response.message.Gender1.toString()) {
+                                    $(this).prop("checked", true);
+                                }
+                            });
+
+
+                            $("#editPassword").val(response.message.Password);
+                            $("#editConfirmPassword").val(response.message.ConfirmPassword);
+                            $("#editAddress").val(response.message.Address);
+                            $("#editcountry").val(response.message.SelectedCountryId);
+
+                            $("#editstate").val(response.message.SelectedStateId);
+                            $("#editCity").val(response.message.SelectedCityId);
+
+                            $("#edit_image").attr("src", "/Uploads/" + response.message.ImagePath.toString());
+
+
+
+                            $("#user_id").val(response.message.user_id)
+
+
+                            $("#editUserModal").modal("show");
+
+                        } else {
+                            customAlert('Error: ' + response.message, 4);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        customAlert('Error: ' + response.message, 4);
                     }
                 });
-            } else {
-                $("#editcity").empty();
-                $("#editcity").append('<option value="">Select a city</option>');
-            }
-      });
 
-        //edit file
-        $("#editfile").change(function (event) {
+                //edit country changing event
 
-            var file = event.target.files[0];
+                $("#editcountry").change(function () {
+                    var countryId = $(this).val();
+                    if (countryId) {
+                        $.ajax({
+                            url: '@Url.Action("GetStatesByCountry", "Home")',
+                            type: "GET",
+                            data: { countryId: countryId },
+                            success: function (data) {
+                                var stateDropdown = $("#editstate");
+                                stateDropdown.empty();
+                                stateDropdown.append('<option value="">Select a State</option>');
 
-            if (file) {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $("#edit_image").attr("src", e.target.result);
-                    $("#edit_image").show();
-                    $('#edit_image').prop('required', true);
-                };
-
-                reader.readAsDataURL(file);
-            } else {
-                $("#edit_image").hide();
-                $('#edit_image').prop('required', false);
-            }
-        });
-
-        $(document).ready(function () {
-
-            $("#EditUserForm").on('submit', function (e) {
-
-                e.preventDefault();
-                var formData = new FormData(this);
-
-                  $.ajax({
-                          url: '@Url.Action("EditUser", "Home")',
-                          type: "POST",
-                          data: formData,
-                          processData: false,
-                          contentType: false,
-                          success: function (response) {
-                              if (response.success)
-                              {
-                                  customAlert("user Edited successfully",0.25);
-                                window.location.href = '@Url.Action("ViewUser", "Home")';
+                                $.each(data, function (index, state) {
+                                    stateDropdown.append('<option value="' + state.Value + '">' + state.Text + '</option>');
+                                });
                             }
-                            else
-                            {
-                                  customAlert(response.message,0.1);
-                            }
-                         }
+                        });
+                    } else {
+                        $("#editstate").empty();
+                        $("#editstate").append('<option value="">Select a State</option>');
+                        $("#editcity").empty();
+                        $("#editcity").append('<option value="">Select a city</option>');
 
-                  });
-
-            });
-
-        });
                     }
+                });
 
-   function detailsUser(userId) {
+                //edit state changing event
+
+                $("#editstate").change(function () {
+                    var StateId = $(this).val();
+                    if (StateId) {
+                        $.ajax({
+                            url: '@Url.Action("GetCityByState", "Home")',
+                            type: "GET",
+                            data: { StateId: StateId },
+                            success: function (data) {
+                                var CityDropdown = $("#editcity");
+                                CityDropdown.empty();
+                                CityDropdown.append('<option value="">Select a City</option>');
+
+                                $.each(data, function (index, City) {
+                                    CityDropdown.append('<option value="' + City.Value + '">' + City.Text + '</option>');
+                                });
+                            }
+                        });
+                    } else {
+                        $("#editcity").empty();
+                        $("#editcity").append('<option value="">Select a city</option>');
+                    }
+                });
+
+                //edit file
+                $("#editfile").change(function (event) {
+
+                    var file = event.target.files[0];
+
+                    if (file) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            $("#edit_image").attr("src", e.target.result);
+                            $("#edit_image").show();
+                            $('#edit_image').prop('required', true);
+                        };
+
+                        reader.readAsDataURL(file);
+                    } else {
+                        $("#edit_image").hide();
+                        $('#edit_image').prop('required', false);
+                    }
+                });
+
+           $(document).ready(function () {
+
+               $("#EditUserForm").off('submit').on('submit', function (e) {
+
+                        e.preventDefault();
+                        var formData = new FormData(this);
+
+
+                        $.ajax({
+                            url: '@Url.Action("EditUser", "Home")',
+                            type: "POST",
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success === true) {
+                                    $("#editUserModal").hide();
+
+                                    showAlert("user Edited successfully", type = "warning", 1900);
+
+                                    setTimeout(() => { window.location.reload(); }, 2000);
+
+                                    $("#EditUserForm input, #EditUserForm select, #EditUserForm textarea").each(function () {
+                                        this.setCustomValidity("");
+                                    });
+                                    $(".text-danger").text("");
+
+                                }
+                                else {
+                                    showAlert(response.message, type = "danger", 1900);
+                                }
+
+                            },
+
+
+
+
+
+                        });
+
+                    });
+
+                    $("#EditUserForm input, #EditUserForm select, #EditUserForm textarea").each(function () {
+                        this.setCustomValidity("");
+
+                    });
+                    $(".text-danger").text("");
+
+                });
+
+            }
+
+        function detailsUser(userId) {
     $.ajax({
         url: '@Url.Action("Details", "Home")',
         type: "POST",
@@ -932,220 +1091,647 @@
                 $("#detail").modal("show");
             } else {
 
-                customAlert("Failed to load user details.",0.25);
+                showAlert("Failed to load user details.", type = "danger", 3000);
             }
         },
         error: function (xhr, status, error) {
 
-            customAlert("An error occurred while fetching details.",0.25);
+            showAlert("An error occurred while fetching details.", type = "danger", 3000);
+
         }
     });
                     }
 
-   function customAlert(message, delayInSeconds) {
+        function validateFirstName(input) {
+            const $input = $(input); // Convert to jQuery object
+            const value = $input.val(); // Use jQuery .val()
+            const $errorSpan = $('#firstNameError');
+            const letterPattern = /^[A-Za-z]*$/;
+
+            if (!value) {
+                $errorSpan.text("First name is required");
+                input.setCustomValidity("First name is required");
+            }
+            else if (value.length < 2) {
+                $errorSpan.text("First name must be at least 2 characters");
+                input.setCustomValidity("First name must be at least 2 characters");
+            }
+            else if (!letterPattern.test(value)) {
+                $errorSpan.text("First name can only contain letters");
+                input.setCustomValidity("First name can only contain letters");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+        }
+
+        function validateLastName(input) {
+            const $input = $(input); // Convert to jQuery object
+            const value = $input.val(); // Use jQuery .val()
+            const $errorSpan = $('#LastNameError');
+            const letterPattern = /^[A-Za-z]*$/;
+
+            if (!value) {
+                $errorSpan.text("Last name is required");
+                input.setCustomValidity("Last name is required");
+            }
+            else if (value.length < 3) {
+                $errorSpan.text("Last name must be at least 3 characters");
+                input.setCustomValidity("Last name must be at least 3 characters");
+            }
+            else if (!letterPattern.test(value)) {
+                $errorSpan.text("Last name can only contain letters");
+                input.setCustomValidity("Last name can only contain letters");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+        }
+
+        function validateEmail(input) {
+            const $input = $(input);
+            const value = $input.val();
+            const emailPattern = /^[^\s"@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            $errorSpan = $("#Email_");
+
+            if (!value) {
+                $errorSpan.text("Email is required");
+                input.setCustomValidity("Email is required");
+            }
+            else if (value.length < 5) {
+                $errorSpan.text("Email must be at least 5 characters");
+                input.setCustomValidity("Email must be at least 5 characters");
+            }
+            else if (!emailPattern.test(value)) {
+                $errorSpan.text("Invalid Formate");
+                input.setCustomValidity("Invalid Formate");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+        }
+
+        function validateMobile(input)
+        {
+            const $input = $(input);
+            const value = $input.val();
+
+            $errorSpan = $("#Mo_number");
+
+            if (!value) {
+                $errorSpan.text("Number is required");
+                input.setCustomValidity("Number is required");
+            }
+            else if (value.length < 10 || value.length>10)
+            {
+                $errorSpan.text(" M_No must be  10 Digits");
+                input.setCustomValidity(" M_No must be 10 digits");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+        }
+
+        function handleDateChange(input)
+
+        {
+            const $input = $(input);
+
+            const value = $input.val();
+            $errorSpan = $("#Date");
+
+            if (!value) {
+                $errorSpan.text("Date is required");
+                input.setCustomValidity("Date is required");
+
+            }
+            else
+            {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+
+        }
+
+        function validatePassword(input)
+     {
+
+         const $input = $(input);
+         const value = $input.val();
+         $errorSpan = $("#PassWord_");
+         letterPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@@#$%^&*])[A-Za-z\d!@@#$%^&*]{8,}$/;
+
+         if (!value) {
+             $errorSpan.text("Password is required");
+             input.setCustomValidity("Password is required");
+         }
+         else if (value.length < 6) {
+             $errorSpan.text("Password must be at least 6 characters");
+             input.setCustomValidity("Password must be at least 6 characters");
+         }
+         else if (!letterPattern.test(value)) {
+             $errorSpan.html("Password must be at least 8 char long.<br>Include at least:<br>- One uppercase letter<br>- One lowercase letter<br>- One digit<br>- One special character (!@@#$%^&*).");
+             input.setCustomValidity("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character (!@@#$%^&*).");
+         }
+         else {
+             $errorSpan.text("");
+             input.setCustomValidity("");
+         }
+
+
+        }
+
+        function validateCPassword(input)
+        {
+            const $input = $(input);
+            const value = $input.val();
+            $errorSpan = $("#C_PassWord_");
+            prepassword = $("#Password").val();
+
+            if (!value) {
+                $errorSpan.text("Password is required");
+                input.setCustomValidity("Password is required");
+            }
+            else if (value.length < 6) {
+                $errorSpan.text("Password must be at least 6 characters");
+                input.setCustomValidity("Password must be at least 6 characters");
+            }
+
+            else if (!(value === prepassword))
+            {
+                $errorSpan.html("Password and Confirm password must be same");
+                input.setCustomValidity("Password and Confirm password must be same");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+
+        }
+
+        function validateAddress(input)
+        {
+            const $input = $(input);
+            const value = $input.val();
+            $errorSpan = $("#Address_");
+
+
+            if (!value) {
+                $errorSpan.text("Address is required");
+                input.setCustomValidity("Address is required");
+            }
+            else if (value.length < 5) {
+                $errorSpan.text("Address must be at least 5 characters");
+                input.setCustomValidity("Address must be at least 5 characters");
+            }
+
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+
+        }
+
+        function customAlert(message, delayInSeconds) {
             setTimeout(() => {
                 alert(message);
             }, delayInSeconds * 1000);
         }
 
+        function editvalidateFirstName(input) {
+            const $input = $(input); // Convert to jQuery object
+            const value = $input.val(); // Use jQuery .val()
+            const $errorSpan = $('#editfirstNameError');
+            const letterPattern = /^[A-Za-z]*$/;
+
+            if (!value) {
+                $errorSpan.text("First name is required");
+                input.setCustomValidity("First name is required");
+            }
+            else if (value.length < 2) {
+                $errorSpan.text("First name must be at least 2 characters");
+                input.setCustomValidity("First name must be at least 2 characters");
+            }
+            else if (!letterPattern.test(value)) {
+                $errorSpan.text("First name can only contain letters");
+                input.setCustomValidity("First name can only contain letters");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+        }
+
+        function editvalidateLastName(input) {
+            const $input = $(input); // Convert to jQuery object
+            const value = $input.val(); // Use jQuery .val()
+            const $errorSpan = $('#editLastNameError');
+            const letterPattern = /^[A-Za-z]*$/;
+
+            if (!value) {
+                $errorSpan.text("Last name is required");
+                input.setCustomValidity("Last name is required");
+            }
+            else if (value.length < 3) {
+                $errorSpan.text("Last name must be at least 3 characters");
+                input.setCustomValidity("Last name must be at least 3 characters");
+            }
+            else if (!letterPattern.test(value)) {
+                $errorSpan.text("Last name can only contain letters");
+                input.setCustomValidity("Last name can only contain letters");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+        }
+
+        function editvalidateEmail(input) {
+            const $input = $(input);
+            const value = $input.val();
+            const emailPattern = /^[^\s"@@]+@@[^\s@@]+\.[^\s@@]+$/;
+            $errorSpan = $("#editEmail12");
+
+            if (!value) {
+                $errorSpan.text("Email is required");
+                input.setCustomValidity("Email is required");
+            }
+            else if (value.length < 5) {
+                $errorSpan.text("Email must be at least 5 characters");
+                input.setCustomValidity("Email must be at least 5 characters");
+            }
+            else if (!emailPattern.test(value)) {
+                $errorSpan.text("Invalid Formate");
+                input.setCustomValidity("Invalid Formate");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+        }
+
+        function editvalidateMobile(input) {
+            const $input = $(input);
+            const value = $input.val();
+
+            $errorSpan = $("#editMo_number");
+
+            if (!value) {
+                $errorSpan.text("Number is required");
+                input.setCustomValidity("Number is required");
+            }
+            else if (value.length < 10 || value.length > 10) {
+                $errorSpan.text(" M_No must be  10 Digits");
+                input.setCustomValidity(" M_No must be 10 digits");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+        }
+
+        function edithandleDateChange(input) {
+            const $input = $(input);
+
+            const value = $input.val();
+            $errorSpan = $("#editDate");
+
+            if (!value) {
+                $errorSpan.text("Date is required");
+                input.setCustomValidity("Date is required");
+
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+
+        }
+
+        function editvalidatePassword(input) {
+
+            const $input = $(input);
+            const value = $input.val();
+            $errorSpan = $("#editPassWord_");
+            letterPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@@#$%^&*])[A-Za-z\d!@@#$%^&*]{8,}$/;
+
+            if (!value) {
+                $errorSpan.text("Password is required");
+                input.setCustomValidity("Password is required");
+            }
+            else if (value.length < 6) {
+                $errorSpan.text("Password must be at least 6 characters");
+                input.setCustomValidity("Password must be at least 6 characters");
+            }
+            else if (!letterPattern.test(value)) {
+                $errorSpan.html("Password must be at least 8 char long.<br>Include at least:<br>- One uppercase letter<br>- One lowercase letter<br>- One digit<br>- One special character (!@@#$%^&*).");
+                input.setCustomValidity("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character (!@@#$%^&*).");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+
+
+        }
+
+        function editvalidateCPassword(input) {
+            const $input = $(input);
+            const value = $input.val();
+            $errorSpan = $("#editC_PassWord_");
+            prepassword = $("#editPassword").val();
+
+            if (!value) {
+                $errorSpan.text("Password is required");
+                input.setCustomValidity("Password is required");
+            }
+            else if (value.length < 6) {
+                $errorSpan.text("Password must be at least 6 characters");
+                input.setCustomValidity("Password must be at least 6 characters");
+            }
+
+            else if (!(value === prepassword)) {
+                $errorSpan.html("Password and Confirm password must be same");
+                input.setCustomValidity("Password and Confirm password must be same");
+            }
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+
+        }
+
+        function editvalidateAddress(input) {
+            const $input = $(input);
+            const value = $input.val();
+            $errorSpan = $("#editAddress_");
+
+
+            if (!value) {
+                $errorSpan.text("Address is required");
+                input.setCustomValidity("Address is required");
+            }
+            else if (value.length < 5) {
+                $errorSpan.text("Address must be at least 5 characters");
+                input.setCustomValidity("Address must be at least 5 characters");
+            }
+
+            else {
+                $errorSpan.text("");
+                input.setCustomValidity("");
+            }
+
+        }
+        // Create the global alert container
+        var globalAlertContainer = document.createElement("div");
+        globalAlertContainer.id = "globalAlertContainer";
+        globalAlertContainer.style.position = "fixed";
+        globalAlertContainer.style.top = "20px"; // Increased top margin to avoid toolbar
+        globalAlertContainer.style.left = "50%";
+        globalAlertContainer.style.transform = "translateX(-50%)";
+        globalAlertContainer.style.zIndex = "1100"; // Ensure it's above the modal and toolbar
+        globalAlertContainer.style.width = "400px";
+        globalAlertContainer.style.maxWidth = "90%";
+        globalAlertContainer.style.display = "flex";
+        globalAlertContainer.style.flexDirection = "column";
+        globalAlertContainer.style.alignItems = "center";
+        document.body.appendChild(globalAlertContainer); // Append to the body
+
+        function customAlert(message, delayInSeconds) {
+            setTimeout(() => {
+                alert(message);
+            }, delayInSeconds * 1000);
+        }
+
+        function showAlert(message, type = "danger", duration = 3000) {
+            const alertDiv = document.createElement("div");
+            alertDiv.classList.add("alert", `alert-${type}`, "shadow-lg", "p-3", "rounded", "animated-alert");
+            alertDiv.style.position = "relative";
+            alertDiv.style.marginBottom = "10px";
+            alertDiv.style.opacity = "0";
+            alertDiv.style.transform = "scale(0.9)";
+            alertDiv.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+            alertDiv.style.width = "100%";
+            alertDiv.style.maxWidth = "400px";
+            alertDiv.style.boxShadow = "0px 4px 10px rgba(0, 0, 0, 0.1)";
+            alertDiv.style.borderLeft = `5px solid ${type === "danger" ? "#dc3545" : type === "warning" ? "#ffc107" : "#28a745"}`;
+            alertDiv.style.backgroundColor = "#ffffff"; // Explicit background color
+            alertDiv.style.color = "#000000"; // Explicit text color for better contrast
+
+            // Progress bar for auto-hide timer
+            const progressBar = document.createElement("div");
+            progressBar.style.height = "3px";
+            progressBar.style.width = "100%";
+            progressBar.style.position = "absolute";
+            progressBar.style.bottom = "0";
+            progressBar.style.left = "0";
+            progressBar.style.backgroundColor = type === "danger" ? "#dc3545" : type === "warning" ? "#ffc107" : "#28a745";
+            progressBar.style.transition = `width ${duration}ms linear`;
+
+            alertDiv.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">${message}</span>
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+    `;
+
+            alertDiv.appendChild(progressBar);
+            globalAlertContainer.appendChild(alertDiv);
+
+            // Show the alert with animation
+            setTimeout(() => {
+                alertDiv.style.opacity = "1";
+                alertDiv.style.transform = "scale(1)";
+                progressBar.style.width = "0"; // Progress bar animation
+            }, 100);
+
+            // Auto-hide after specified duration
+            setTimeout(() => {
+                alertDiv.style.opacity = "0";
+                alertDiv.style.transform = "scale(0.9)";
+                setTimeout(() => alertDiv.remove(), 500);
+            }, duration);
+
+            // Close button event
+            alertDiv.querySelector(".btn-close").addEventListener("click", function () {
+                alertDiv.style.opacity = "0";
+                alertDiv.style.transform = "scale(0.9)";
+                setTimeout(() => alertDiv.remove(), 500);
+            });
+        }
+
+        function showCustomConfirm(userId, callback) {
+
+  document.getElementById("userIdPlaceholder").textContent = userId;
+
+
+  const confirmModal = new bootstrap.Modal(document.getElementById("confirmModal"));
+  confirmModal.show();
+
+  document.getElementById("confirmDelete").onclick = function () {
+    confirmModal.hide(); // Hide the modal
+    callback(true); // User confirmed
+  };
+
+  // Handle the "Cancel" button click or modal close
+  document.getElementById("confirmModal").addEventListener("hidden.bs.modal", function () {
+    callback(false); // User canceled
+  });
+}
+
     </script>
 }
 
 <style>
-    .dataTables_wrapper {
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* General Table Styling */
+table.dataTable {
+    width: 100% !important;
+    table-layout: fixed;
+    border: 1px solid #e2e8f0; /* Light gray border */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Header */
+table.dataTable thead {
+    background: linear-gradient(90deg, #007bff, #0056b3);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+table.dataTable thead th {
+    padding: 12px;
+    text-align: center;
+}
+
+/* Table Body */
+.dataTable tbody tr:hover {
+    background-color: #f1f5f9; /* Light hover effect */
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.dataTable tbody td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Buttons Styling */
+.btn-sm {
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.2s ease-in-out;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+}
+
+.details-btn {
+    background-color: #ffc107;
+    color: white;
+}
+
+.details-btn:hover {
+    background-color: #e0a800;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Loading Indicator */
+.dataTables_processing {
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Pagination and Info Section */
+#servertable_length label,
+#servertable_info {
+    margin-left: 15px;
+    font-size: 14px;
+}
+
+#servertable_paginate {
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+/* Search Input */
+#servertable_filter input {
+    width: 250px;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    transition: border 0.2s ease-in-out;
+}
+
+#servertable_filter input:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+}
+
+/* Search Box Wrapper */
+#servertable_filter {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Responsive Table */
+@@media (max-width: 768px) {
+    #servertable_filter input {
+        width: 100%;
     }
 
-    #servertable th:after {
-        content: "" !important; /* Remove diamond separators */
+    table.dataTable {
+        font-size: 12px;
     }
 
-    /* Table cell alignment */
-    #servertable td {
-        vertical-align: middle;
-        padding: 10px;
-        text-align: center;
-        white-space: nowrap;
-        border-bottom: 1px solid #eee;
+    .btn-sm {
+        padding: 4px 8px;
+        font-size: 0.75rem;
     }
-    /* Image column styling */
-    #servertable .img-thumbnail {
-        border: 3px solid #e9ecef; /* Thicker, softer border */
-        padding: 3px;
-        background-color: #fff; /* White background for consistency */
-        border-radius: 50%;
-        width: 50px; /* Fixed width */
-        height: 50px; /* Fixed height */
-        object-fit: cover; /* Ensure images fit nicely */
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    hr {
+    
+    margin-top:15px;
     }
 
-        #servertable .img-thumbnail:hover {
-            transform: scale(1.2); /* Larger zoom on hover */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Add shadow on hover */
-        }
-
-    /* Actions column button styling */
-    #servertable .btn-group .btn {
-        padding: 8px 12px; /* Slightly larger buttons */
-        border-radius: 20px; /* Rounded pill shape */
-        font-size: 14px;
-        margin: 0 4px; /* Consistent spacing */
-        transition: all 0.3s ease;
+    #servertable_filter{
+        margin-right: 10px;
     }
 
-        #servertable .btn-group .btn:hover {
-            transform: translateY(-3px); /* More pronounced lift */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Stronger shadow */
-        }
-
-    #servertable .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-
-    #servertable .btn-warning {
-        background-color: #ffc107;
-        border-color: #ffc107;
-    }
-
-    #servertable .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
-    }
-
-    .dataTables_wrapper .dataTables_filter {
-        padding-right: 0;
-    }
-
-    .dataTables_wrapper .dataTables_length {
-        padding-left: 0;
-    }
-
-    .dataTables_wrapper .dataTables_filter input {
-        width: 250px !important;
-        max-width: 100%;
-        padding: 8px 12px;
-        border-color: #007bff;
-    }
-
-    .dataTables_wrapper .dataTables_length select {
-        width: auto !important;
-        max-width: 120px;
-        padding: 6px 12px;
-        border-color: #007bff;
-    }
-
-    @@media (max-width: 768px) {
-        .dataTables_wrapper .dataTables_filter,
-        .dataTables_wrapper .dataTables_length {
-            text-align: center !important;
-            margin-bottom: 10px;
-        }
-
-            .dataTables_wrapper .dataTables_filter input {
-                width: 100% !important;
-                max-width: 100%;
-            }
-
-            .dataTables_wrapper .dataTables_length select {
-                width: 100% !important;
-            }
-
-        .dataTables_wrapper .row:first-child {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #servertable th,
-        #servertable td {
-            padding: 12px 15px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 15px;
-            color: #333;
-            border-bottom: 1px solid #e9ecef;
-        }
-    }
-
-    #servertable tr:hover {
-        background-color: darkkhaki;
-        transform: scale(1.01);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        opacity: 0.95;
-    }
-
-    .dataTables_wrapper .dataTables_info {
-        padding-top: 8px;
-        font-size: 14px;
-        color: #6c757d;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-        padding: 6px 12px;
-        margin: 0 4px;
-        border: none;
-    }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            background-color: #e9ecef;
-            border-radius: 50%;
-        }
-
-    .dataTables_length select,
-    .dataTables_filter input {
-        border-radius: 55px;
-        padding: 0.6rem 1.5rem;
-        border: 2px solid #dee2e6;
-        background: #fff;
-        transition: all 0.3s ease;
-        box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.05);
-    }
-
-        .dataTables_filter input:focus,
-        .dataTables_length select:focus {
-            border-color: #ff6f61;
-            box-shadow: 0 0 10px rgba(255, 111, 97, 0.3);
-            outline: none;
-        }
-
-    .dataTables_wrapper #servertable thead th {
-        text-align: center !important;
-        background: linear-gradient(90deg, #007bff, #0056b3);
-        color: #fff;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-        padding: 20px 15px;
-        border-bottom: 4px solid #0056b3;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-        vertical-align: middle;
-    }
-
-    #servertable tbody tr:nth-child(even) {
-        background-color: #f5f7fa;
-    }
-
-    #servertable tbody tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
-
-    #servertable tr:hover {
-        background-color: #e6f3ff;
-        transform: scale(1.02);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-        cursor: pointer;
-        opacity: 1;
-    }
-
-    #servertable tbody tr.selected {
-        background-color: #d1e7ff; /* Light blue for selected row */
-        font-weight: 500; /* Slightly bolder text */
-        transition: background-color 0.2s ease;
+    #create_user {
+        margin-right: 15px;
     }
 </style>
