@@ -1,8 +1,8 @@
-﻿namespace task1.Migrations
+﻿using System;
+using System.Data.Entity.Migrations;
+
+namespace task1.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class m2 : DbMigration
     {
         public override void Up()
@@ -15,7 +15,7 @@
             AddForeignKey("dbo.Countries", "UserData_user_id", "dbo.UserDatas", "user_id");
             DropColumn("dbo.UserDatas", "country_country_id");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.UserDatas", "country_country_id", c => c.Int(nullable: false));

@@ -1,8 +1,8 @@
-﻿namespace task1.Migrations
+﻿using System;
+using System.Data.Entity.Migrations;
+
+namespace task1.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class m5 : DbMigration
     {
         public override void Up()
@@ -12,7 +12,7 @@
             CreateIndex("dbo.States", "UserData_user_id");
             AddForeignKey("dbo.States", "UserData_user_id", "dbo.UserDatas", "user_id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.States", "UserData_user_id", "dbo.UserDatas");

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -41,7 +41,7 @@ namespace task1.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int city_id { get; set; }
 
-        [Required(ErrorMessage ="A city is required")]
+        [Required(ErrorMessage = "A city is required")]
         [Display(Name = "City : ")]
         public string CityName { get; set; }
 

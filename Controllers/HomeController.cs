@@ -32,7 +32,7 @@ namespace task1.Controllers
                 Value = s.country_id.ToString(),
                 Text = s.CountryName
             }).ToList();
-            return Json(AllCountry,JsonRequestBehavior.AllowGet);
+            return Json(AllCountry, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -65,18 +65,18 @@ namespace task1.Controllers
         [HttpGet]
         public ActionResult ViewUser()
         {
-            List<UserData> users = _applicationDbContext.Users.Where(c=>c.IsActive == true).ToList();
+            List<UserData> users = _applicationDbContext.Users.Where(c => c.IsActive == true).ToList();
             foreach (var user in users)
             {
-                var City = _applicationDbContext.Cities.FirstOrDefault(c=>c.city_id == user.SelectedCityId);
+                var City = _applicationDbContext.Cities.FirstOrDefault(c => c.city_id == user.SelectedCityId);
                 user.selectedCity = City != null ? City.CityName : "N/A";
 
-                var State = _applicationDbContext.states.FirstOrDefault(s=>s.state_id == City.state_id);
+                var State = _applicationDbContext.states.FirstOrDefault(s => s.state_id == City.state_id);
                 user.selectedState = State != null ? State.StateName : "N/A";
 
-                var Country = _applicationDbContext.Countries.FirstOrDefault(c=>c.country_id == State.country_id);
+                var Country = _applicationDbContext.Countries.FirstOrDefault(c => c.country_id == State.country_id);
                 user.SelectedCountry = Country != null ? Country.CountryName : "N/A";
-               PopulateSelectLists(user);
+                PopulateSelectLists(user);
             }
             return View(users);
         }
@@ -107,20 +107,20 @@ namespace task1.Controllers
 
             if (!string.IsNullOrEmpty(searchValue))
             {
-                query = query.Where(ucs =>ucs.User.FirstName.ToLower().Contains(searchValue) ||
-                                          ucs.City.CityName.ToLower().Contains(searchValue)||
-                                          ucs.State.StateName.ToLower().Contains(searchValue)||
-                                          ucs.Country.CountryName.ToLower().Contains(searchValue)||
+                query = query.Where(ucs => ucs.User.FirstName.ToLower().Contains(searchValue) ||
+                                          ucs.City.CityName.ToLower().Contains(searchValue) ||
+                                          ucs.State.StateName.ToLower().Contains(searchValue) ||
+                                          ucs.Country.CountryName.ToLower().Contains(searchValue) ||
                                           ucs.User.FirstName.ToLower().Contains(searchValue) ||
-                                          ucs.User.LastName.ToLower().Contains(searchValue)||
-                                          ucs.User.Email.ToLower().Contains(searchValue)||
+                                          ucs.User.LastName.ToLower().Contains(searchValue) ||
+                                          ucs.User.Email.ToLower().Contains(searchValue) ||
                                           ucs.User.MobileNo.ToLower().Contains(searchValue) ||
                                           ucs.User.Gender_.ToLower().Contains(searchValue) ||
-                                          ucs.User.Dob.ToLower().Contains(searchValue)|| 
+                                          ucs.User.Dob.ToLower().Contains(searchValue) ||
                                           ucs.User.Address.ToLower().Contains(searchValue));
 
             }
-          
+
             if (dataTableRequest.Order != null && dataTableRequest.Order.Any())
             {
                 var order = dataTableRequest.Order[0];
@@ -154,7 +154,7 @@ namespace task1.Controllers
                     case 7: // Address
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.Address) : query.OrderByDescending(ucs => ucs.User.Address);
                         break;
-                  
+
                     case 9: // City
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.City.CityName) : query.OrderByDescending(ucs => ucs.City.CityName);
 
@@ -203,7 +203,7 @@ namespace task1.Controllers
                     selectedCity = ucs.City.CityName,
                     selectedState = ucs.State.StateName,
                     SelectedCountry = ucs.Country.CountryName
-                   
+
                 })
             };
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -276,7 +276,7 @@ namespace task1.Controllers
                              .SelectMany(v => v.Errors)
                              .Select(e => e.ErrorMessage)
                              .ToList();
-                    Debug.WriteLine("Validation errors: " + string.Join(", ", errors));
+
                     var errorMessage = "Validation failed." + Environment.NewLine + string.Join(Environment.NewLine, errors);
                     return Json(new { success = false, message = errorMessage });
                 }
@@ -297,7 +297,7 @@ namespace task1.Controllers
         public JsonResult Edit(int Id)
         {
             var Edituser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
-          
+
             if (Edituser != null)
             {
 
@@ -319,8 +319,8 @@ namespace task1.Controllers
                 return View();
             }
 
-            
-            var Edituser = _applicationDbContext.Users.FirstOrDefault(u=>u.user_id==user.user_id);
+
+            var Edituser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == user.user_id);
 
             var OldEmail = Edituser.Email;
 
@@ -402,9 +402,9 @@ namespace task1.Controllers
                         return Json(new { success = false, message = "Email is Already registered with other User!" });
 
                     }
-                    
 
-                  
+
+
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -413,8 +413,8 @@ namespace task1.Controllers
 
                         ModelState.AddModelError("", validationErrors.ToString());
                     }
-                        PopulateSelectLists(user);
-                    return Json(new { success = false, message = "Some error is coming"});
+                    PopulateSelectLists(user);
+                    return Json(new { success = false, message = "Some error is coming" });
                 }
             }
             else
@@ -424,7 +424,7 @@ namespace task1.Controllers
                                       .Select(e => e.ErrorMessage)
                                       .ToList();
 
-       
+
                 var errorMessage = "Validation failed." + Environment.NewLine + string.Join(Environment.NewLine, errors);
 
                 return Json(new { success = false, message = errorMessage });
@@ -437,8 +437,7 @@ namespace task1.Controllers
         {
             try
             {
-                var deleteuser = _applicationDbContext.Users.FirstOrDefault(u=>u.user_id==Id);
-                Debug.WriteLine(deleteuser);
+                var deleteuser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
                 deleteuser.IsActive = false;
                 _applicationDbContext.Configuration.ValidateOnSaveEnabled = false;
 
@@ -448,10 +447,10 @@ namespace task1.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "No record Found"+ ex });
-             }
-
+                return Json(new { success = false, message = "No record Found" + ex });
             }
+
+        }
 
         [HttpPost]
         public JsonResult Details(int Id)
@@ -467,7 +466,6 @@ namespace task1.Controllers
 
                 var Country = _applicationDbContext.Countries.Find(State.country_id);
                 user.SelectedCountry = Country != null ? Country.CountryName : "N/A";
-                Debug.WriteLine(user);
 
 
                 return Json(new { success = true, message = user }, JsonRequestBehavior.DenyGet); ;
@@ -475,7 +473,7 @@ namespace task1.Controllers
             return Json(new { success = false, message = "Error accure" }, JsonRequestBehavior.DenyGet);
         }
 
-         private void PopulateSelectLists(UserData user)
+        private void PopulateSelectLists(UserData user)
         {
             var CityName = _applicationDbContext.Cities.Find(user.SelectedCityId);
             user.CityList = _applicationDbContext.Cities
@@ -484,7 +482,7 @@ namespace task1.Controllers
                 {
                     Value = c.city_id.ToString(),
                     Text = c.CityName,
-                    Selected = c.city_id == user.SelectedCityId 
+                    Selected = c.city_id == user.SelectedCityId
                 }).ToList();
 
             var StateName = _applicationDbContext.states.Find(CityName.state_id);
@@ -494,7 +492,7 @@ namespace task1.Controllers
                 {
                     Value = c.state_id.ToString(),
                     Text = c.StateName,
-                    Selected = c.state_id == CityName.state_id  
+                    Selected = c.state_id == CityName.state_id
                 }).ToList();
 
             user.SelectedStateId = CityName.state_id;
@@ -503,14 +501,14 @@ namespace task1.Controllers
             {
                 if (i.Selected)
                 {
-                    var countryid = _applicationDbContext.Countries.FirstOrDefault(c=>c.country_id == StateName.country_id);
+                    var countryid = _applicationDbContext.Countries.FirstOrDefault(c => c.country_id == StateName.country_id);
                     user.SelectedCountryId = countryid.country_id;
                 }
             }
 
-            var CountryName = _applicationDbContext.Countries.All(s=>s.country_id == s.country_id);
+            var CountryName = _applicationDbContext.Countries.All(s => s.country_id == s.country_id);
 
-            user.CountryList = _applicationDbContext.Countries.Where(c=>c.country_id == c.country_id)
+            user.CountryList = _applicationDbContext.Countries.Where(c => c.country_id == c.country_id)
                .Select(c => new SelectListItem
                {
                    Value = c.country_id.ToString(),
@@ -519,18 +517,18 @@ namespace task1.Controllers
                }).ToList();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
+      
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult Index()
+        {
+            return View();
+            
         }
     }
 }

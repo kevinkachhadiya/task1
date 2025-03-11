@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
-using System.Web.UI.WebControls;
 using System.Web.Mvc;
 using System.Web.Services.Protocols;
+using System.Web.UI.WebControls;
 
 namespace task1.Models
 {
@@ -78,7 +78,7 @@ namespace task1.Models
 
         [NotMapped]
         [Display(Name = "Select a Country")]
-        [Required(ErrorMessage ="Country is required")]
+        [Required(ErrorMessage = "Country is required")]
         public int SelectedCountryId { get; set; }
 
 
@@ -104,13 +104,13 @@ namespace task1.Models
         public IEnumerable<SelectListItem> StateList { get; set; }
         public IEnumerable<SelectListItem> CityList { get; set; }
         public Boolean IsActive { get; set; }
-    
+
     }
     public enum Gender
-    { 
-       Male,
-       Female,
-       Other
+    {
+        Male,
+        Female,
+        Other
     }
 
 }

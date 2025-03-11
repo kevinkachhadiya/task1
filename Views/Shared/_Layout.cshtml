@@ -33,13 +33,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto gap-4">
                     <li class="nav-item">
-                        @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link  hover:text-gray-300" })
+                        @Html.ActionLink("Web Api", "Index", "Home", new { area = "" }, new { @class = "nav-link  hover:text-gray-300" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link  hover:text-gray-300" })
+                        @Html.ActionLink("Client Side", "ViewUser", "Home", new { area = "" }, new { @class = "nav-link  hover:text-gray-300" })
                     </li>
                     <li class="nav-item">
-                        @Html.ActionLink("Server Table", "Contact", "Home", new { area = "" }, new { @class = "nav-link hover:text-gray-300" })
+                        @Html.ActionLink("Server Side", "Contact", "Home", new { area = "" }, new { @class = "nav-link hover:text-gray-300" })
                     </li>
                     <li class="nav-item">
                         <label class="inline-flex align-items-center cursor-pointer">
@@ -213,6 +213,11 @@
 
     .dark #tdm {
         color: white; /* Gray-900 for light mode */
+    }
+
+    .dark h5
+    {
+        color:white;
     }
 
 </style>

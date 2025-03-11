@@ -1,8 +1,8 @@
-﻿namespace task1.Migrations
+﻿using System;
+using System.Data.Entity.Migrations;
+
+namespace task1.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class m6 : DbMigration
     {
         public override void Up()
@@ -14,7 +14,7 @@
             DropColumn("dbo.States", "UserData_user_id");
             DropColumn("dbo.Countries", "UserData_user_id");
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.Countries", "UserData_user_id", c => c.Int());

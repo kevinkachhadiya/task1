@@ -1,10 +1,10 @@
-﻿namespace task1.Migrations
-{
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
+﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.Migrations;
+using System.Linq;
 
+namespace task1.Migrations
+{
     internal sealed class Configuration : DbMigrationsConfiguration<task1.Models.ApplicationDbContext>
     {
         public Configuration()

@@ -15,7 +15,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h4 class="text-primary">ViewUser</h4>
-            <h5 class="text-muted">User List</h5>
+            <h5>User List</h5>
         </div>
         <button id="create_user" class="btn btn-success btn-lg rounded-pill shadow-sm" data-bs-toggle="tooltip" title="Add a new user">
             <i class="fas fa-plus"></i> Create New User
@@ -561,7 +561,7 @@
     { "targets": [4], "data": "MobileNo", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
     { "targets": [5], "data": "Gender_", "className": "text-center dt-center", },
     { "targets": [6], "data": "Dob", "className": "text-center dt-center"},
-    { "targets": [7], "data": "Address", "render": function (data, type, row) { return type === 'display' && data.length > 10 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
+    { "targets": [7], "data": "Address", "render": function (data, type, row) { return type === 'display' && data.length > 10 ? '<span title="' + data + '">' + data.substring(0, 12) + '</span>' : data; }, "className": "text-center dt-center",  },
     { "targets": [8], "data": "ImagePath", "render": function (data, type, row, meta) { return data && data.trim() !== "" ? '<img src="/Uploads/' + data + '" alt="User Image" class="img-thumbnail rounded-circle shadow-sm" style="max-width: 50px; max-height: 50px;" />' : '<span class="text-muted">No image</span>'; }, "className": "text-center dt-center ps-1", "orderable": false },
     { "targets": [9], "data": "selectedCity", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", },
     { "targets": [10], "data": "selectedState", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
@@ -1742,7 +1742,7 @@
     }
 
     label, .col-md-3, .cnf {
-        color: #333333; /* Dark text for labels */
+        color: #333333; 
     }
 
     .form-check-label {
@@ -1750,7 +1750,7 @@
     }
 
     .text-danger {
-        background-color: #FFE0E0; /* Light red background */
+        background-color: #FFE0E0; 
     }
 
     /* Dark Mode Styles */

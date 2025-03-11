@@ -20,5 +20,5 @@ namespace task1.Models
             return new ApplicationDbContext();
         }
     }
-    
-    }
+
+}
