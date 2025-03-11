@@ -7,48 +7,55 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome for icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- DataTables -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
-    <!-- DataTables Bootstrap 5 -->
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-
-    <!-- Bootstrap JS (includes Popper.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Your custom script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="~/js/your-custom-script.js"></script>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.x.x/dist/js/bootstrap.min.js"></script>
-
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+
+
+    <nav class="navbar navbar-expand-md  fixed-top">
         <div class="container">
-            @Html.ActionLink("Application name", "ViewUser", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
+            <a href="/Home/ViewUser" class="navbar-brand d-flex align-items-center gap-3">
+                <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo">
+                <span class="fs-4 fw-semibold text-white">MyApp</span>
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Server Table", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto gap-4">
+                    <li class="nav-item">
+                        @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link  hover:text-gray-300" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link  hover:text-gray-300" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Server Table", "Contact", "Home", new { area = "" }, new { @class = "nav-link hover:text-gray-300" })
+                    </li>
+                    <li class="nav-item">
+                        <label class="inline-flex align-items-center cursor-pointer">
+                            <!-- Hidden Checkbox -->
+                            <input type="checkbox" id="darkModeToggle" class="sr-only">
+
+                            <!-- Toggle Container -->
+                            <div class="toggle-container relative w-12 h-6 bg-gray-300 rounded-full transition-colors duration-300 ease-in-out">
+                                <!-- Toggle Handle -->
+                                <div class="toggle-handle absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform duration-300 ease-in-out"></div>
+                            </div>
+
+                            <!-- Toggle Label -->
+                            <span class="ms-0 text-sm font-medium text-gray-900 dark:text-gray-300" id="tdm">Dark Mode</span>
+                        </label>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -62,7 +69,150 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <!-- Remove @Scripts.Render("~/bundles/bootstrap") if you're using the CDN -->
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<style>
+    body {
+        padding-top: 56px;
+    }
+    .navbar {
+        background-color: #FFFFFF; /* White background */
+        color: #4A4A4A; /* Softer slate gray text */
+    }
+
+        .navbar a, .navbar span {
+            color: #4A4A4A; /* Slate gray for links and spans */
+        }
+
+        .dark .navbar a, .dark .navbar span {
+            color: #E0E0E0; /* Light gray for links and spans */
+        }
+
+    .dark .nav-link {
+        color: white;
+    }
+    /* Toggle Styles */
+    .toggle-container {
+        background-color: #d1d5db; /* Light gray */
+    }
+
+    .toggle-handle {
+        transform: translateX(0);
+    }
+
+    #darkModeToggle:checked ~ .toggle-container {
+        background-color: #4f46e5; /* Dark blue */
+    }
+
+    #darkModeToggle:checked ~ .toggle-container .toggle-handle {
+        transform: translateX(1.5rem);
+    }
+
+    body.dark .toggle-container {
+        background-color: #374151; /* Dark gray */
+    }
+
+    body.dark .toggle-handle {
+        border-color: #4b5563; /* Darker border */
+    }
+
+    #tdm {
+        color: white;
+    }
+
+    /* Navbar and Dark Mode Overrides */
+    body.dark .navbar-dark,
+    body.dark .navbar-brand span {
+        color: #ffffff !important;
+    }
+
+    body.dark .navbar-dark .nav-link:hover {
+        color: #d1d5db !important; /* Gray-300 */
+    }
+
+    /* Mobile Adjustments */
+    @@media (max-width: 767.98px) {
+        body {
+            padding-top: 70px; /* Adjust for collapsed navbar */
+        }
+
+        .navbar-nav {
+            padding: 1rem;
+        }
+
+        /* Remove .navbar .container .ul as Bootstrap handles collapse */
+    }
+    .text-w-900 {
+        font-weight: 900;
+        color: white; /* Or whatever color you intend */
+    }
+
+    body.dark .dark\:text-w-300 {
+        font-weight: 300;
+        color: #d1d5db; /* Example: light gray for dark mode */
+    }
+
+    body.dark .navbar-dark #tdm {
+        font-weight: 300;
+        color: #d1d5db;
+    }
+
+    /* Toggle Container */
+    .toggle-container {
+        background-color: #d1d5db; /* Light gray for off state */
+        width: 3rem; /* 48px */
+        height: 1.5rem; /* 24px */
+        border-radius: 9999px; /* Full rounding */
+        position: relative;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    /* Toggle Handle */
+    .toggle-handle {
+        width: 1.25rem; /* 20px */
+        height: 1.25rem; /* 20px */
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        top: 0.125rem; /* 2px */
+        left: 0.125rem; /* 2px */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    /* Checked State (On) */
+    #darkModeToggle:checked ~ .toggle-container {
+        background-color: #4f46e5; /* Indigo for on state - adjust to your brand */
+    }
+
+        #darkModeToggle:checked ~ .toggle-container .toggle-handle {
+            transform: translateX(1.5rem); /* Move handle to the right */
+        }
+
+    /* Dark Mode Styles */
+    body.dark .toggle-container {
+        background-color: #374151; /* Dark gray for off state in dark mode */
+    }
+
+    body.dark #darkModeToggle:checked ~ .toggle-container {
+        background-color: #7dd3fc; /* Light blue for on state in dark mode */
+    }
+
+    body.dark .toggle-handle {
+        border-color: #4b5563; /* Darker border in dark mode */
+    }
+
+    /* Label Styling */
+    #tdm {
+        color: black; /* Gray-300 for dark mode */
+
+        transition: color 0.3s ease-in-out;
+    }
+
+    .dark #tdm {
+        color: white; /* Gray-900 for light mode */
+    }
+
+</style>

@@ -11,7 +11,7 @@
     };
 }
 
-<div class="mt-4">
+<div class="mt-4 table-container">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h4 class="text-primary">ViewUser</h4>
@@ -28,21 +28,22 @@
         <p>Loading users...</p>
     </div>
 
-    <table class="w-full text-sm text-gray-600 border-collapse" id="servertable">
+    
+    <table class="display responsive" width="100%" id="servertable">
         <thead class="bg-gradient-to-r from-blue-500 to-blue-700 text-white">
             <tr>
-                <th>#</th>
-                <th>F_Name</th>
-                <th>L_Name</th>
-                <th>Email</th>
-                <th>Mob_No</th>
-                <th>Gender</th>
-                <th>DOB</th>
-                <th>Address</th>
+                <th class="pe-4">#</th>
+                <th class="pe-4">F_Name</th>
+                <th class="pe-4" >L_Name</th>
+                <th class="pe-4" >Email</th>
+                <th class="pe-4">Mob_No</th>
+                <th class="pe-4">Gender</th>
+                <th class="pe-4">DOB</th>
+                <th class="pe-4">Address</th>
                 <th>Img</th>
-                <th>City</th>
-                <th>State</th>
-                <th>Country</th>
+                <th class="pe-4" >City</th>
+                <th class="pe-4" >State</th>
+                <th class="pe-4">Country</th>
                 <th id="actions">Actions</th>
             </tr>
         </thead>
@@ -51,9 +52,10 @@
 </div>
 
 <div class="modal fade" id="CreateModal" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="false">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-md" role="document">
+        <!-- Add modal-sm here -->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-success" style="color:white;">
                 <h5 class="modal-title" id="editUserModalLabel">Create User</h5>
                 <button type="button" class="btn-close" aria-label="Close" onclick="$('#CreateModal').modal('hide')"></button>
 
@@ -144,7 +146,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    @Html.LabelFor(model => item.Gender1, new { @class = "control-label" })
+                                    @Html.LabelFor(model => item.Gender1, new { @class = "control-label", id = "gender_" })
                                 </div>
                                 <div class="col-md-8 d-flex">
                                     @foreach (var gender in Enum.GetValues(typeof(task1.Models.Gender)))
@@ -202,7 +204,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    @Html.LabelFor(model => item.ConfirmPassword, new { @class = "control-label" })
+                                    @Html.Label("C_Password", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
                                     @Html.Password("ConfirmPassword", null,
@@ -236,7 +238,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    @Html.LabelFor(model => item.SelectedCountryId, new { @class = "control-label" })
+                                    @Html.Label("Country", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
                                     @Html.DropDownList("SelectedCountryId", item.CountryList, "Select a Country", new { @class = "form-control", id = "countryDropdown", required = "required" })
@@ -246,7 +248,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    @Html.LabelFor(model => item.SelectedStateId, new { @class = "control-label" })
+                                    @Html.Label("State", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
                                     @Html.DropDownList("SelectedStateId", item.StateList, "Select a State", new { @class = "form-control", id = "stateDropdown", required = "required" })
@@ -256,7 +258,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    @Html.LabelFor(model => item.SelectedCityId, new { @class = "control-label" })
+                                    @Html.Label("City", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
                                     @Html.DropDownList("SelectedCityId", item.CityList, "Select a City", new { @class = "form-control", id = "CityDropdown", required = "required" })
@@ -297,7 +299,7 @@
 <div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-warning">
                 <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
                 <button type="button" class="btn-close" aria-label="Close" onclick="$('#editUserModal').modal('hide')"></button>
             </div>
@@ -388,7 +390,7 @@
                             </div>
 
                             <div class="row mb-3">
-                                <div class="col-md-3">@Html.Label("Confirm Password", new { @class = "control-label" })</div>
+                                <div class="col-md-3">@Html.Label("C_Password", new { @class = "control-label" })</div>
                                 <div class="col-md-8">
                                     <input type="password" id="editConfirmPassword" onkeyup="editvalidateCPassword(this)" name="ConfirmPassword" required="required" class="form-control" placeholder="Confirm Your Password" />
                                     <span class="text-danger" id="editC_PassWord_"></span>
@@ -407,7 +409,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    @Html.LabelFor(model => item.SelectedCountryId, new { @class = "control-label" })
+                                    @Html.Label("Country", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
                                     @Html.DropDownList("SelectedCountryId", item.CountryList, "Select a Country", new { @class = "form-control", id = "editcountry", required = "required" })
@@ -417,7 +419,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    @Html.LabelFor(model => item.SelectedStateId, new { @class = "control-label" })
+                                    @Html.Label("state", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
                                     @Html.DropDownList("SelectedStateId", item.StateList, "Select a State", new { @class = "form-control", id = "editstate", required = "required" })
@@ -427,7 +429,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-3">
-                                    @Html.LabelFor(model => item.SelectedCityId, new { @class = "control-label" })
+                                    @Html.Label("City", new { @class = "control-label" })
                                 </div>
                                 <div class="col-md-8">
                                     @Html.DropDownList("SelectedCityId", item.CityList, "Select a City", new { @class = "form-control", id = "editcity", required = "required" })
@@ -465,7 +467,7 @@
 <div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
 
-        <div class="modal-body" style="width: 22rem;">
+        <div>
             <div class="card shadow-lg rounded" style="width: 22rem;">
 
                 <div class="modal-header">
@@ -479,7 +481,7 @@
                 <div class="card-body text-center">
                     @Html.Hidden("user_id", null, new { @id = "user_id" })
                     <h5 class="card-title fw-bold" id="fullname">Loading...</h5>
-                    <p class="card-text text-muted" id="dEmail"><i class="fas fa-envelope me-2"></i><span></span></p>
+                    <p  id="dEmail"><i class="fas fa-envelope me-2"></i><span></span></p>
                 </div>
 
                 <ul class="list-group list-group-flush">
@@ -510,8 +512,8 @@
                 <h5 class="modal-title" id="confirmModalLabel">Confirmation</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                Are you sure you want to delete this user? Whose id is <span id="userIdPlaceholder"></span>?
+            <div class="modal-body cnf">
+                Are you sure you want to delete this user? Whose id is <span id="userIdPlaceholder" class="text-bg-danger"></span>?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -521,8 +523,22 @@
     </div>
 </div>
 
+<section class="dark:bg-gray-900 mt-2 con">
+    <div class="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
+        <div class=" sm:text-lg dark:text-gray-400">
+            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white mt-2">We didn't reinvent the wheel</h2>
+            <p class="mb-4">We are strategists, designers and developers. Innovators and problem solvers. Small enough to be simple and quick, but big enough to deliver the scope you want at the pace you need. Small enough to be simple and quick, but big enough to deliver the scope you want at the pace you need.</p>
+            <p>We are strategists, designers and developers. Innovators and problem solvers. Small enough to be simple and quick.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-8">
+            <img class="w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-2.png" alt="office content 1">
+            <img class="mt-4 w-full lg:mt-10 rounded-lg" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/office-long-1.png" alt="office content 2">
+        </div>
+    </div>
+</section>
+
 @section scripts {
-    <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -532,6 +548,8 @@
 
     <script>
         $(document).ready(function () {
+
+
 
             document.body.appendChild(globalAlertContainer);
 
@@ -547,7 +565,7 @@
     { "targets": [8], "data": "ImagePath", "render": function (data, type, row, meta) { return data && data.trim() !== "" ? '<img src="/Uploads/' + data + '" alt="User Image" class="img-thumbnail rounded-circle shadow-sm" style="max-width: 50px; max-height: 50px;" />' : '<span class="text-muted">No image</span>'; }, "className": "text-center dt-center ps-1", "orderable": false },
     { "targets": [9], "data": "selectedCity", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center", },
     { "targets": [10], "data": "selectedState", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
-    { "targets": [11], "data": "SelectedCountry", "render": function (data, type, row) { return type === 'display' && data.length > 12 ? '<span title="' + data + '">' + data.substring(0, 12) + '...</span>' : data; }, "className": "text-center dt-center",  },
+    { "targets": [11], "data": "SelectedCountry", "render": function (data, type, row) { return type === 'display' && data.length > 9 ? '<span title="' + data + '">' + data.substring(0, 9) + '...</span>' : data; }, "className": "text-center dt-center",  },
     { "targets": [12], "data": null, "render": function (data, type, row, meta) { return `<div class="btn-group" role="group"><button class="btn btn-primary btn-sm me-1" onclick="edituser(${row.id})" data-bs-toggle="tooltip" title="Edit user"><i class="fas fa-edit"></i></button><button class="btn btn-warning btn-sm me-1" onclick="detailsUser(${row.id})" data-bs-toggle="tooltip" title="View details"><i class="fas fa-info-circle"></i></button><button class="btn btn-danger btn-sm" onclick="deleteUser(${row.id})" data-bs-toggle="tooltip" title="Delete user"><i class="fas fa-trash"></i></button></div>`; }, "className": "text-center dt-center", "orderable": false },
     { "targets": "_all", "className": "dt-center", "createdCell": function (td, cellData, rowData, row, col) {
         $(td).on('click', function (e) {
@@ -571,7 +589,7 @@
     "autoWidth": true,
     "scrollX": true,
     "scrollY": "80vh", 
-      
+    fixedHeader: true,  
      responsive: true,
                 "scrollCollapse": true,
                 "fixedColumns": true, // Disable fixedColumns temporarily
@@ -592,19 +610,19 @@
         }
     },
     "columns": [
-        { "data": null, "width": "3%" },
-        { "data": "FirstName", "width": "8%" },
-        { "data": "LastName", "width": "8%" },
-        { "data": "Email", "width": "13%" },
-        { "data": "MobileNo", "width": "10%" },
-        { "data": "Gender_", "width": "9%" },
-        { "data": "Dob", "width": "10%" },
-        { "data": "Address", "width": "12%" },
-        { "data": "ImagePath", "width": "6%" },
-        { "data": "selectedCity", "width": "10%" },
-        { "data": "selectedState", "width": "10%" },
-        { "data": "SelectedCountry", "width": "10%" },
-        { "data": null, "width": "13%" }
+        { "data": null, width: "5%" },
+        { "data": "FirstName", width: "10%" },
+        { "data": "LastName", width: "10%"  },
+        { "data": "Email", width: "15%" },
+        { "data": "MobileNo", width: "10%" },
+        { "data": "Gender_", width: "5%" },
+        { "data": "Dob", width: "10%" },
+        { "data": "Address", width: "12%" },
+        { "data": "ImagePath", width: "8%" },
+        { "data": "selectedCity", width: "5%"  },
+        { "data": "selectedState", width: "5%" },
+        { "data": "SelectedCountry",width: "5%" },
+        { "data": null, "width": "10%" }
     ],
        
     // Pagination and ordering
@@ -766,7 +784,7 @@
                 });
 
         });
-
+ 
         });
 
 
@@ -800,11 +818,6 @@
         }
     });
         }
-
-
-
-
-
        function edituser(userId) {
            var form = $("#EditUserForm")[0];
            form.reset();
@@ -1575,125 +1588,352 @@
 }
 
 <style>
-/* General Table Styling */
-table.dataTable {
-    width: 100% !important;
-    table-layout: fixed;
-    border: 1px solid #e2e8f0; /* Light gray border */
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
 
-/* Table Header */
-table.dataTable thead {
-    background: linear-gradient(90deg, #007bff, #0056b3);
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
-}
+    /* Light Mode Styles (Default) */
+    body {
+        background-color: #FFFFFF; /* White background */
+        color: #000000; /* Black text */
+    }
 
-table.dataTable thead th {
-    padding: 12px;
-    text-align: center;
-}
+    #servertable {
+        width: 100% !important;
+        max-width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #DDD; /* Light border for contrast */
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow */
+        table-layout: fixed;
+        background-color: #FFFFFF; /* White table background */
+        color: #333333; /* Dark text */
+       
+    }
 
-/* Table Body */
-.dataTable tbody tr:hover {
-    background-color: #f1f5f9; /* Light hover effect */
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-}
+        #servertable thead {
+            background: linear-gradient(90deg, #007bff, #0056b3); /* Blue gradient */
+            color: #FFFFFF; /* White text */
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            top: 0;
+            z-index: 1;
+        }
 
-.dataTable tbody td {
-    padding: 10px;
-    text-align: center;
-    vertical-align: middle;
-}
+            #servertable thead th {
+                padding: 12px;
+                text-align: center;
+                white-space: nowrap;
+            }
 
-/* Buttons Styling */
-.btn-sm {
-    font-size: 0.85rem;
-    padding: 6px 10px;
-    border-radius: 6px;
-    transition: background 0.2s ease-in-out;
-}
+        #servertable tbody tr {
+            background-color: #FFFFFF; /* White background */
+          
+        }
 
+            #servertable tbody tr:hover {
+                background-color: #F0F0F0; /* Light gray hover */
+                cursor: pointer;
+                transition: background 0.2s ease-in-out;
+            }
 
-/* Loading Indicator */
-.dataTables_processing {
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    font-size: 1.1rem;
-    border-radius: 4px;
-    padding: 10px;
-    text-align: center;
-}
+        #servertable tbody td 
+        {
+            padding: 10px;
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #333333; /* Dark text */
+        }
 
-/* Pagination and Info Section */
-#servertable_length label,
-#servertable_info {
-    margin-left: 15px;
-    font-size: 14px;
-}
+    .dataTables_scrollHead {
+        overflow: hidden !important;
+        background-color: #FFFFFF; /* White background */
+    }
 
-#servertable_paginate {
-    margin-bottom: 10px;
-    margin-right: 10px;
-}
+    .dataTables_scrollBody {
+        margin-top: 0;
+        background-color: #FFFFFF; /* White background */
+    }
 
-/* Search Input */
-#servertable_filter input {
-    width: 250px;
-    padding: 8px 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    background-color: #f8fafc;
-    transition: border 0.2s ease-in-out;
-}
+    .dataTables_processing {
+        background: rgba(255, 255, 255, 0.8); /* Light overlay */
+        color: #000000; /* Black text */
+        font-size: 1.1rem;
+        border-radius: 4px;
+        padding: 10px;
+        text-align: center;
+    }
 
-#servertable_filter input:focus {
-    border-color: #3b82f6;
-    outline: none;
-    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
-}
+    #servertable_length label,
+    #servertable_info {
+        margin-left: 15px;
+        font-size: 14px;
+        color: #333333; /* Dark text */
+    }
 
-/* Search Box Wrapper */
-#servertable_filter {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    #servertable_paginate {
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
 
+        #servertable_paginate .paginate_button {
+            color: #333333 !important; /* Dark text */
+            background-color: #FFFFFF; /* White background */
+            border: 1px solid #DDD; /* Light border */
+        }
 
-/* Responsive Table */
-@@media (max-width: 768px) {
+            #servertable_paginate .paginate_button:hover {
+                background-color: #F0F0F0; /* Light gray hover */
+                color: #000000 !important;
+            }
+
+            #servertable_paginate .paginate_button.current {
+                background-color: #007bff !important; /* Active page blue */
+                border-color: #007bff !important;
+                color: #FFFFFF !important;
+            }
+
     #servertable_filter input {
-        width: 100%;
+        width: 250px;
+        padding: 8px 10px;
+        border: 1px solid #DDD; /* Light border */
+        border-radius: 6px;
+        background-color: #FFFFFF; /* White background */
+        color: #333333; /* Dark text */
+        transition: border 0.2s ease-in-out;
     }
 
-    table.dataTable {
-        font-size: 12px;
-    }
+        #servertable_filter input:focus {
+            border-color: #3b82f6; /* Blue focus border */
+            outline: none;
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+        }
 
-    .btn-sm {
-        padding: 4px 8px;
-        font-size: 0.75rem;
+    #servertable_filter {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #333333; /* Dark text for label */
     }
-}
 
     hr {
-    
-    margin-top:15px;
-    }
-
-    #servertable_filter{
-        margin-right: 10px;
+        margin-top: 15px;
+        border-color: #DDD; /* Light border */
     }
 
     #create_user {
         margin-right: 15px;
+        background-color: #007bff; /* Blue button */
+        color: #FFFFFF; /* White text */
+    }
+
+        #create_user:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+    #CreateNewUser {
+        color: black; /* Black text */
+    }
+
+    .modal-body {
+        background-color: #FFFFFF; /* White background */
+    }
+
+    label, .col-md-3, .cnf {
+        color: #333333; /* Dark text for labels */
+    }
+
+    .form-check-label {
+        margin: 0px;
+    }
+
+    .text-danger {
+        background-color: #FFE0E0; /* Light red background */
+    }
+
+    /* Dark Mode Styles */
+    .dark body {
+        background-color: #1A1A1A; /* Dark gray background */
+        color: #E0E0E0; /* Light text */
+    }
+
+    .dark #servertable, .dark .con, .dark .navbar {
+        border: 1px solid #404040; /* Darker border */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+        background-color: #2D2D2D; /* Dark gray table background */
+        color: #E0E0E0; /* Light text */
+    }
+
+        .dark #servertable thead {
+            background: linear-gradient(90deg, #007bff, #0056b3); /* Blue gradient */
+            color: #FFFFFF; /* White text */
+        }
+
+        .dark #servertable tbody tr {
+            background-color: #2D2D2D; /* Dark gray background */
+        }
+
+            .dark #servertable tbody tr:hover {
+                background-color: #3A3A3A; /* Slightly lighter hover */
+            }
+
+        .dark #servertable tbody td {
+            color: #E0E0E0; /* Light text */
+        }
+
+    .dark .dataTables_scrollHead {
+        background-color: #2D2D2D; /* Dark gray background */
+    }
+
+    .dark .dataTables_scrollBody {
+        background-color: #2D2D2D; /* Dark gray background */
+    }
+
+    .dark .dataTables_processing {
+        background: rgba(0, 0, 0, 0.8); /* Dark overlay */
+        color: #FFFFFF; /* White text */
+    }
+
+    .dark #servertable_length label,
+    .dark #servertable_info {
+        color: #E0E0E0; /* Light text */
+    }
+
+    .dark #servertable_paginate .paginate_button {
+        color: #E0E0E0 !important; /* Light text */
+        background-color: #2D2D2D; /* Dark gray background */
+        border: 1px solid #404040; /* Dark border */
+    }
+
+        .dark #servertable_paginate .paginate_button:hover {
+            background-color: #3A3A3A; /* Slightly lighter hover */
+            color: #FFFFFF !important;
+        }
+
+        .dark #servertable_paginate .paginate_button.current {
+            background-color: #007bff !important; /* Active page blue */
+            border-color: #007bff !important;
+            color: #FFFFFF !important;
+        }
+
+    .dark #servertable_filter input {
+        border: 1px solid #404040; /* Dark border */
+        background-color: #3A3A3A; /* Dark input background */
+        color: #E0E0E0; /* Light text */
+    }
+
+        .dark #servertable_filter input:focus {
+            border-color: #3b82f6; /* Blue focus border */
+        }
+
+    .dark #servertable_filter {
+        color: #E0E0E0; /* Light text for label */
+    }
+
+    .dark hr {
+        border-color: #404040; /* Darker line */
+    }
+
+    .dark .modal-body {
+        background-color: #3A3A3A; /* Dark modal background */
+    }
+
+    .dark label, .dark .col-md-3, .dark .cnf {
+        color: #E0E0E0; /* Light text for labels */
+    }
+
+    .dark .text-danger {
+        background-color: #E0E0FF; /* Light blue background */
+    }
+    .dark #editUserModalLabel {
+    
+    color:white;
+      font-size:20px;
+    
+    }
+
+    /* Dark mode styles for cards */
+    .dark .card {
+        background-color: #2D2D2D; /* Dark gray background for the card */
+        color: #E0E0E0; /* Light text color for the card */
+        border: 1px solid #404040; /* Dark border for the card */
+    }
+
+        .dark .card p {
+            background-color: #3A3A3A; /* Slightly lighter gray for paragraphs */
+            color: #FFFFFF; /* Pure white text for paragraphs */
+            padding: 8px; /* Add padding for better readability */
+            border-radius: 4px; /* Rounded corners for paragraphs */
+        }
+
+        .dark .card li {
+            background-color: #4A4A4A; /* Medium gray for list items */
+            color: #E0E0E0; /* Light text color for list items */
+            margin: 4px 0; /* Add spacing between list items */
+            padding: 8px; /* Add padding for better readability */
+            border-radius: 4px; /* Rounded corners for list items */
+        }
+
+    .dark #detail {
+        background-color: inherit; /* Inherit background color from parent */
+        color: #E0E0E0; /* Light text color for details */
+    }
+
+    .dark .card ul {
+        margin: 5px;
+    }
+
+    .dark #confirmModalLabel {
+    
+    color:black;
     }
 </style>
+
+<script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const navbarCollapse = document.getElementById('navbarSupportedContent');
+    const tdm = document.getElementById('tdm'); 
+    const rootElement = document.documentElement;
+
+    function toggleDarkMode() {
+        if (darkModeToggle.checked) {
+            rootElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            tdm.innerText = "Dark Mode"
+            
+        }
+        else {
+            
+            localStorage.setItem('theme', 'light');
+            rootElement.classList.remove('dark');
+            tdm.innerText ="Light Mode"
+        }
+    }
+
+    darkModeToggle.addEventListener('change', toggleDarkMode);
+
+    const savedMode = localStorage.getItem('theme');
+    if (savedMode === 'dark') {
+        rootElement.classList.add('dark');
+        darkModeToggle.checked = true;
+        tdm.innerText = "Dark Mode"
+    } else if (savedMode === 'light') {
+        rootElement.classList.remove('dark');
+        tdm.innerText = "Light Mode"
+        darkModeToggle.checked = false;
+    }
+
+
+    togglerButton.addEventListener('click', function () {
+        // Toggle the 'show' class to control visibility
+        navbarCollapse.classList.toggle('show');
+
+        // Update aria-expanded attribute for accessibility
+        const isExpanded = navbarCollapse.classList.contains('show');
+        togglerButton.setAttribute('aria-expanded', isExpanded);
+    });
+
+
+</script>
