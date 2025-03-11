@@ -6,6 +6,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using task1.Models;
@@ -15,12 +18,43 @@ namespace task1.Controllers
     public class HomeController : Controller
     {
         public readonly ApplicationDbContext _applicationDbContext;
+        
+
         public HomeController()
         {
             _applicationDbContext = new ApplicationDbContext();
+            
         }
+        [HttpGet] 
+       public async Task<ActionResult> all_users()
+       {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    HttpResponseMessage response = await client.GetAsync("https://localhost:44367/api/Home/all-users");
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    List<UserData> responseData = JsonSerializer.Deserialize<List<UserData>>(jsonResponse, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
 
-        public HomeController(ApplicationDbContext context)
+                   
+                    return Json(responseData, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (HttpRequestException ex)
+        {
+            
+            return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+        }
+        catch (Exception ex)
+        {
+            
+            return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+        }
+    }
+    public HomeController(ApplicationDbContext context)
         {
             _applicationDbContext = context;
         }
@@ -52,7 +86,7 @@ namespace task1.Controllers
         [HttpGet]
         public JsonResult GetCityByState(int StateId)
         {
-            var City = _applicationDbContext.Cities
+                 var City = _applicationDbContext.Cities
                 .Where(s => s.state_id == StateId)
                 .Select(s => new SelectListItem
                 {

@@ -10,6 +10,7 @@ using System.Web.UI.WebControls;
 
 namespace task1.Models
 {
+    [Table("UserDatas")]
     public class UserData
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -99,9 +100,12 @@ namespace task1.Models
 
         [NotMapped]
         public string selectedCity { get; set; }
-
+        [NotMapped]
         public IEnumerable<SelectListItem> CountryList { get; set; }
+        [NotMapped]
         public IEnumerable<SelectListItem> StateList { get; set; }
+
+        [NotMapped]
         public IEnumerable<SelectListItem> CityList { get; set; }
         public Boolean IsActive { get; set; }
 
