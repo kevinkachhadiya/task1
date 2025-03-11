@@ -129,7 +129,7 @@ namespace task1.Controllers
                 {
                     case 0: // number
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.user_id) : query.OrderByDescending(ucs => ucs.User.user_id);
-                        
+
                         break;
                     case 1: // FirstName
                         query = order.Dir == "asc" ? query.OrderBy(ucs => ucs.User.FirstName) : query.OrderByDescending(ucs => ucs.User.FirstName);
