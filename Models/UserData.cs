@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Protocols;
@@ -16,6 +17,9 @@ namespace task1.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int user_id { get; set; }
+
+        [NotMapped]
+        public int iid { get; set; }
 
         [Display(Name = "First Name : ")]
         [Required(ErrorMessage = "A First Name is required.")]
@@ -108,6 +112,11 @@ namespace task1.Models
         [NotMapped]
         public IEnumerable<SelectListItem> CityList { get; set; }
         public Boolean IsActive { get; set; }
+        
+        
+        [NotMapped]
+        [JsonIgnore]
+        public HttpPostedFileBase file { get; set; }
 
     }
     public enum Gender
@@ -117,4 +126,5 @@ namespace task1.Models
         Other
     }
 
+    
 }

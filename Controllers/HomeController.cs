@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
@@ -7,10 +8,14 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using task1.Models;
 
 namespace task1.Controllers
@@ -25,36 +30,177 @@ namespace task1.Controllers
             _applicationDbContext = new ApplicationDbContext();
             
         }
-        [HttpGet] 
-       public async Task<ActionResult> all_users()
-       {
+
+        [HttpPost]
+        public async Task<ActionResult> Web_Api(DataTableRequest dataTableRequest)
+        {
             try
             {
                 using (var client = new HttpClient())
                 {
-                    HttpResponseMessage response = await client.GetAsync("https://localhost:44367/api/Home/all-users");
+
+                    string jsonPayload = JsonSerializer.Serialize(dataTableRequest);
+                    var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                    Debug.WriteLine("Request Payload: " + jsonPayload);
+
+
+                    HttpResponseMessage response = await client.PostAsync("https://localhost:44367/api/Home/Web_Api", content);
+
+
+                    response.EnsureSuccessStatusCode();
+
+
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-                    List<UserData> responseData = JsonSerializer.Deserialize<List<UserData>>(jsonResponse, new JsonSerializerOptions
+
+                    Debug.WriteLine("Response JSON: " + jsonResponse);
+
+                    // Deserialize the JSON response into a DataTableResponse object
+                    var result = JsonSerializer.Deserialize<DataTableResponse>(jsonResponse, new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
                     });
 
-                   
-                    return Json(responseData, JsonRequestBehavior.AllowGet);
+
+                    // Log the deserialized object
+                    Debug.WriteLine($"Draw: {result.draw}, RecordsTotal: {result.recordsTotal}, RecordsFiltered: {result.recordsFiltered}");
+
+                    foreach (var item in result.data)
+                    {
+                        Debug.WriteLine($"iid: {item.iid}, id: {item.user_id}, firstName: {item.FirstName}, lastName: {item.LastName}, email: {item.Email}");
+                    }
+
+                    // Return the result as JSON
+                    return Json(result, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (HttpRequestException ex)
-        {
-            
-            return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            {
+                Debug.WriteLine("HTTP Request Error: " + ex.Message);
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error: " + ex.Message);
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
-        catch (Exception ex)
+
+        [HttpPost]
+        public async Task<ActionResult> createUser(UserData user, HttpPostedFileBase file)
         {
-            
-            return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    using (var client = new HttpClient())
+                    {
+
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                            string extension = Path.GetExtension(file.FileName);
+                            string newFileName = fileName + "_" + Guid.NewGuid() + extension;
+                            string directoryPath = Server.MapPath("~/Uploads/");
+
+                            if (!Directory.Exists(directoryPath))
+                            {
+                                Directory.CreateDirectory(directoryPath);
+                            }
+
+                            string filePath = Path.Combine(directoryPath, newFileName);
+                            try
+                            {
+                                var allowedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".JPG", ".JPEG" };
+                                if (allowedExtensions.Contains(extension))
+                                {
+                                    file.SaveAs(filePath);
+                                    user.ImagePath = newFileName;
+                                }
+                                else
+                                {
+                                    return Json(new { success = false, message = "FileError Invalid file format. Only JPG, JPEG are allowed." });
+                                }
+
+                                string json = JsonSerializer.Serialize(user);
+                                HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                                HttpResponseMessage response = await client.PostAsync("https://localhost:44367/api/Home/Create_User", content);
+                                string jsonResponse = await response.Content.ReadAsStringAsync();
+                        
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    return Json(new { success = true, Message = "User Created Successfully" });
+                                }
+                                else
+                                {
+                                    Debug.WriteLine(jsonResponse);
+                                    return Json(new { success = false, message = $"API Error: {jsonResponse}" }, JsonRequestBehavior.AllowGet);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine(ex);
+                                return Json(new { success = false, message = ex.Message });
+
+                            }
+                      }
+
+
+                        else
+                        {
+                            var errors = ModelState.Values
+                           .SelectMany(v => v.Errors)
+                           .Select(e => e.ErrorMessage)
+                           .ToList();
+                            return Json(new { success = false, message = "FileError Invalid file format. Only JPG, JPEG are allowed." });
+
+                        }
+                    }
+                }
+                else
+                {
+                    return Json(new { success = false, error = "Error Accure"}, JsonRequestBehavior.AllowGet);
+                }
+
+                }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
-    }
-    public HomeController(ApplicationDbContext context)
+
+        [HttpPost]
+
+        public async Task<ActionResult> DeleteWebApi(int Id)
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var url = $"https://localhost:44367/api/Home/Delete_user/{Id}";
+                    HttpResponseMessage response = await client.DeleteAsync(url);
+
+                    response.EnsureSuccessStatusCode(); // Throws if not successful
+                    var message = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Response: {response.StatusCode}, Content: {message}");
+
+                    return Json(new { success = true, response = "Deleted Successfully", Name = message });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                return Json(new { success = false, message = "No record found: " + ex.Message });
+            }
+        }
+
+        public async Task<ActionResult> EditUserWebApi(UserData user)
+        {
+            return Json(new { success = false, message = "No record found: " });
+        }
+
+        public HomeController(ApplicationDbContext context)
         {
             _applicationDbContext = context;
         }
@@ -240,6 +386,9 @@ namespace task1.Controllers
 
                 })
             };
+
+            Debug.WriteLine(result);
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -267,7 +416,6 @@ namespace task1.Controllers
                         if (extension.ToUpper() == ".JPG" || extension.ToUpper() == ".JPEG" || extension.ToUpper() == ".PNG")
                         {
                             file.SaveAs(filePath);
-
                             user.ImagePath = newFileName;
                         }
                         else
