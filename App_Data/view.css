@@ -16,12 +16,6 @@
     overflow: hidden;
 }
 
-    /*   #viewtable thead th:hover {
-            background: linear-gradient(90deg, #ff5e50, #ff6f61);
-        }
-
-  */ 
-
     #viewtable tbody tr {
         transition: all 0.3s ease;
     }

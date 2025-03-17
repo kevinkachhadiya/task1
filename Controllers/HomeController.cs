@@ -1,4 +1,5 @@
 ﻿
+using BrenoQueiroz.MVC.DataTable;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace task1.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Web_Api(DataTableRequest dataTableRequest)
+        public async Task<JsonResult> Web_Api(DataTableRequest dataTableRequest)
         {
             try
             {
@@ -42,9 +43,6 @@ namespace task1.Controllers
                     string jsonPayload = JsonSerializer.Serialize(dataTableRequest);
                     var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-                    Debug.WriteLine("Request Payload: " + jsonPayload);
-
-
                     HttpResponseMessage response = await client.PostAsync("https://localhost:44367/api/Home/Web_Api", content);
 
 
@@ -53,41 +51,26 @@ namespace task1.Controllers
 
                     string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                    Debug.WriteLine("Response JSON: " + jsonResponse);
-
-                    // Deserialize the JSON response into a DataTableResponse object
                     var result = JsonSerializer.Deserialize<DataTableResponse>(jsonResponse, new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
                     });
 
-
-                    // Log the deserialized object
-                    Debug.WriteLine($"Draw: {result.draw}, RecordsTotal: {result.recordsTotal}, RecordsFiltered: {result.recordsFiltered}");
-
-                    foreach (var item in result.data)
-                    {
-                        Debug.WriteLine($"iid: {item.iid}, id: {item.user_id}, firstName: {item.FirstName}, lastName: {item.LastName}, email: {item.Email}");
-                    }
-
-                    // Return the result as JSON
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (HttpRequestException ex)
             {
-                Debug.WriteLine("HTTP Request Error: " + ex.Message);
                 return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error: " + ex.Message);
                 return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult> createUser(UserData user, HttpPostedFileBase file)
+        public async Task<JsonResult> createUser(UserData user, HttpPostedFileBase file)
         {
             try
             {
@@ -134,13 +117,11 @@ namespace task1.Controllers
                                 }
                                 else
                                 {
-                                    Debug.WriteLine(jsonResponse);
                                     return Json(new { success = false, message = $"API Error: {jsonResponse}" }, JsonRequestBehavior.AllowGet);
                                 }
                             }
                             catch (Exception ex)
                             {
-                                Debug.WriteLine(ex);
                                 return Json(new { success = false, message = ex.Message });
 
                             }
@@ -172,7 +153,7 @@ namespace task1.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult> DeleteWebApi(int Id)
+        public async Task<JsonResult> DeleteWebApi(int Id)
         {
             try
             {
@@ -181,23 +162,163 @@ namespace task1.Controllers
                     var url = $"https://localhost:44367/api/Home/Delete_user/{Id}";
                     HttpResponseMessage response = await client.DeleteAsync(url);
 
-                    response.EnsureSuccessStatusCode(); // Throws if not successful
+                    response.EnsureSuccessStatusCode(); 
                     var message = await response.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"Response: {response.StatusCode}, Content: {message}");
-
+                
                     return Json(new { success = true, response = "Deleted Successfully", Name = message });
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error: {ex.Message}");
+           
                 return Json(new { success = false, message = "No record found: " + ex.Message });
             }
         }
 
-        public async Task<ActionResult> EditUserWebApi(UserData user)
+        [HttpPost]
+        public async Task<JsonResult> EditUserWebApi(UserData Edituser, HttpPostedFileBase file)
         {
-            return Json(new { success = false, message = "No record found: " });
+
+            if (file != null && file.ContentLength > 0)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(file.FileName);
+                string extension = Path.GetExtension(file.FileName);
+                string newFileName = fileName + "_" + Guid.NewGuid() + extension;
+                string directoryPath = Server.MapPath("~/Uploads/");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+                string filePath = Path.Combine(directoryPath, newFileName);
+                try
+                {
+                    var allowedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { ".JPG", ".JPEG" };
+                    if (allowedExtensions.Contains(extension))
+                    {
+                        file.SaveAs(filePath);
+                        Edituser.ImagePath = newFileName;
+                      
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("FileError", "Invalid file format. Only JPG, JPEG are allowed.");
+                        return Json(new { success = false, message = "FileError Invalid file format. Only JPG, JPEG are allowed." });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("FileError", "Error uploading file: " + ex.Message);
+                    return Json(new { success = false, message = ex.Message });
+                }
+            }
+            else 
+            {
+                Edituser.ImagePath = "notuploaded";
+            }
+
+            Edituser.SelectedCountry = Edituser.SelectedCountry ?? "DefaultCountry";
+            Edituser.selectedState = Edituser.selectedState ?? "DefaultState";
+            Edituser.selectedCity = Edituser.selectedCity ?? "DefaultCity";
+            Edituser.CityList = Edituser.CityList ?? new List<SelectListItem> { new SelectListItem { Text = "DefaultCity", Value = "1" } };
+            Edituser.StateList = Edituser.StateList ?? new List<SelectListItem> { new SelectListItem { Text = "DefaultState", Value = "1" } };
+            Edituser.CountryList = Edituser.CountryList ?? new List<SelectListItem> { new SelectListItem { Text = "DefaultCountry", Value = "1" } };
+           
+            using (var client = new HttpClient())
+                {
+                 string jsonpayLoad = JsonSerializer.Serialize(Edituser);
+                 var content = new StringContent(jsonpayLoad,Encoding.UTF8,"application/json");
+
+                HttpResponseMessage response = await client.PutAsync("https://localhost:44367/api/Home/EditUser", content);
+
+                string responseMessage = await response.Content.ReadAsStringAsync();
+
+
+
+                if (response.IsSuccessStatusCode) 
+                {
+                    return Json(new { success = true, message = responseMessage});
+                }
+                else
+                {
+                    return Json(new { success = false, message = responseMessage });
+                }
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Edit(int Id)
+        {
+            var Edituser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
+
+            if (Edituser != null)
+            {
+
+                PopulateSelectLists(Edituser);
+                Edituser.ConfirmPassword = Edituser.Password;
+                return Json(new { success = true, message = Edituser, JsonRequestBehavior.DenyGet });
+            }
+            return Json(new { success = false, message = "Error accure" }, JsonRequestBehavior.DenyGet);
+
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> UserDetailWebApi(int Id)
+        {
+            using (var client = new HttpClient())
+                {
+        
+                HttpResponseMessage message = await client.GetAsync($"https://localhost:44367/api/Home/GetUserData?Id={Id}");
+
+                string jsonresponse = await message.Content.ReadAsStringAsync();
+
+                var result = JsonSerializer.Deserialize<UserData>(jsonresponse, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (message.IsSuccessStatusCode)
+                {
+                 
+                    return Json(new { success = true, message = result }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { success = false, message = jsonresponse }, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditUserDetailsWebApi(int Id)
+        {
+            using(var client = new HttpClient())
+            {
+
+                string jsonPayload = JsonSerializer.Serialize(Id);
+                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+               
+
+                var url = $"https://localhost:44367/api/Home/EditUserDetail";
+
+                HttpResponseMessage response = await client.PostAsync(url,content);
+
+                response.EnsureSuccessStatusCode(); // Throws if not successful
+
+
+                var message = await response.Content.ReadAsStringAsync();
+
+
+                var result = JsonSerializer.Deserialize<UserData>(message, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                return Json(new { success = true, message = result }, JsonRequestBehavior.DenyGet);
+
+
+
+            }
+        
         }
 
         public HomeController(ApplicationDbContext context)
@@ -387,7 +508,7 @@ namespace task1.Controllers
                 })
             };
 
-            Debug.WriteLine(result);
+          
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -474,23 +595,7 @@ namespace task1.Controllers
                 return Json(new { success = false, message = errorMessage });
             }
         }
-
-        [HttpPost]
-        public JsonResult Edit(int Id)
-        {
-            var Edituser = _applicationDbContext.Users.FirstOrDefault(u => u.user_id == Id);
-
-            if (Edituser != null)
-            {
-
-                PopulateSelectLists(Edituser);
-                Edituser.ConfirmPassword = Edituser.Password;
-                return Json(new { success = true, message = Edituser, JsonRequestBehavior.DenyGet });
-            }
-            return Json(new { success = false, message = "Error accure" }, JsonRequestBehavior.DenyGet);
-
-        }
-
+       
         [HttpPost]
         public ActionResult EditUser(UserData user, HttpPostedFileBase file)
         {
@@ -548,6 +653,8 @@ namespace task1.Controllers
                         return Json(new { success = false, message = ex.Message });
                     }
                 }
+                
+                
                 Edituser.user_id = user.user_id;
                 Edituser.FirstName = user.FirstName;
                 Edituser.LastName = user.LastName;
@@ -649,7 +756,6 @@ namespace task1.Controllers
                 var Country = _applicationDbContext.Countries.Find(State.country_id);
                 user.SelectedCountry = Country != null ? Country.CountryName : "N/A";
 
-
                 return Json(new { success = true, message = user }, JsonRequestBehavior.DenyGet); ;
             }
             return Json(new { success = false, message = "Error accure" }, JsonRequestBehavior.DenyGet);
@@ -711,6 +817,9 @@ namespace task1.Controllers
         {
             return View();
             
+    
         }
+
+
     }
 }

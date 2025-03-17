@@ -18,6 +18,11 @@ namespace task1
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Contact", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+                  name: "EditUserWebApi",
+                  url: "Home/EditUserWebApi",
+                  defaults: new { controller = "Home", action = "EditUserWebApi" }
+);
         }
     }
 }
