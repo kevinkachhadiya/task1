@@ -386,7 +386,16 @@
     <Compile Include="Migrations\202503111808188_m19.Designer.cs">
       <DependentUpon>202503111808188_m19.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202503191301457_m002.cs" />
+    <Compile Include="Migrations\202503191301457_m002.Designer.cs">
+      <DependentUpon>202503191301457_m002.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202503191707166_m003.cs" />
+    <Compile Include="Migrations\202503191707166_m003.Designer.cs">
+      <DependentUpon>202503191707166_m003.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\DataTableRequest.cs" />
@@ -452,6 +461,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\ViewUser.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -568,6 +578,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202503111808188_m19.resx">
       <DependentUpon>202503111808188_m19.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202503191301457_m002.resx">
+      <DependentUpon>202503191301457_m002.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202503191707166_m003.resx">
+      <DependentUpon>202503191707166_m003.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -777,6 +777,7 @@
 showCustomConfirm(userId, function (confirmed) {
     if (confirmed) {
         $.ajax({
+
             url: '@Url.Action("DeleteWebApi", "Home")',
             type: "POST",
             data: { Id: userId },
@@ -835,7 +836,7 @@ showCustomConfirm(userId, function (confirmed) {
 
             $.ajax({
                 url: '@Url.Action("EditUserDetailsWebApi", "Home")',
-                type: "POST",
+                type: "GET",
                 data: { Id: userId },
                 success: function (response) {
 
@@ -1002,7 +1003,8 @@ showCustomConfirm(userId, function (confirmed) {
            $("#EditUserForm").off('submit').on('submit', function (e) {
 
                     e.preventDefault();
-                    var formData = new FormData(this);
+               var formData = new FormData(this);
+
                     $.ajax({
                         url: '@Url.Action("EditUserWebApi", "Home")',
                         type: "POST",
@@ -1139,6 +1141,7 @@ $.ajax({
         function validateEmail(input) {
             const $input = $(input);
             const value = $input.val();
+
             const emailPattern = /^[^\s"@@]+@@[^\s@@]+\.[^\s@@]+$/;
             $errorSpan = $("#Email_");
 

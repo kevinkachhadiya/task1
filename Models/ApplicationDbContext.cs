@@ -13,6 +13,8 @@ namespace task1.Models
 
         public DbSet<City> Cities { get; set; }
 
+        public DbSet<Login> usetlogin { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();

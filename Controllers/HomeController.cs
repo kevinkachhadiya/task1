@@ -1,22 +1,15 @@
-﻿
-using BrenoQueiroz.MVC.DataTable;
-using Microsoft.Ajax.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Helpers;
 using System.Web.Mvc;
-using System.Web.Services.Description;
 using task1.Models;
 
 namespace task1.Controllers
@@ -25,7 +18,6 @@ namespace task1.Controllers
     {
         public readonly ApplicationDbContext _applicationDbContext;
         
-
         public HomeController()
         {
             _applicationDbContext = new ApplicationDbContext();
@@ -43,8 +35,18 @@ namespace task1.Controllers
                     string jsonPayload = JsonSerializer.Serialize(dataTableRequest);
                     var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await client.PostAsync("https://localhost:44367/api/Home/Web_Api", content);
+                    var searchValue = dataTableRequest.Search != null ? Uri.EscapeDataString(dataTableRequest.Search.Value ?? "") : "";
+                    var searchRegex = dataTableRequest.Search != null ? dataTableRequest.Search.Regex.ToString().ToLower() : "false";
+                    var searchQuery = $"&search.value={searchValue}&search.regex={searchRegex}";
 
+                    var order = dataTableRequest.Order?.FirstOrDefault();
+                    var orderQuery = order != null
+                        ? $"&order[0].column={order.Column}&order[0].dir={Uri.EscapeDataString(order.Dir)}"
+                        : "";
+
+                    var url = $"https://localhost:44367/api/Home/GetAll?draw={dataTableRequest.Draw}&start={dataTableRequest.Start}&length={dataTableRequest.Length}{searchQuery}{orderQuery}";
+
+                    HttpResponseMessage response = await client.GetAsync(url);
 
                     response.EnsureSuccessStatusCode();
 
@@ -108,7 +110,7 @@ namespace task1.Controllers
                                 string json = JsonSerializer.Serialize(user);
                                 HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                                HttpResponseMessage response = await client.PostAsync("https://localhost:44367/api/Home/Create_User", content);
+                                HttpResponseMessage response = await client.PostAsync("https://localhost:44367/api/Home/CreateUser", content);
                                 string jsonResponse = await response.Content.ReadAsStringAsync();
                         
                                 if (response.IsSuccessStatusCode)
@@ -159,7 +161,7 @@ namespace task1.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    var url = $"https://localhost:44367/api/Home/Delete_user/{Id}";
+                    var url = $"https://localhost:44367/api/Home/DeleteUser/{Id}";
                     HttpResponseMessage response = await client.DeleteAsync(url);
 
                     response.EnsureSuccessStatusCode(); 
@@ -267,9 +269,10 @@ namespace task1.Controllers
             using (var client = new HttpClient())
                 {
         
-                HttpResponseMessage message = await client.GetAsync($"https://localhost:44367/api/Home/GetUserData?Id={Id}");
+                HttpResponseMessage message = await client.GetAsync($"https://localhost:44367/api/Home/GetbyId/{Id}");
 
                 string jsonresponse = await message.Content.ReadAsStringAsync();
+
 
                 var result = JsonSerializer.Deserialize<UserData>(jsonresponse, new JsonSerializerOptions
                 {
@@ -288,7 +291,7 @@ namespace task1.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> EditUserDetailsWebApi(int Id)
         {
             using(var client = new HttpClient())
@@ -298,12 +301,11 @@ namespace task1.Controllers
                 var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
                
 
-                var url = $"https://localhost:44367/api/Home/EditUserDetail";
+                var url = $"https://localhost:44367/api/Home/GetbyId/{Id}";
 
-                HttpResponseMessage response = await client.PostAsync(url,content);
+                HttpResponseMessage response = await client.GetAsync(url);
 
-                response.EnsureSuccessStatusCode(); // Throws if not successful
-
+                response.EnsureSuccessStatusCode();
 
                 var message = await response.Content.ReadAsStringAsync();
 
@@ -313,7 +315,9 @@ namespace task1.Controllers
                     PropertyNameCaseInsensitive = true
                 });
 
-                return Json(new { success = true, message = result }, JsonRequestBehavior.DenyGet);
+                Debug.WriteLine(JsonSerializer.Serialize(result));
+
+                return Json(new { success = true, message = result }, JsonRequestBehavior.AllowGet);
 
 
 
@@ -719,7 +723,7 @@ namespace task1.Controllers
                 return Json(new { success = false, message = errorMessage });
 
             }
-        }
+        } 
 
         [HttpPost]
         public ActionResult Delete(int Id)
@@ -805,7 +809,6 @@ namespace task1.Controllers
                }).ToList();
         }
 
-      
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -820,6 +823,84 @@ namespace task1.Controllers
     
         }
 
+        public ActionResult Login()
+        {
+            return View();
+        }
 
+        [HttpPost]
+       public async Task<JsonResult> UserLogin(Login login)
+        {
+            try {
+
+                using (var client = new HttpClient())
+                {
+                    string json = JsonSerializer.Serialize(login);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync("https://localhost:44367/api/Auth/Login", content);
+
+                    string responsemessage = await  response.Content.ReadAsStringAsync();
+
+                    var jsonDoc = JsonDocument.Parse(responsemessage);
+                    string token = jsonDoc.RootElement.GetProperty("token").GetString();
+
+                    Debug.WriteLine(token);
+
+                    Debug.WriteLine(responsemessage);
+                    return Json(new { success = true , message = token });
+                }
+            }
+            catch (Exception e)
+            {
+
+                Debug.WriteLine(e);
+
+                Debug.WriteLine(e);
+                return Json(new { success = false, message = "some error accure" });
+             
+
+            }
+
+
+
+        }
+        [HttpPost]
+
+        public async Task<JsonResult> validtoken(string token )
+        {
+            try
+            {
+
+                using (var client = new HttpClient())
+                {
+                    string json = JsonSerializer.Serialize(token);
+                    HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync("https://localhost:44367/api/Auth/validate-token", content);
+
+                    string responsemessage = await response.Content.ReadAsStringAsync();
+
+                    Debug.WriteLine(responsemessage);
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        return Json(new { success = true, valid = true });
+                    }
+
+                    else
+                    {
+                        return Json(new { success = false, valid = false });
+                    }
+                   
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, valid = false });
+
+            }
+
+        }
     }
 }
