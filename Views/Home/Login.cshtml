@@ -3,16 +3,14 @@
     ViewBag.Title = "Login";
 }
 
-<h2>Login</h2>
-
 <div class="login-container">
     <form class="login-form">
         <div class="form-group">
-            <input type="text" onkeyup="UserName(this)" required>
+            <input type="text" onkeyup="UserName(this)" style="max-width:100%" required>
             <label class="label1" id="uname">Username</label>
         </div>
         <div class="form-group">
-            <input type="password"  onkeyup="PassWord(this)" required>
+            <input type="password"  onkeyup="PassWord(this)" style="max-width:100%" required>
             <label class="label1" id="pwd">Password</label>
         </div>
         <button type="submit" id="button1">Login</button>
@@ -21,253 +19,92 @@
 
 <div class="">
     <form class="register-form">
-        <div class="form-group">
-            <input type="text"  readonly>
-            <label class="label" id="fname">First Name</label>
+
+        <div class="form-group" style="align-items:center">
+            <label  class="label2" style=" top: -8px; left: 133px;">Profile Image</label>
+            <img id="imagePreview" src="" alt="Image Preview" style="display: block; max-width: 250px; margin-top: 10px;">
+        </div>
+
+        <div class="form-group" >
+            <input type="text" id="fname_" style="max-width:100%" readonly>
+            <label class="label2" id="fname" >First Name</label>
         </div>
         <div class="form-group">
-            <input type="text"  readonly>
-            <label class="label" id="lname">Last Name</label>
+            <input type="text" id="lname_" style="max-width:100%" readonly>
+            <label class="label2" id="lname"  >Last Name</label>
         </div>
         <div class="form-group">
-            <input type="email"  readonly>
-            <label class="label" id="email">Email</label>
+            <input type="email" id="email_" style="max-width:100%" readonly>
+            <label class="label2" id="email" >Email</label>
+        </div>
+
+        <div class="form-group">
+            <input type="tel" id="mobile_"  style="max-width:100%" readonly>
+            <label class="label2" id="mobile"  >Mobile No</label>
         </div>
         <div class="form-group">
-            <input type="password" readonly>
-            <label class="label" id="pwd">Password</label>
+            <input type="text" id="addr_" style="max-width:100%" readonly>
+            <label class="label2" id="addr"  >Address</label>
         </div>
         <div class="form-group">
-            <input type="tel"  readonly>
-            <label class="label" id="mobile">Mobile No</label>
+            <input type="date" id="dob_" style="max-width:100%"  readonly>
+            <label class="label2" id="dob"   >Date of Birth</label>
         </div>
         <div class="form-group">
-            <input type="text" readonly>
-            <label class="label" id="addr">Address</label>
+            <input type="text" id="Country_" style="max-width:100%" readonly>
+            <label class="label2" id="Country"  > Country</label>
         </div>
         <div class="form-group">
-            <input type="date" readonly>
-            <label class="label" id="dob">Date of Birth</label>
+            <input type="text" id="State_" style="max-width:100%" readonly>
+            <label class="label2" id="State"  >State</label>
         </div>
-    
         <div class="form-group">
-            <label for="imageUpload">Profile Image</label>
-            <img id="imagePreview" src="" alt="Image Preview" style="display: none; max-width: 200px; margin-top: 10px;">
+            <input type="text" id="City_" style="max-width:100%" readonly>
+            <label class="label2" id="City" >City</label>
         </div>
+
+
         <button type="submit" id="button2">Reset</button>
-       
+
     </form>
 </div>
 
-
 <style>
-   /* Default light mode styles */
 
-.login-container {
-    background-color: rgba(255, 255, 255, 0.1); /* Transparent white background */
-    padding: 5%; /* Responsive padding */
-    border-radius: 10px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px); /* Creates frosted glass effect */
-    width: 90%; /* Responsive width */
-    max-width: 400px; /* Maximum width for larger screens */
+body {
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0; /* Ensure no default margin */
+    min-height: 100vh; /* Full viewport height */
 }
 
-    .login-container {
-        transition: opacity 1s ease-in-out; /* Smooth fade over 1 second */
-        opacity: 1; /* Default visible state */
-    }
-
-        .login-container.hidden {
-            opacity: 0; /* Faded out state */
-        }
-
-
-.login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.form-group {
-    position: relative;
-}
-
-input {
-    width: 100%; /* Full width of the container */
-    padding: 12px;
-    border: none;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.5); /* Darker border for light mode */
-    background: transparent;
-    color: black; /* Text color for light mode */
-    font-size: 1rem; /* Responsive font size */
-    transition: 0.3s;
-}
-
-input:focus {
-    outline: none;
-    border-bottom: 2px solid rgb(0, 86, 179); /* Accent color for light mode */
-}
-
-input::placeholder {
-    color: rgba(0, 0, 0, 0.7); /* Placeholder color for light mode */
-}
-
-#button1 {
-    padding: 12px;
-    background: rgb(0, 86, 179); /* Button color for light mode */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem; /* Responsive font size */
-    font-weight: 600;
-    transition: 0.3s;
-    color: white; /* Button text color */
-    width: 100%; /* Full width of the container */
-}
-
-#button1:hover {
-    background: rgb(0, 70, 150); /* Button hover color for light mode */
-}
-    .error {
-        color: red;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: block;
-        max-width: 280px;
-    }
-
-    /* Default label styling (unchanged) */
-    .label1 {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
-        transition: 0.3s;
-        font-size: 1rem;
-
-    }
-
-  input:focus ~ .label1:not(.error), input:valid ~ .label1:not(.error) {
-        top: -10px;
-       font-size: 1rem;
-        color: rgb(0, 86, 179);
-    }
-
-    /* Keep label in place when it has an error (empty or invalid) */
-    input:focus ~ .label1.error,
-    input:valid ~ .label1.error {
-        top: -10px;
-        font-size: 1rem; /* Keep original size */
-    }
-
-    /* Dark mode adjustments */
-    .dark .error {
-        color: red;
-    }
-
-    .dark input:focus ~ .label1:not(.error),
-    .dark input:valid ~ .label1:not(.error) {
-        color: rgb(100, 150, 255);
-    }
-
-    .dark input:focus ~ .label1.error,
-    .dark input:valid ~ .label1.error {
-        top: -10px;
-
-        font-size: 1rem;
-    }
-
-
-/* Dark mode styles */
-.dark .login-container {
-    background-color: rgba(0, 0, 0, 0.); /* Transparent black background */
-    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.1); /* Lighter shadow for dark mode */
-}
-
-.dark input {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.5); /* Lighter border for dark mode */
-    color: white; /* Text color for dark mode */
-}
-
-.dark input:focus {
-    border-bottom: 2px solid rgb(100, 150, 255); /* Accent color for dark mode */
-}
-
-.dark input::placeholder {
-    color: rgba(255, 255, 255, 0.7); /* Placeholder color for dark mode */
-}
-    .dark #button1:hover {
-        background: rgb(80, 130, 235); /* Button hover color for dark mode */
-    }
-
-
-
-
-/* Media Queries for Responsiveness */
-@@media (max-width: 768px) {
-    .login-container {
-        padding: 10%; /* More padding for smaller screens */
-        width: 80%; /* Wider container for smaller screens */
-    }
-
-    input {
-        font-size: 0.9rem; /* Smaller font size for smaller screens */
-    }
-
-    button {
-        font-size: 0.9rem; /* Smaller font size for smaller screens */
-    }
-
-    .label1 {
-        font-size: 0.9rem; /* Smaller font size for smaller screens */
-    }
-
-    input:focus ~ .label1,
-    input:valid ~ .label1 {
-        font-size: 0.7rem; /* Smaller font size for focused labels on smaller screens */
-    }
-}
-
-@@media (max-width: 480px) {
-    .login-container {
-        padding: 15%; /* Even more padding for very small screens */
-        width: 90%; /* Wider container for very small screens */
-    }
-
-    input {
-        font-size: 0.8rem; /* Smaller font size for very small screens */
-    }
-
-    button {
-        font-size: 0.8rem; /* Smaller font size for very small screens */
-    }
-
-    .label1 {
-        font-size: 0.8rem; /* Smaller font size for very small screens */
-    }
-
-    input:focus ~ .label1,
-    input:valid ~ .label1 {
-        font-size: 0.6rem; /* Smaller font size for focused labels on very small screens */
-    }
-}
-
-/* General Form Styling */
-.register-form {
-    width: 100%;
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.2); /* Light frosted glass effect */
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+/* Container Styling */
+.login-container, .register-form {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 450px;
+    margin: 1rem auto;
+    transition: all 0.4s ease;
+    /* Scroll-driven animation */
+    animation: slideUp 0.8s ease-out;
+    animation-timeline: scroll();
+    animation-range: 0 150px;
+}
+
+.login-container.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+/* Form Styling */
+.login-form, .register-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.5rem;
 }
 
 /* Form Group */
@@ -275,143 +112,244 @@ input::placeholder {
     position: relative;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
 }
 
-/* Input Fields */
-.register-form input {
+/* Inputs */
+input {
     width: 100%;
-    padding: 12px;
+    padding: 12px 10px;
     border: none;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
     background: transparent;
     font-size: 1rem;
-    color: black;
-    transition: border-bottom 0.3s;
+    color: #333;
+    transition: border-bottom 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform, border-bottom; /* Optimize for animation */
 }
 
-.register-form input:focus {
+input:focus {
     outline: none;
-    border-bottom: 2px solid rgb(0, 86, 179);
+    border-bottom: 2px solid #007bff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    animation: glow 0.6s ease-in-out infinite alternate; /* Latest glow effect */
 }
 
-/* Floating Labels */
-.label {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    font-size: 1rem;
-    color: rgba(0, 0, 0, 0.7);
-    transition: 0.3s;
-    pointer-events: none;
+input::placeholder {
+    color: transparent;
 }
 
-input:focus ~ .label,
-input:not(:placeholder-shown) ~ .label {
-    top: -10px;
-    left: 10px;
-    font-size: 0.8rem;
-    color: rgb(0, 86, 179);
-}
-
-/* Readonly Fields */
 input[readonly] {
-    background: rgba(200, 200, 200, 0.2);
+    background: rgba(240, 240, 240, 0.4);
     cursor: not-allowed;
+    color: #666;
 }
 
-/* File Upload */
-#imageUpload {
-    margin-top: 10px;
+/* Labels */
+.label1, .label2 {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+    transition: all 0.3s ease;
 }
 
-#imagePreview {
-    display: none;
+input:focus ~ .label1, input:not(:placeholder-shown) ~ .label1,
+input:focus ~ .label2, input:not(:placeholder-shown) ~ .label2 {
+    top: -8px;
+    left: 0;
+    font-size: 0.85rem;
+    color: #007bff;
+    animation: labelPop 0.2s ease-out; /* Subtle pop effect */
+}
+
+/* Specific Label Adjustments */
+.label2[for="imageUpload"] {
+    position: static;
+    transform: none;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Error */
+.error {
+    color: orangered;
+    font-size: 0.8rem;
     max-width: 100%;
-    margin-top: 10px;
-    border-radius: 5px;
+    white-space: normal;
 }
 
-/* Submit Button */
-#button2 {
+/* Buttons */
+#button1, #button2 {
     padding: 12px;
-    background: rgb(0, 86, 179);
+    background: #007bff;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    transition: 0.3s;
     color: white;
+    transition: background 0.3s ease, transform 0.2s ease;
     width: 100%;
+    will-change: transform; /* Optimize hover animation */
 }
 
-#button2:hover {
-    background: rgb(0, 70, 150);
+#button1:hover, #button2:hover {
+    background: #0056d2;
+    transform: translateY(-2px) scale(1.02); /* Enhanced hover */
+    animation: buttonPulse 0.4s ease; /* Subtle pulse */
+}
+
+/* Image Preview */
+#imagePreview {
+    display: block;
+    max-width: 200px;
+    margin: 10px auto 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease;
+}
+
+/* Show image with animation when loaded */
+#imagePreview[src]:not([src=""]) {
+    opacity: 1;
+    animation: fadeIn 0.5s ease-out;
 }
 
 /* Dark Mode */
-.dark .register-form {
-    background: rgba(0, 0, 0, 0.1);
-    color: white;
+.dark body {
+    background: linear-gradient(135deg, #343a40, #495057);
+}
+
+.dark .login-container, .dark .register-form {
+    background: rgba(0, 0, 0, 0.25);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
 }
 
 .dark input {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-    color: white;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    color: #e9ecef;
 }
 
 .dark input:focus {
-    border-bottom: 2px solid rgb(100, 150, 255);
+    border-bottom: 2px solid #66b0ff;
+    box-shadow: 0 2px 8px rgba(102, 176, 255, 0.2);
+    animation: glowDark 0.6s ease-in-out infinite alternate;
 }
 
-.dark .label {
-    color: rgba(255, 255, 255, 0.7);
+.dark input[readonly] {
+    background: rgba(80, 80, 80, 0.4);
+    color: #adb5bd;
 }
 
-.dark input:focus ~ .label,
-.dark input:not(:placeholder-shown) ~ .label {
-    color: rgb(100, 150, 255);
+.dark .label1, .dark .label2 {
+    color: rgba(255, 255, 255, 0.6);
 }
 
-.dark #button2 {
-    background: rgb(100, 150, 255);
+.dark input:focus ~ .label1, .dark input:not(:placeholder-shown) ~ .label1,
+.dark input:focus ~ .label2, .dark input:not(:placeholder-shown) ~ .label2 {
+    color: #66b0ff;
 }
 
-.dark #button2:hover {
-    background: rgb(80, 130, 235);
+.dark .label2[for="imageUpload"] {
+    color: #e9ecef;
 }
 
-/* Responsive */
+.dark #button1, .dark #button2 {
+    background: #66b0ff;
+}
+
+.dark #button1:hover, .dark #button2:hover {
+    background: #4d94ff;
+}
+
+/* Keyframes for Animations */
+@@keyframes slideUp {
+    from { opacity: 1; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@@keyframes glow {
+    from { box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); }
+    to { box-shadow: 0 0 12px rgba(0, 123, 255, 0.6); }
+}
+
+@@keyframes glowDark {
+    from { box-shadow: 0 0 5px rgba(102, 176, 255, 0.3); }
+    to { box-shadow: 0 0 12px rgba(102, 176, 255, 0.6); }
+}
+
+@@keyframes labelPop {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(-8px); }
+}
+
+@@keyframes buttonPulse {
+    0% { transform: translateY(-2px) scale(1.02); }
+    50% { transform: translateY(-2px) scale(1.05); }
+    100% { transform: translateY(-2px) scale(1.02); }
+}
+
+@@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 @@media (max-width: 768px) {
-    .register-form {
-        width: 90%;
+    .login-container, .register-form {
+        padding: 1.5rem;
+        max-width: 380px;
     }
-
-    .label {
+    input {
+        font-size: 0.95rem;
+    }
+    .label1, .label2 {
         font-size: 0.9rem;
+    }
+    #button1, #button2 {
+        font-size: 0.95rem;
+    }
+    #imagePreview {
+        max-width: 150px;
     }
 }
 
 @@media (max-width: 480px) {
-    .register-form {
-        width: 100%;
-        padding: 15px;
+    .login-container, .register-form {
+        padding: 1rem;
+        max-width: 320px;
     }
-
-    .label {
-        font-size: 0.8rem;
+    input {
+        font-size: 0.9rem;
+        padding: 10px 8px;
+    }
+    .label1, .label2 {
+        font-size: 0.85rem;
+    }
+    input:focus ~ .label1, input:not(:placeholder-shown) ~ .label1,
+    input:focus ~ .label2, input:not(:placeholder-shown) ~ .label2 {
+        font-size: 0.75rem;
+    }
+    #button1, #button2 {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+    #imagePreview {
+        max-width: 120px;
     }
 }
-
-  
 </style>
 
 <script>
     $(document).ready(function () {
 
         var jwtToken = localStorage.getItem('AuthToken');
-        console.log(jwtToken);
-
 
         $.ajax({
             url: '@Url.Action("validtoken", "Home")',
@@ -427,12 +365,42 @@ input[readonly] {
                     const loginContainer = document.querySelector('.login-container');
                     loginContainer.classList.add('hidden');
 
-
+                    $(".register-form").css("display", "");
                     loginContainer.style.display = 'none';
+
+                    $.ajax({
+
+                        url: '@Url.Action("GetDetailsFromToken","Home")',
+                        type: 'GET',
+                        data: { Token: jwtToken },
+                        success: function (response) {
+                            if (response.success)
+                            {
+                                $("#imagePreview").attr("src", "/Uploads/" + response.message.ImagePath);
+                                    $("#fname_").val(response.message.FirstName);
+                                    $("#lname_").val(response.message.LastName);
+                                    $("#email_").val(response.message.Email);
+                                  
+                                    $("#mobile_").val(response.message.MobileNo);
+                                    $("#addr_").val(response.message.Address);
+                                    $("#dob_").val(response.message.Dob);
+                                    $("#Country_").val(response.message.SelectedCountry);
+                                    $("#State_").val(response.message.selectedState);
+                                   $("#City_").val(response.message.selectedCity);
+
+                                }
+
+
+                            }
+                        
+                    });
 
                 }
                 else
                 {
+                    $(".register-form").css("display", "none");
+
+                    localStorage.setItem('AuthToken', "");
 
                    
                 }
@@ -446,10 +414,24 @@ input[readonly] {
 
     $(document).ready(function () {
 
-        $(".register-form").css("display", "none");
 
         document.body.appendChild(globalAlertContainer);
 
+
+        
+
+        $(".register-form").on("submit", function (event) {
+
+            event.preventDefault();
+
+            localStorage.setItem("AuthToken", "")
+
+            showAlert("Token is removed from Local storage", "danger", 1900);
+
+            setTimeout(() => { window.location.reload() }, 1900);
+
+
+        });
 
         $(".login-form").on("submit", function (event) {
             event.preventDefault(); // Prevents the form from submitting (optional, for testing)
@@ -484,13 +466,16 @@ input[readonly] {
                         setTimeout(() => {
                             loginContainer.style.display = 'none';
                             $(".register-form").css("display", "");
-
+                            window.location.reload();
                         }, 1900);
+
+                       
                     }
                     else {
              
-                        showAlert('Login failed: ' + response.message); // Handle failure
+                        showAlert('Login failed: Invalid Id or Password' ); // Handle failure
                         $(".register-form").css("display", "none");
+                       
                     }
 
 
@@ -506,9 +491,8 @@ input[readonly] {
     const $errorSpan = $("#uname");
     const emailPattern = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
 
-    $errorSpan.css("top","-10px");
 
-
+       $errorSpan.css("color","red")
 
     if (!value) {
         $errorSpan.text("Email is required").addClass("error"); // Error state
@@ -523,6 +507,7 @@ input[readonly] {
     } else {
         $errorSpan.text("Username").removeClass("error"); // Valid state
         input.setCustomValidity("");
+        $errorSpan.css("color", "")
     }
     }
 
@@ -532,7 +517,7 @@ input[readonly] {
         const value = $input.val();
         $errorSpan = $("#pwd");
         letterPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@@#$%^&*])[A-Za-z\d!@@#$%^&*]{8,}$/;
-        $errorSpan.css("top", "-10px");
+        $errorSpan.css("color", "red")
 
         if (!value) {
             $errorSpan.text("Password is required").addClass("error");
@@ -547,6 +532,7 @@ input[readonly] {
         } else {
             $errorSpan.text("Password").removeClass("error");
             input.setCustomValidity("");
+            $errorSpan.css("color", "")
         }
 
     }

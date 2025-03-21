@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -881,7 +883,7 @@ namespace task1.Controllers
 
                     string responsemessage = await response.Content.ReadAsStringAsync();
 
-                    Debug.WriteLine(responsemessage);
+           
 
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
@@ -902,5 +904,48 @@ namespace task1.Controllers
             }
 
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetDetailsFromToken(string Token)
+        {
+            using(var client = new HttpClient())
+           {
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Token);
+
+
+                var result = await client.GetAsync("https://localhost:44367/api/Auth/GetDeatilsFromToken");
+
+
+                
+                string resultmessage =await  result.Content.ReadAsStringAsync();
+
+               
+
+                var jsonresult = JsonSerializer.Deserialize<UserData>(resultmessage, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+
+                Debug.WriteLine(JsonSerializer.Serialize( jsonresult));
+                if (result.IsSuccessStatusCode)
+                {
+                    return Json(new { success = true, message = jsonresult }, JsonRequestBehavior.AllowGet);
+                }
+                else 
+                {
+                    return Json(new { success = false, message = jsonresult }, JsonRequestBehavior.AllowGet);
+                }
+
+
+            }
+
+
+
+          
+
+        }
+
     }
 }

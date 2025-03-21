@@ -87,214 +87,293 @@
 </body>
 </html>
 <style>
-    /* Light Mode Styles */
-    body {
-        background-color: #FFFFFF; /* Solid white fallback */
-        color: #1F2937; /* Dark gray text for contrast (unchanged, works well) */
-        background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('https://4kwallpapers.com/images/walls/thumbs_3t/10781.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed; /* Fixes image */
-        min-height: 100vh;
-        margin: 0;
-    }
+  /* Light Mode Styles */
+body {
+    background-color: #FFFFFF; /* Solid white fallback */
+    color: #1F2937; /* Dark gray text */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('https://4kwallpapers.com/images/walls/thumbs_3t/10781.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
+    animation: backgroundFade 2s ease-out; /* Subtle background fade on load */
+}
 
-    /* Navbar */
-    .navbar {
-        background-color: white;
-        color: #1F2937;
-        position: sticky;
-        top: 0;
-        width: 100%;
-        padding: 5px;
-        z-index: 1000;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    }
+/* Navbar */
+.navbar {
+    background-color: white;
+    color: #1F2937;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    padding: 5px;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    animation: slideDown 0.5s ease-out; /* Navbar slides in */
+}
 
-        .navbar a, .navbar span {
-            color: #1F2937; /* Dark gray (changed from #4A4A4A) */
-        }
+.navbar a, .navbar span {
+    color: #1F2937;
+    transition: color 0.2s ease-in-out;
+}
 
-    /* DataTable */
-    #servertable {
-        width: 100% !important;
-        border-collapse: collapse;
-        border: 1px solid #9CA3AF; /* Gray-400 (changed from #DDD for softer contrast) */
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        table-layout: fixed;
-        background-color: transparent; /* Keeps background visible */
-        color: #1F2937; /* Dark gray (changed from #333333 for consistency) */
-    }
+.navbar a:hover {
+    color: #2563EB; /* Vibrant blue on hover */
+}
 
-        #servertable thead {
-            background: linear-gradient(90deg, #2563EB, #1E3A8A); /* Updated blue gradient for vibrancy */
-            color: #FFFFFF; /* White text (unchanged, perfect contrast) */
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-            top: 0;
-            z-index: 1;
-        }
+/* DataTable */
+#servertable {
+    width: 100% !important;
+    border-collapse: collapse;
+    border: 1px solid #9CA3AF;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    table-layout: fixed;
+    background-color: transparent;
+    color: #1F2937;
+    animation: tableFade 0.8s ease-out; /* Table fades in with scroll */
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+}
 
-            #servertable thead th {
-                padding: 12px;
-                text-align: center;
-                white-space: nowrap;
-            }
+#servertable thead {
+    background: linear-gradient(90deg, #2563EB, #1E3A8A);
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    top: 0;
+    z-index: 1;
+}
 
-        #servertable tbody tr {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
+#servertable thead th {
+    padding: 12px;
+    text-align: center;
+    white-space: nowrap;
+}
 
-            #servertable tbody tr:hover {
-                background-color: rgba(243, 244, 246, 0.8); /* Gray-100 with opacity (changed from #F0F0F0) */
-                cursor: pointer;
-                transition: background 0.2s ease-in-out;
-                opacity: 1; /* Changed from 0.8 to 1 to avoid fading content */
-            }
+#servertable tbody tr {
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    will-change: transform; /* Optimize for animation */
+}
 
-        #servertable tbody td {
-            padding: 10px;
-            text-align: center;
-            vertical-align: middle;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: #1F2937; /* Dark gray (changed from #333333) */
-        }
+#servertable tbody tr:hover {
+    background-color: rgba(243, 244, 246, 0.8);
+    cursor: pointer;
+    transform: scale(1.01); /* Slight scale on hover */
+    opacity: 1;
+}
 
-    /* DataTables Components */
-    .dataTables_scrollHead {
-        overflow: hidden !important;
-        background-color: transparent;
-    }
+#servertable tbody td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #1F2937;
+}
 
-    .dataTables_scrollBody {
-        margin-top: 0;
-        background-color: transparent;
-    }
+/* DataTables Components */
+.dataTables_scrollHead {
+    overflow: hidden !important;
+    background-color: transparent;
+}
 
-    .dataTables_processing {
-        background: rgba(255, 255, 255, 0.9); /* Slightly more opaque (changed from 0.8) */
-        color: #1F2937; /* Dark gray (changed from #000000 for consistency) */
-        font-size: 1.1rem;
-        border-radius: 4px;
-        padding: 10px;
-        text-align: center;
-    }
+.dataTables_scrollBody {
+    margin-top: 0;
+    background-color: transparent;
+}
 
-    /* Light Mode Styles (Default) */
-    #servertable_length label, #servertable_info {
-        margin-left: 15px;
-        font-size: 14px;
-        color: #1F2937; /* Dark gray (already good for white background) */
-    }
+.dataTables_processing {
+    background: rgba(255, 255, 255, 0.9);
+    color: #1F2937;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+    animation: processingPulse 1.5s infinite ease-in-out; /* Processing indicator pulse */
+}
 
-    #servertable_paginate {
-        margin-bottom: 10px;
-        margin-right: 10px;
-    }
+/* Light Mode Styles (Default) */
+#servertable_length label, #servertable_info {
+    margin-left: 15px;
+    font-size: 14px;
+    color: #1F2937;
+}
 
-        #servertable_paginate .paginate_button {
-            color: #1F2937 !important; /* Dark gray (changed from #333333) */
-            background-color: rgba(255, 255, 255, 0.9); /* Slightly opaque white (changed from #FFFFFF) */
-            border: 1px solid #9CA3AF; /* Gray-400 (changed from #DDD) */
-            border-radius: 4px; /* Added for consistency */
-            padding: 5px 10px; /* Added for better spacing */
-            transition: background-color 0.2s ease-in-out; /* Smooth transition */
-        }
+#servertable_paginate {
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
 
-            #servertable_paginate .paginate_button:hover {
-                background-color: #E5E7EB; /* Gray-200 (changed from #F0F0F0) */
-                color: #1F2937 !important; /* Dark gray (changed from #000000) */
-            }
+#servertable_paginate .paginate_button {
+    color: #1F2937 !important;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #9CA3AF;
+    border-radius: 4px;
+    padding: 5px 10px;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    will-change: transform; /* Optimize hover animation */
+}
 
-            #servertable_paginate .paginate_button.current {
-                background-color: #2563EB !important; /* Vibrant blue (changed from #007bff) */
-                border-color: #2563EB !important;
-                color: #FFFFFF !important; /* White (unchanged) */
-            }
+#servertable_paginate .paginate_button:hover {
+    background-color: #E5E7EB;
+    color: #1F2937 !important;
+    transform: translateY(-2px); /* Lift on hover */
+}
 
-    #servertable_filter {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #1F2937; /* Dark gray (changed from #333333) */
-    }
+#servertable_paginate .paginate_button.current {
+    background-color: #2563EB !important;
+    border-color: #2563EB !important;
+    color: #FFFFFF !important;
+    animation: currentPulse 1s infinite ease-in-out; /* Subtle pulse for active page */
+}
 
-        #servertable_filter input {
-            width: 250px;
-            padding: 8px 10px;
-            border: 1px solid #9CA3AF; /* Gray-400 (changed from #DDD) */
-            border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.95); /* Slightly opaque white (changed from #FFFFFF) */
-            color: #1F2937; /* Dark gray (changed from #333333) */
-            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
+#servertable_filter {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1F2937;
+}
 
-            #servertable_filter input:focus {
-                border-color: #2563EB; /* Vibrant blue (changed from #3b82f6) */
-                outline: none;
-                box-shadow: 0 0 5px rgba(37, 99, 235, 0.5); /* Adjusted to match #2563EB */
-            }
+#servertable_filter input {
+    width: 250px;
+    padding: 8px 10px;
+    border: 1px solid #9CA3AF;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1F2937;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
 
+#servertable_filter input:focus {
+    border-color: #2563EB;
+    outline: none;
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+    animation: inputGlow 0.6s ease-in-out infinite alternate; /* Glow on focus */
+}
 
-    .dark #servertable_length label,
-    .dark #servertable_info {
-        color: #D1D5DB;
-    }
+/* Dark Mode Styles */
+.dark body {
+    background-color: #1F2937; /* Dark gray fallback */
+    background-image: linear-gradient(rgba(31, 41, 55, 0.7), rgba(31, 41, 55, 0.7)), url('https://4kwallpapers.com/images/walls/thumbs_3t/10781.png');
+    color: #D1D5DB;
+}
 
-    .dark #servertable_paginate .paginate_button {
-        color: #D1D5DB !important;
-        background-color: rgba(31, 41, 55, 0.9);
-        border: 1px solid #4B5563;
-    }
+.dark .navbar {
+    background-color: #1F2937;
+    color: #D1D5DB;
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.05);
+}
 
-        .dark #servertable_paginate .paginate_button:hover {
-            background-color: #4B5563;
-            color: #FFFFFF !important;
-        }
+.dark .navbar a, .dark .navbar span {
+    color: #D1D5DB;
+}
 
-        .dark #servertable_paginate .paginate_button.current {
-            background-color: #60A5FA !important;
-            border-color: #60A5FA !important;
-            color: #FFFFFF !important;
-        }
+.dark .navbar a:hover {
+    color: #60A5FA;
+}
 
-    .dark #servertable_filter {
-        color: #D1D5DB;
-    }
+.dark #servertable {
+    border: 1px solid #4B5563;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+    color: #D1D5DB;
+}
 
-        .dark #servertable_filter input {
-            border: 1px solid #4B5563;
-            background-color: rgba(55, 65, 81, 0.95);
-            color: #D1D5DB;
-        }
+.dark #servertable thead {
+    background: linear-gradient(90deg, #60A5FA, #1E3A8A);
+}
 
-            .dark #servertable_filter input:focus {
-                border-color: #60A5FA;
-                box-shadow: 0 0 5px rgba(96, 165, 250, 0.5);
-            }
+.dark #servertable tbody tr {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark #servertable tbody tr:hover {
+    background-color: rgba(75, 85, 99, 0.8);
+    transform: scale(1.01);
+}
+
+.dark #servertable tbody td {
+    color: #D1D5DB;
+}
+
+.dark .dataTables_processing {
+    background: rgba(31, 41, 55, 0.9);
+    color: #D1D5DB;
+}
+
+.dark #servertable_length label,
+.dark #servertable_info {
+    color: #D1D5DB;
+}
+
+.dark #servertable_paginate .paginate_button {
+    color: #D1D5DB !important;
+    background-color: rgba(31, 41, 55, 0.9);
+    border: 1px solid #4B5563;
+}
+
+.dark #servertable_paginate .paginate_button:hover {
+    background-color: #4B5563;
+    color: #FFFFFF !important;
+    transform: translateY(-2px);
+}
+
+.dark #servertable_paginate .paginate_button.current {
+    background-color: #60A5FA !important;
+    border-color: #60A5FA !important;
+    color: #FFFFFF !important;
+}
+
+.dark #servertable_filter {
+    color: #D1D5DB;
+}
+
+.dark #servertable_filter input {
+    border: 1px solid #4B5563;
+    background-color: rgba(55, 65, 81, 0.95);
+    color: #D1D5DB;
+}
+
+.dark #servertable_filter input:focus {
+    border-color: #60A5FA;
+    box-shadow: 0 0 5px rgba(96, 165, 250, 0.5);
+    animation: inputGlowDark 0.6s ease-in-out infinite alternate;
+}
 
 /* Buttons and Modals */
+/* Light Mode Styles */
 #create_user {
     margin-right: 15px;
     color: #FFFFFF;
+    padding: 8px 16px; /* Added for better clickable area */
+    border-radius: 4px;
+    background-color: #007bff; /* Default background */
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    will-change: transform; /* Optimize for animation */
 }
 
 #create_user:hover {
     background-color: #0056b3;
+    transform: scale(1.05); /* Slight scale on hover */
+    animation: buttonPulse 0.4s ease; /* Subtle pulse */
 }
 
 #CreateNewUser {
     color: black;
+    transition: color 0.2s ease-in-out;
 }
 
 .modal-body {
     background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    animation: modalFade 0.5s ease-out; /* Modal fades in */
 }
 
 label, .col-md-3, .cnf {
@@ -308,65 +387,77 @@ label, .col-md-3, .cnf {
 hr {
     margin-top: 15px;
     border-color: #DDD;
+    transition: border-color 0.3s ease-in-out;
 }
 
 .text-danger {
-    background-color: #FFE0E0;
+    background-color: transparent;
+    padding: 4px 8px;
+    border-radius: 4px;
+    animation: errorShake 0.3s ease; /* Shake effect for errors */
 }
 
-    .dark body {
-        background-color: #1A1A1A;
-        color: #E0E0E0;
-        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://4kwallpapers.com/images/walls/thumbs_3t/8710.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        min-height: 100vh;
-        margin: 0;
-    }
+/* Dark Mode Styles */
+.dark body {
+    background-color: #1A1A1A;
+    color: #E0E0E0;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://4kwallpapers.com/images/walls/thumbs_3t/8710.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
+    animation: backgroundFade 2s ease-out; /* Background fades in */
+}
 
-    .dark .navbar, .dark #servertable, .dark .con {
-        border: 1px solid #404040;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        background-color: transparent; /* Changed from #2D2D2D to transparent */
-        color: #E0E0E0;
-    }
+.dark .navbar, .dark #servertable, .dark .con {
+    border: 1px solid #404040;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    background-color: transparent;
+    color: #E0E0E0;
+    animation: slideDown 0.5s ease-out; /* Navbar/table slide in */
+}
 
-        .dark .navbar a, .dark .navbar span, .dark .nav-link {
-            color: white;
-        }
+.dark .navbar a, .dark .navbar span, .dark .nav-link {
+    color: white;
+    transition: color 0.2s ease-in-out;
+}
 
-    .dark .navbar-dark, .dark .navbar-brand span {
-        color: #ffffff !important;
-    }
+.dark .navbar a:hover, .dark .nav-link:hover {
+    color: #d1d5db !important;
+}
 
-        .dark .navbar-dark .nav-link:hover {
-            color: #d1d5db !important;
-        }
+.dark .navbar-dark, .dark .navbar-brand span {
+    color: #ffffff !important;
+}
 
-    .dark .navbar-toggler {
-        background-color: grey;
-    }
-    .dark #servertable tbody tr {
-        background-color: transparent; /* Changed from #2D2D2D to transparent */
-    }
+.dark .navbar-toggler {
+    background-color: grey;
+}
 
-        .dark #servertable tbody tr:hover {
-            background-color: rgba(58, 58, 58, 0.3); /* Semi-transparent hover effect */
-        }
+.dark #servertable tbody tr {
+    background-color: transparent;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
 
-    .dark #servertable tbody td {
-        color: #E0E0E0; /* Text remains visible */
-    }
+.dark #servertable tbody tr:hover {
+    background-color: rgba(58, 58, 58, 0.3);
+    transform: scale(1.01); /* Slight scale on hover */
+}
 
-    .dark .dataTables_scrollHead, .dark .dataTables_scrollBody {
-        background-color: transparent; /* Changed from #2D2D2D to transparent */
-    }
+.dark #servertable tbody td {
+    color: #E0E0E0;
+}
+
+.dark .dataTables_scrollHead, .dark .dataTables_scrollBody {
+    background-color: transparent;
+}
 
 .dark .dataTables_processing {
     background: rgba(0, 0, 0, 0.8);
     color: #FFFFFF;
+    animation: processingPulse 1.5s infinite ease-in-out; /* Pulse effect */
 }
 
 .dark #servertable_length label, .dark #servertable_info {
@@ -377,11 +468,13 @@ hr {
     color: #E0E0E0 !important;
     background-color: #2D2D2D;
     border: 1px solid #404040;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .dark #servertable_paginate .paginate_button:hover {
     background-color: #3A3A3A;
     color: #FFFFFF !important;
+    transform: translateY(-2px); /* Lift on hover */
 }
 
 .dark #servertable_filter {
@@ -392,26 +485,31 @@ hr {
     border: 1px solid #404040;
     background-color: #3A3A3A;
     color: #E0E0E0;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .dark #servertable_filter input:focus {
     border-color: #3b82f6;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+    animation: inputGlowDark 0.6s ease-in-out infinite alternate; /* Glow effect */
 }
 
 .dark hr {
     border-color: #404040;
 }
 
-    .dark .modal-body {
-        background-color: #212529;
-    }
+.dark .modal-body {
+    background-color: #212529;
+    animation: modalFade 0.5s ease-out; /* Modal fades in */
+}
 
 .dark label, .dark .col-md-3, .dark .cnf {
     color: #E0E0E0;
 }
 
 .dark .text-danger {
-    background-color: #E0E0FF;
+    background-color: transparent;
+    animation: errorShake 0.3s ease; /* Shake effect */
 }
 
 .dark #editUserModalLabel {
@@ -419,11 +517,14 @@ hr {
     font-size: 20px;
 }
 
-    .dark .card {
-        background-color: #212529;
-        color: #E0E0E0;
-        border: 1px solid #404040;
-    }
+.dark .card {
+    background-color: #212529;
+    color: #E0E0E0;
+    border: 1px solid #404040;
+    animation: cardFade 0.5s ease-out; /* Card fades in */
+    animation-timeline: scroll(); /* Scroll-driven */
+    animation-range: 0 100px;
+}
 
 .dark .card p {
     background-color: #3A3A3A;
@@ -438,6 +539,11 @@ hr {
     margin: 4px 0;
     padding: 8px;
     border-radius: 4px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.dark .card li:hover {
+    transform: translateX(5px); /* Slight shift on hover */
 }
 
 .dark #detail {
@@ -453,13 +559,13 @@ hr {
     color: black;
 }
 
-    .dark .navbar {
-        background-color: black;
-    }
-    .dark .divide-y {
-        background-color: rgba(0, 0, 0, 0.6);
-    }
+.dark .navbar {
+    background-color: black;
+}
 
+.dark .divide-y {
+    background-color: rgba(0, 0, 0, 0.6);
+}
 
 .dark #tdm, .dark h5 {
     color: white;
@@ -475,18 +581,9 @@ hr {
     color: #d1d5db;
 }
 
-    @@media (max-width: 767.98px) {
-        body {
-            padding-top: 0;
-        }
-
-     
-.navbar-nav {
-    padding: 1rem;
-}
-
-
-  
+    .navbar-nav {
+        padding: 1rem;
+    }
 }
 
 /* Utility Classes */
@@ -500,216 +597,326 @@ hr {
     transition: color 0.3s ease-in-out;
 }
 
-    .container1 {
-        overflow-y: scroll; /* Enables vertical scrolling */
-        max-height: 400px; /* Optional: Limits height to trigger scrolling */
+/* Scroll Container */
+.container1 {
+    overflow-y: scroll;
+    max-height: 400px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+    animation: scrollFade 0.5s ease-out; /* Fade in scroll container */
+}
+
+.container1::-webkit-scrollbar {
+    width: 10px;
+}
+
+.container1::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.container1::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+    border: 2px solid #f1f1f1;
+    transition: background 0.2s ease-in-out;
+}
+
+.container1::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    animation: thumbPulse 0.4s ease; /* Pulse on hover */
+}
+
+/* Dark Mode Scrollbar */
+.dark .container1 {
+    scrollbar-color: #555 #2D2D2D;
+}
+
+.dark .container1::-webkit-scrollbar-track {
+    background: #2D2D2D;
+}
+
+.dark .container1::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
+.dark .container1::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+.dark .container1 {
+    scrollbar-color: #666 #2D2D2D;
+    animation: scrollFade 0.5s ease-out; /* Fade in scroll container */
+}
+
+.dark .container1::-webkit-scrollbar-track {
+    background: #2D2D2D;
+}
+
+.dark .container1::-webkit-scrollbar-thumb {
+    background: #666;
+    border: 2px solid #2D2D2D;
+    transition: background 0.2s ease-in-out;
+}
+
+.dark .container1::-webkit-scrollbar-thumb:hover {
+    background: #999;
+    animation: thumbPulse 0.4s ease; /* Pulse on hover */
+}
+
+/* Light Mode Toggle Styles */
+.toggle-container {
+    background-color: #D1D5DB; /* Gray-300 */
+    width: 3rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    position: relative;
+    transition: background-color 0.3s ease-in-out;
+    animation: toggleFade 0.5s ease-out; /* Fade in toggle */
+}
+
+.toggle-handle {
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform; /* Optimize for animation */
+}
+
+#darkModeToggle:checked ~ .toggle-container {
+    background-color: #4F46E5; /* Indigo for "on" state */
+}
+
+#darkModeToggle:checked ~ .toggle-container .toggle-handle {
+    transform: translateX(1.5rem); /* Moves to right */
+    animation: handleBounce 0.3s ease-out; /* Bounce effect */
+}
+
+/* Label Styling */
+#tdm {
+    color: #1F2937; /* Gray-900 for light mode */
+    transition: color 0.3s ease-in-out;
+}
+
+/* Dark Mode Adjustments */
+.dark .toggle-container {
+    background-color: #374151; /* Gray-700 */
+}
+
+.dark #darkModeToggle:checked ~ .toggle-container {
+    background-color: #7DD3FC; /* Light blue for "on" state */
+}
+
+.dark .toggle-handle {
+    border-color: #4B5563; /* Gray-600 border */
+}
+
+.dark #darkModeToggle:checked ~ .toggle-container .toggle-handle {
+    background-color: #FFFFFF; /* Keeps white handle */
+}
+
+.dark #tdm {
+    color: #D1D5DB; /* Gray-300 for dark mode */
+}
+
+/* Symbol Styling */
+.light-symbol {
+    color: #F59E0B; /* Amber for sun */
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.light-symbol:hover {
+    transform: scale(1.2); /* Scale up on hover */
+}
+
+.dark-symbol {
+    color: #60A5FA; /* Light blue for moon */
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.dark-symbol:hover {
+    transform: scale(1.2); /* Scale up on hover */
+}
+
+/* Light Mode Styles */
+.nav-link {
+    color: #1F2937; /* Dark gray */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    color: #6B7280; /* Gray-500 for hover */
+    transform: translateX(5px); /* Slight shift on hover */
+    animation: navPulse 0.4s ease; /* Subtle pulse */
+}
+
+.web-api-symbol {
+    font-size: 1rem;
+    color: #2563EB; /* Blue for light mode */
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.web-api-symbol:hover {
+    transform: rotate(360deg); /* Spin on hover */
+}
+
+.client-side-symbol {
+    font-size: 1rem;
+    color: #16A34A; /* Green for client-side */
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.client-side-symbol:hover {
+    transform: scale(1.2); /* Scale up on hover */
+}
+
+.server-side-symbol {
+    font-size: 1rem;
+    color: #D97706; /* Amber for server-side */
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.server-side-symbol:hover {
+    transform: scale(1.2); /* Scale up on hover */
+}
+
+/* Dark Mode Styles */
+.dark .nav-link {
+    color: #D1D5DB; /* Light gray */
+}
+
+.dark .nav-link:hover {
+    color: #9CA3AF; /* Gray-400 for hover */
+    transform: translateX(5px);
+    animation: navPulse 0.4s ease;
+}
+
+.dark .web-api-symbol {
+    color: #60A5FA; /* Lighter blue */
+}
+
+.dark .web-api-symbol:hover {
+    transform: rotate(360deg);
+}
+
+.dark .client-side-symbol {
+    color: #4ADE80; /* Lighter green */
+}
+
+.dark .client-side-symbol:hover {
+    transform: scale(1.2);
+}
+
+.dark .server-side-symbol {
+    color: #FBBF24; /* Lighter amber */
+}
+
+.dark .server-side-symbol:hover {
+    transform: scale(1.2);
+}
+
+#servertable_filter {
+    margin-right: 15px;
+}
+
+
+@@keyframes backgroundFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+@@keyframes processingPulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.05); opacity: 1; }
+}
+}
+
+@@keyframes currentPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+@@keyframes inputGlow {
+    from { box-shadow: 0 0 5px rgba(37, 99, 235, 0.5); }
+    to { box-shadow: 0 0 10px rgba(37, 99, 235, 0.8); }
+}
+
+@@keyframes inputGlowDark {
+    from { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+    to { box-shadow: 0 0 10px rgba(59, 130, 246, 0.8); }
+}
+
+@@keyframes scrollFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@@keyframes thumbPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@@keyframes toggleFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@@keyframes handleBounce {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(1.7rem); }
+    100% { transform: translateX(1.5rem); }
+}
+
+@@keyframes navPulse {
+    0% { transform: translateX(5px) scale(1); }
+    50% { transform: translateX(5px) scale(1.05); }
+    100% { transform: translateX(5px) scale(1); }
+}
+
+@@keyframes buttonPulse {
+    0% { transform: scale(1.05); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1.05); }
+}
+
+@@keyframes modalFade {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@@keyframes cardFade {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Media Query */
+@@media (max-width: 767.98px) {
+    body {
+        padding-top: 0;
     }
-
-    /* General Scrollbar Styling (Firefox and modern browsers) */
-    .container1 {
-        scrollbar-width: thin; /* Makes scrollbar thinner */
-        scrollbar-color: #888 #f1f1f1; /* Thumb color and track color */
+    .navbar-nav {
+        padding: 1rem;
     }
-
-        /* Webkit Browsers (Chrome, Safari, Edge) */
-        .container1::-webkit-scrollbar {
-            width: 10px; /* Width of the vertical scrollbar */
-        }
-
-        .container1::-webkit-scrollbar-track {
-            background: #f1f1f1; /* Light gray track */
-            border-radius: 5px; /* Rounded edges */
-        }
-
-        .container1::-webkit-scrollbar-thumb {
-            background: #888; /* Gray thumb */
-            border-radius: 5px; /* Rounded thumb */
-            border: 2px solid #f1f1f1; /* Adds padding between thumb and track */
-        }
-
-            .container1::-webkit-scrollbar-thumb:hover {
-                background: #555; /* Darker gray on hover for better interaction */
-            }
-
-    /* Dark Mode Adjustments */
-    .dark .container1 {
-        scrollbar-color: #666 #2D2D2D; /* Dark thumb and track */
-    }
-
-        .dark .container1::-webkit-scrollbar-track {
-            background: #2D2D2D; /* Matches dark mode background */
-        }
-
-        .dark .container1::-webkit-scrollbar-thumb {
-            background: #666; /* Lighter gray thumb */
-            border: 2px solid #2D2D2D; /* Matches track */
-        }
-
-            .dark .container1::-webkit-scrollbar-thumb:hover {
-                background: #999; /* Lighter hover effect */
-            }
-
-
-    /* Light Mode Toggle Styles */
-    .toggle-container {
-        background-color: #D1D5DB; /* Gray-300 */
-        width: 3rem; /* 48px */
-        height: 1.5rem; /* 24px */
-        border-radius: 9999px;
-        position: relative;
-        transition: background-color 0.3s ease-in-out;
-    }
-
-    .toggle-handle {
-        width: 1.25rem; /* 20px */
-        height: 1.25rem; /* 20px */
-        background-color: #FFFFFF;
-        border-radius: 50%;
-        position: absolute;
-        top: 0.125rem; /* 2px */
-        left: 0.125rem; /* 2px */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #darkModeToggle:checked ~ .toggle-container {
-        background-color: #4F46E5; /* Indigo for "on" state */
-    }
-
-        #darkModeToggle:checked ~ .toggle-container .toggle-handle {
-            transform: translateX(1.5rem); /* Moves to right */
-        }
-
-
-
-
-    /* Label Styling */
-    #tdm {
-        color: #1F2937; /* Gray-900 for light mode */
-        transition: color 0.3s ease-in-out;
-    }
-
-    /* Dark Mode Adjustments */
-    .dark .toggle-container {
-        background-color: #374151; /* Gray-700 */
-    }
-
-    .dark #darkModeToggle:checked ~ .toggle-container {
-        background-color: #7DD3FC; /* Light blue for "on" state */
-    }
-
-    .dark .toggle-handle {
-        border-color: #4B5563; /* Gray-600 border */
-    }
-
-    .dark #darkModeToggle:checked ~ .toggle-container .toggle-handle {
-        background-color: #FFFFFF; /* Keeps white handle in dark mode */
-    }
-
-    .dark #tdm {
-        color: #D1D5DB; /* Gray-300 for dark mode */
-    }
-
-    /* Symbol Styling */
-    .light-symbol {
-        color: #F59E0B; /* Amber for sun */
-    }
-
-    .dark-symbol {
-        color: #60A5FA; /* Light blue for moon */
-    }
-
-    /* Light Mode Styles */
-    .nav-link {
-        color: #1F2937; /* Dark gray from your theme */
-        display: flex;
-        align-items: center;
-        gap: 0.5rem; /* Space between symbol and text */
-        transition: color 0.3s ease-in-out;
-    }
-
-        .nav-link:hover {
-            color: #6B7280; /* Gray-500 for hover (replaces hover:text-gray-300) */
-        }
-
-    .web-api-symbol {
-        font-size: 1rem; /* Adjust size as needed */
-        color: #2563EB; /* Blue accent for light mode */
-        transition: color 0.3s ease-in-out;
-    }
-
-    /* Dark Mode Styles */
-    .dark .nav-link {
-        color: #D1D5DB; /* Light gray for dark mode */
-    }
-
-        .dark .nav-link:hover {
-            color: #9CA3AF; /* Gray-400 for hover */
-        }
-
-    .dark .web-api-symbol {
-        color: #60A5FA; /* Lighter blue for dark mode */
-    }
-
-    /* Light Mode Styles */
-    .nav-link {
-        color: #1F2937; /* Dark gray text */
-        display: flex;
-        align-items: center;
-        gap: 0.5rem; /* Space between symbol and text */
-        transition: color 0.3s ease-in-out;
-    }
-
-        .nav-link:hover {
-            color: #6B7280; /* Gray-500 for hover */
-        }
-
-    .web-api-symbol {
-        font-size: 1rem;
-        color: #2563EB; /* Blue for light mode */
-        transition: color 0.3s ease-in-out;
-    }
-
-    .client-side-symbol {
-        font-size: 1rem;
-        color: #16A34A; /* Green for client-side in light mode */
-        transition: color 0.3s ease-in-out;
-    }
-
-    .server-side-symbol {
-        font-size: 1rem;
-        color: #D97706; /* Amber for server-side in light mode */
-        transition: color 0.3s ease-in-out;
-    }
-
-    /* Dark Mode Styles */
-    .dark .nav-link {
-        color: #D1D5DB; /* Light gray text */
-    }
-
-        .dark .nav-link:hover {
-            color: #9CA3AF; /* Gray-400 for hover */
-        }
-
-    .dark .web-api-symbol {
-        color: #60A5FA; /* Lighter blue for dark mode */
-    }
-
-    .dark .client-side-symbol {
-        color: #4ADE80; /* Lighter green for dark mode */
-    }
-
-    .dark .server-side-symbol {
-        color: #FBBF24; /* Lighter amber for dark mode */
-    }
-
-    #servertable_filter {
-        margin-right: 15px;
-    }
-
+}
 </style>
 
 <script>
